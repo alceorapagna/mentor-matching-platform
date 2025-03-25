@@ -100,7 +100,7 @@ const HRPortal = () => {
             lastName,
             email,
             department: department || 'Not specified',
-            inviteStatus: 'pending'
+            inviteStatus: 'pending' // Ensure this is explicitly typed as a valid status
           });
         }
       });
@@ -122,7 +122,7 @@ const HRPortal = () => {
       if (emp.inviteStatus === 'pending') {
         return {
           ...emp,
-          inviteStatus: 'sent',
+          inviteStatus: 'sent' as const, // Use a const assertion to ensure type safety
           accessLink: `https://reneu.com/access/${emp.firstName.toLowerCase().charAt(0)}${emp.lastName.toLowerCase()}${Math.floor(Math.random() * 1000000)}`
         };
       }
