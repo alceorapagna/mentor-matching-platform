@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
-import { PlusCircle, Upload, UserPlus, Users, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { PlusCircle, Upload, UserPlus, Users, X, BarChart } from 'lucide-react';
 import MainLayout from '../components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -86,7 +86,6 @@ const HRPortal = () => {
     }
     
     try {
-      // Split the text by new lines
       const rows = bulkData.trim().split('\n');
       const newEmployees: Employee[] = [];
       
@@ -100,7 +99,7 @@ const HRPortal = () => {
             lastName,
             email,
             department: department || 'Not specified',
-            inviteStatus: 'pending' // Ensure this is explicitly typed as a valid status
+            inviteStatus: 'pending'
           });
         }
       });
@@ -122,7 +121,7 @@ const HRPortal = () => {
       if (emp.inviteStatus === 'pending') {
         return {
           ...emp,
-          inviteStatus: 'sent' as const, // Use a const assertion to ensure type safety
+          inviteStatus: 'sent' as const,
           accessLink: `https://reneu.com/access/${emp.firstName.toLowerCase().charAt(0)}${emp.lastName.toLowerCase()}${Math.floor(Math.random() * 1000000)}`
         };
       }
@@ -147,6 +146,12 @@ const HRPortal = () => {
             <p className="text-muted-foreground mt-2">Manage employee access to Reneu Coaching Platform</p>
           </div>
           <div className="flex gap-3">
+            <Link to="/hr-dashboard">
+              <Button variant="outline" className="gap-2">
+                <BarChart size={16} />
+                View Dashboard
+              </Button>
+            </Link>
             <Button onClick={handleGenerateLinks} className="gap-2">
               <UserPlus size={16} />
               Generate Links & Send Invites

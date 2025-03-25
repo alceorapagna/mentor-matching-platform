@@ -17,6 +17,7 @@ import CoachingSession from "./pages/CoachingSession";
 import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import HRPortal from "./pages/HRPortal";
+import HRDashboard from "./pages/HRDashboard";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
           <Route path="/dashboard" element={<ClientDashboard />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/hr-portal" element={<HRPortal />} />
+          <Route path="/hr-dashboard" element={<HRDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
