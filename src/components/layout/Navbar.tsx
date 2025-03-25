@@ -45,6 +45,16 @@ const Navbar = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <NavLinks />
             <div className="flex items-center space-x-4">
+              <Link to="/session/123">
+                <Button variant="outline" className="hover-transition">
+                  Test Session
+                </Button>
+              </Link>
+              <Link to="/dashboard">
+                <Button variant="outline" className="hover-transition">
+                  Test Dashboard
+                </Button>
+              </Link>
               <Link to="/login">
                 <Button variant="ghost" className="hover-transition">
                   Log in
@@ -78,6 +88,16 @@ const Navbar = () => {
             <nav className="flex flex-col space-y-4">
               <MobileNavLinks closeMenu={() => setIsMenuOpen(false)} />
               <div className="flex flex-col space-y-3 pt-4 border-t">
+                <Link to="/session/123" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start">
+                    Test Session
+                  </Button>
+                </Link>
+                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start">
+                    Test Dashboard
+                  </Button>
+                </Link>
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="ghost" className="w-full justify-start">
                     Log in
