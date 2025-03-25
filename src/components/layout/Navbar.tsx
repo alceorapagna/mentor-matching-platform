@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, Briefcase, Brain, Dumbbell } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,7 +38,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-gradient">MentorMatch</span>
+            <span className="text-2xl font-bold text-gradient">Reneu</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -119,27 +119,27 @@ const NavLinks = () => (
   <>
     <div className="relative group">
       <button className="flex items-center space-x-1 hover:text-primary transition-colors">
-        <span>Find Coaches</span>
+        <span>Reneu Framework</span>
         <ChevronDown className="h-4 w-4" />
       </button>
       <div className="absolute left-0 mt-2 w-48 p-2 rounded-md bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-left">
-        <Link to="/coaches/business" className="block px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
-          Business Coaching
+        <Link to="/framework/work" className="flex items-center px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
+          <Briefcase className="h-4 w-4 mr-2" />
+          Work
         </Link>
-        <Link to="/coaches/life" className="block px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
-          Life Coaching
+        <Link to="/framework/mind" className="flex items-center px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
+          <Brain className="h-4 w-4 mr-2" />
+          Mind
         </Link>
-        <Link to="/coaches/sports" className="block px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
-          Sports Coaching
-        </Link>
-        <Link to="/coaches/nutrition" className="block px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
-          Nutrition
-        </Link>
-        <Link to="/coaches/mental" className="block px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
-          Mental Coaching
+        <Link to="/framework/body" className="flex items-center px-4 py-2 text-sm rounded-md hover:bg-muted transition-colors">
+          <Dumbbell className="h-4 w-4 mr-2" />
+          Body
         </Link>
       </div>
     </div>
+    <Link to="/coaches" className="hover:text-primary transition-colors">
+      Find Coaches
+    </Link>
     <Link to="/how-it-works" className="hover:text-primary transition-colors">
       How It Works
     </Link>
@@ -168,33 +168,33 @@ const MobileNavLinks = ({ closeMenu }: { closeMenu: () => void }) => {
       <div>
         <button 
           className="flex items-center justify-between w-full py-2"
-          onClick={() => toggleCategory('coaches')}
+          onClick={() => toggleCategory('framework')}
         >
-          <span>Find Coaches</span>
+          <span>Reneu Framework</span>
           <ChevronDown className={`h-4 w-4 transform transition-transform ${
-            expandedCategory === 'coaches' ? 'rotate-180' : ''
+            expandedCategory === 'framework' ? 'rotate-180' : ''
           }`} />
         </button>
-        {expandedCategory === 'coaches' && (
+        {expandedCategory === 'framework' && (
           <div className="pl-4 space-y-2 mt-2 mb-2 border-l-2 border-muted animate-slide-down">
-            <Link to="/coaches/business" className="block py-2" onClick={closeMenu}>
-              Business Coaching
+            <Link to="/framework/work" className="flex items-center py-2" onClick={closeMenu}>
+              <Briefcase className="h-4 w-4 mr-2" />
+              Work
             </Link>
-            <Link to="/coaches/life" className="block py-2" onClick={closeMenu}>
-              Life Coaching
+            <Link to="/framework/mind" className="flex items-center py-2" onClick={closeMenu}>
+              <Brain className="h-4 w-4 mr-2" />
+              Mind
             </Link>
-            <Link to="/coaches/sports" className="block py-2" onClick={closeMenu}>
-              Sports Coaching
-            </Link>
-            <Link to="/coaches/nutrition" className="block py-2" onClick={closeMenu}>
-              Nutrition
-            </Link>
-            <Link to="/coaches/mental" className="block py-2" onClick={closeMenu}>
-              Mental Coaching
+            <Link to="/framework/body" className="flex items-center py-2" onClick={closeMenu}>
+              <Dumbbell className="h-4 w-4 mr-2" />
+              Body
             </Link>
           </div>
         )}
       </div>
+      <Link to="/coaches" className="py-2 block" onClick={closeMenu}>
+        Find Coaches
+      </Link>
       <Link to="/how-it-works" className="py-2 block" onClick={closeMenu}>
         How It Works
       </Link>
