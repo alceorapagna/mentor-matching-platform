@@ -1,14 +1,12 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, ChevronDown, Briefcase, Brain, Dumbbell } from 'lucide-react';
+import { Menu, X, ChevronDown, Briefcase, Brain, Dumbbell, Users } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Track scroll position to update navbar styles
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 10) {
@@ -36,15 +34,19 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="text-2xl font-bold text-gradient">Reneu</span>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <NavLinks />
             <div className="flex items-center space-x-4">
+              <Link to="/hr-portal">
+                <Button variant="outline" className="hover-transition">
+                  <Users className="mr-2 h-4 w-4" />
+                  HR Portal
+                </Button>
+              </Link>
               <Link to="/session/123">
                 <Button variant="outline" className="hover-transition">
                   Test Session
@@ -66,7 +68,6 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* Mobile menu button */}
           <button 
             className="md:hidden focus:outline-none" 
             onClick={toggleMenu}
@@ -81,13 +82,18 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-lg animate-fade-in">
           <div className="container mx-auto px-6 py-4">
             <nav className="flex flex-col space-y-4">
               <MobileNavLinks closeMenu={() => setIsMenuOpen(false)} />
               <div className="flex flex-col space-y-3 pt-4 border-t">
+                <Link to="/hr-portal" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start">
+                    <Users className="mr-2 h-4 w-4" />
+                    HR Portal
+                  </Button>
+                </Link>
                 <Link to="/session/123" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" className="w-full justify-start">
                     Test Session
