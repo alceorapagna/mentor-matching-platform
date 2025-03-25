@@ -12,6 +12,10 @@ import Coaches from "./pages/Coaches";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import CoachProfile from "./pages/CoachProfile";
+import CoachingSession from "./pages/CoachingSession";
+import ClientDashboard from "./pages/ClientDashboard";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const queryClient = new QueryClient();
 
@@ -27,8 +31,12 @@ const App = () => (
           <Route path="/for-coaches" element={<ForCoaches />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/coaches" element={<Coaches />} />
+          <Route path="/coaches/:id" element={<CoachProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/session/:id" element={<CoachingSession />} />
+          <Route path="/dashboard" element={<ClientDashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
