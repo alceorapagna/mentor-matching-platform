@@ -50,9 +50,9 @@ const HeroSection = () => {
             </div>
             
             <div className="mt-10 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0">
-              <Stat label="Work" value="Career" icon={<Briefcase className="h-5 w-5 text-blue-500" />} />
-              <Stat label="Mind" value="Wellness" icon={<Brain className="h-5 w-5 text-purple-500" />} />
-              <Stat label="Body" value="Health" icon={<Dumbbell className="h-5 w-5 text-green-500" />} />
+              <Stat label="Work" value="Career" icon={<Briefcase className="h-5 w-5 text-reneu-500" />} />
+              <Stat label="Mind" value="Wellness" icon={<Brain className="h-5 w-5 text-reneu-500" />} />
+              <Stat label="Body" value="Health" icon={<Dumbbell className="h-5 w-5 text-reneu-500" />} />
             </div>
           </div>
           
@@ -73,9 +73,9 @@ const HeroSection = () => {
                 <span className="font-medium">Your Renewal Path</span>
               </div>
               <div className="mt-3 space-y-2">
-                <DimensionPill icon={<Briefcase className="h-4 w-4 text-blue-500" />} label="Work Renewal" />
-                <DimensionPill icon={<Brain className="h-4 w-4 text-purple-500" />} label="Mind Renewal" />
-                <DimensionPill icon={<Dumbbell className="h-4 w-4 text-green-500" />} label="Body Renewal" />
+                <DimensionPill icon={<Briefcase className="h-4 w-4 text-reneu-500" />} label="Work Renewal" />
+                <DimensionPill icon={<Brain className="h-4 w-4 text-reneu-500" />} label="Mind Renewal" />
+                <DimensionPill icon={<Dumbbell className="h-4 w-4 text-reneu-500" />} label="Body Renewal" />
               </div>
             </div>
           </div>

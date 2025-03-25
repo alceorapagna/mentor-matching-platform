@@ -53,6 +53,21 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				reneu: {
+					DEFAULT: '#1e4d57',
+					light: '#2a6b78',
+					dark: '#183c44',
+					50: '#edf7f8',
+					100: '#d0eaed',
+					200: '#a1d5dd',
+					300: '#72bfcc',
+					400: '#43aabb',
+					500: '#1e4d57',
+					600: '#1a444c',
+					700: '#163a41',
+					800: '#133136',
+					900: '#0f282c'
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

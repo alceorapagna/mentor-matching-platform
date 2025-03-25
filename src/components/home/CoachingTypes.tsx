@@ -26,8 +26,8 @@ const CoachingTypes = () => {
               { icon: <Target />, name: "Purpose Finding" }
             ]}
             link="/framework/work"
-            bgColor="bg-blue-50"
-            iconColor="text-blue-600"
+            bgColor="bg-reneu-50"
+            iconColor="text-reneu-600"
           />
           
           <ReneuDimension 
@@ -40,8 +40,8 @@ const CoachingTypes = () => {
               { icon: <Scale />, name: "Mindfulness" }
             ]}
             link="/framework/mind"
-            bgColor="bg-purple-50"
-            iconColor="text-purple-600"
+            bgColor="bg-reneu-50"
+            iconColor="text-reneu-600"
           />
           
           <ReneuDimension 
@@ -54,8 +54,8 @@ const CoachingTypes = () => {
               { icon: <Target />, name: "Energy Management" }
             ]}
             link="/framework/body"
-            bgColor="bg-green-50"
-            iconColor="text-green-600"
+            bgColor="bg-reneu-50"
+            iconColor="text-reneu-600"
           />
         </div>
         
