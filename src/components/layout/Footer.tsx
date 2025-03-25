@@ -9,10 +9,10 @@ const Footer = () => {
           {/* Company */}
           <div className="lg:col-span-2">
             <Link to="/" className="inline-block mb-6">
-              <span className="text-2xl font-bold text-gradient">MentorMatch</span>
+              <span className="text-2xl font-bold text-gradient">Reneu</span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Connecting professionals with expert coaches to develop skills, achieve goals, and reach their full potential.
+              Transform your life with Reneu's holistic coaching approach. Balance and enhance your work, mind, and body with dedicated coaches guiding your personal renewal journey.
             </p>
             <div className="flex space-x-4">
               <SocialLink href="#" label="Twitter" />
@@ -61,7 +61,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-border/40">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-muted-foreground text-sm">
-              © {new Date().getFullYear()} MentorMatch. All rights reserved.
+              © {new Date().getFullYear()} Reneu. All rights reserved.
             </p>
             <div className="mt-4 md:mt-0">
               <ul className="flex flex-wrap justify-center space-x-6">
