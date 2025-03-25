@@ -56,15 +56,56 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Right Image/Illustration */}
+          {/* Right Image/Illustration - Replacing with Reneu Framework 3 Circles */}
           <div className="lg:w-1/2 relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
-              <img 
-                src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?ixlib=rb-4.0.3&auto=format&fit=crop&w=1024&h=1024&q=80" 
-                alt="Personal Renewal Journey" 
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/40 to-transparent mix-blend-overlay"></div>
+              {/* Reneu Framework SVG with 3 Circles */}
+              <div className="bg-gradient-to-tr from-primary/10 to-white p-8 aspect-square flex items-center justify-center">
+                <svg viewBox="0 0 400 400" className="w-full h-auto">
+                  {/* Background circles with subtle animation */}
+                  <circle cx="200" cy="200" r="190" fill="white" stroke="#f0f0f0" strokeWidth="2" />
+                  
+                  {/* Center connecting area */}
+                  <circle cx="200" cy="200" r="40" fill="#f5f5f5" className="animate-pulse-slow" />
+                  <text x="200" y="200" textAnchor="middle" dominantBaseline="middle" fill="#333" fontWeight="bold" fontSize="12">RENEU</text>
+                  
+                  {/* Work Circle */}
+                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
+                    <circle cx="120" cy="150" r="70" fill="#e6f0ff" stroke="#4287f5" strokeWidth="2" />
+                    <circle cx="120" cy="150" r="50" fill="#4287f5" fillOpacity="0.2" />
+                    <text x="120" y="140" textAnchor="middle" dominantBaseline="middle" fill="#0056b3" fontWeight="bold" fontSize="16">WORK</text>
+                    <g transform="translate(90, 170)">
+                      <Briefcase color="#0056b3" size={24} />
+                    </g>
+                  </g>
+                  
+                  {/* Mind Circle */}
+                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
+                    <circle cx="280" cy="150" r="70" fill="#f5e6ff" stroke="#9b51e0" strokeWidth="2" />
+                    <circle cx="280" cy="150" r="50" fill="#9b51e0" fillOpacity="0.2" />
+                    <text x="280" y="140" textAnchor="middle" dominantBaseline="middle" fill="#6200ea" fontWeight="bold" fontSize="16">MIND</text>
+                    <g transform="translate(250, 170)">
+                      <Brain color="#6200ea" size={24} />
+                    </g>
+                  </g>
+                  
+                  {/* Body Circle */}
+                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
+                    <circle cx="200" cy="270" r="70" fill="#e6ffed" stroke="#34c759" strokeWidth="2" />
+                    <circle cx="200" cy="270" r="50" fill="#34c759" fillOpacity="0.2" />
+                    <text x="200" y="260" textAnchor="middle" dominantBaseline="middle" fill="#008a2e" fontWeight="bold" fontSize="16">BODY</text>
+                    <g transform="translate(170, 290)">
+                      <Dumbbell color="#008a2e" size={24} />
+                    </g>
+                  </g>
+                  
+                  {/* Connecting lines */}
+                  <line x1="155" y1="182" x2="183" y2="214" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
+                  <line x1="245" y1="182" x2="217" y2="214" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
+                  <line x1="200" y1="150" x2="200" y2="190" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
+                </svg>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent mix-blend-overlay"></div>
             </div>
             
             {/* Floating component showing the three dimensions */}
