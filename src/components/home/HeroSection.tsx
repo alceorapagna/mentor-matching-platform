@@ -60,7 +60,7 @@ const HeroSection = () => {
           <div className="lg:w-1/2 relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
               <img 
-                src="/reneu-framework.jpg" 
+                src="/lovable-uploads/97dd8d6d-87eb-43df-b863-783cf2001c71.png" 
                 alt="Reneu Framework" 
                 className="w-full h-auto"
               />
