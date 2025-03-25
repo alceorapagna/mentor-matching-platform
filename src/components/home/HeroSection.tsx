@@ -1,4 +1,3 @@
-
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Search, Briefcase, Brain, Dumbbell } from 'lucide-react';
@@ -56,56 +55,68 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Right Image/Illustration - Replacing with Reneu Framework 3 Circles */}
+          {/* Right Image/Illustration - Reneu Framework */}
           <div className="lg:w-1/2 relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
-              {/* Reneu Framework SVG with 3 Circles */}
-              <div className="bg-gradient-to-tr from-primary/10 to-white p-8 aspect-square flex items-center justify-center">
+              <div className="bg-[#1d4c4f] p-8 aspect-square flex items-center justify-center">
                 <svg viewBox="0 0 400 400" className="w-full h-auto">
-                  {/* Background circles with subtle animation */}
-                  <circle cx="200" cy="200" r="190" fill="white" stroke="#f0f0f0" strokeWidth="2" />
+                  {/* Large background circles */}
+                  <circle cx="200" cy="200" r="190" fill="none" stroke="#2a5c5f" strokeWidth="1" />
+                  <circle cx="200" cy="200" r="170" fill="none" stroke="#2a5c5f" strokeWidth="1" />
                   
-                  {/* Center connecting area */}
-                  <circle cx="200" cy="200" r="40" fill="#f5f5f5" className="animate-pulse-slow" />
-                  <text x="200" y="200" textAnchor="middle" dominantBaseline="middle" fill="#333" fontWeight="bold" fontSize="12">RENEU</text>
-                  
-                  {/* Work Circle */}
-                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
-                    <circle cx="120" cy="150" r="70" fill="#e6f0ff" stroke="#4287f5" strokeWidth="2" />
-                    <circle cx="120" cy="150" r="50" fill="#4287f5" fillOpacity="0.2" />
-                    <text x="120" y="140" textAnchor="middle" dominantBaseline="middle" fill="#0056b3" fontWeight="bold" fontSize="16">WORK</text>
-                    <g transform="translate(90, 170)">
-                      <Briefcase color="#0056b3" size={24} />
-                    </g>
+                  {/* Center text area */}
+                  <g className="text-center">
+                    <text x="200" y="180" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">KNOWLEDGE &</text>
+                    <text x="200" y="200" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">COMMUNITY</text>
+                    <text x="200" y="225" textAnchor="middle" fill="white" fontSize="12">Grow with</text>
+                    <text x="200" y="245" textAnchor="middle" fill="white" fontSize="12">like-minded and</text>
+                    <text x="200" y="265" textAnchor="middle" fill="white" fontSize="12">inspiring people</text>
                   </g>
-                  
+
                   {/* Mind Circle */}
-                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
-                    <circle cx="280" cy="150" r="70" fill="#f5e6ff" stroke="#9b51e0" strokeWidth="2" />
-                    <circle cx="280" cy="150" r="50" fill="#9b51e0" fillOpacity="0.2" />
-                    <text x="280" y="140" textAnchor="middle" dominantBaseline="middle" fill="#6200ea" fontWeight="bold" fontSize="16">MIND</text>
-                    <g transform="translate(250, 170)">
-                      <Brain color="#6200ea" size={24} />
-                    </g>
+                  <g transform="translate(200, 80)">
+                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
+                    <Brain color="white" size={30} x="-15" y="-15" />
+                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">MIND</text>
+                    <text y="-50" textAnchor="middle" fill="white" fontSize="10" width="100">
+                      <tspan x="0">Know how your mind & body</tspan>
+                      <tspan x="0" dy="15">work, and learn new</tspan>
+                      <tspan x="0" dy="15">professional skills</tspan>
+                    </text>
                   </g>
-                  
+
+                  {/* Work Circle */}
+                  <g transform="translate(120, 280)">
+                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
+                    <Briefcase color="white" size={30} x="-15" y="-15" />
+                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">WORK</text>
+                    <text x="-100" y="0" textAnchor="end" fill="white" fontSize="10">A fulfilling job</text>
+                    <text x="-100" y="15" textAnchor="end" fill="white" fontSize="10">reduces the</text>
+                    <text x="-100" y="30" textAnchor="end" fill="white" fontSize="10">level of stress</text>
+                  </g>
+
                   {/* Body Circle */}
-                  <g className="hover:opacity-90 transition-opacity cursor-pointer">
-                    <circle cx="200" cy="270" r="70" fill="#e6ffed" stroke="#34c759" strokeWidth="2" />
-                    <circle cx="200" cy="270" r="50" fill="#34c759" fillOpacity="0.2" />
-                    <text x="200" y="260" textAnchor="middle" dominantBaseline="middle" fill="#008a2e" fontWeight="bold" fontSize="16">BODY</text>
-                    <g transform="translate(170, 290)">
-                      <Dumbbell color="#008a2e" size={24} />
-                    </g>
+                  <g transform="translate(280, 280)">
+                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
+                    <Dumbbell color="white" size={30} x="-15" y="-15" />
+                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">BODY</text>
+                    <text x="100" y="0" textAnchor="start" fill="white" fontSize="10">A healthy body</text>
+                    <text x="100" y="15" textAnchor="start" fill="white" fontSize="10">strengthens</text>
+                    <text x="100" y="30" textAnchor="start" fill="white" fontSize="10">your attitude</text>
                   </g>
-                  
-                  {/* Connecting lines */}
-                  <line x1="155" y1="182" x2="183" y2="214" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
-                  <line x1="245" y1="182" x2="217" y2="214" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
-                  <line x1="200" y1="150" x2="200" y2="190" stroke="#ddd" strokeWidth="2" strokeDasharray="5,3" />
+
+                  {/* Connecting lines and relationship descriptions */}
+                  <path d="M150 250 L250 250" stroke="white" strokeWidth="1" fill="none" />
+                  <text x="200" y="270" textAnchor="middle" fill="white" fontSize="10">
+                    Lower job stress drives a healthier body
+                  </text>
+
+                  <path d="M160 200 L240 200" stroke="white" strokeWidth="1" fill="none" />
+                  <text x="200" y="190" textAnchor="middle" fill="white" fontSize="10">
+                    A healthier body increases productivity
+                  </text>
                 </svg>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent mix-blend-overlay"></div>
             </div>
             
             {/* Floating component showing the three dimensions */}
