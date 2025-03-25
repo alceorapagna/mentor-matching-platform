@@ -1,3 +1,4 @@
+
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Search, Briefcase, Brain, Dumbbell } from 'lucide-react';
@@ -55,68 +56,14 @@ const HeroSection = () => {
             </div>
           </div>
           
-          {/* Right Image/Illustration - Reneu Framework */}
+          {/* Right Image/Illustration */}
           <div className="lg:w-1/2 relative">
             <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
-              <div className="bg-[#1d4c4f] p-8 aspect-square flex items-center justify-center">
-                <svg viewBox="0 0 400 400" className="w-full h-auto">
-                  {/* Large background circles */}
-                  <circle cx="200" cy="200" r="190" fill="none" stroke="#2a5c5f" strokeWidth="1" />
-                  <circle cx="200" cy="200" r="170" fill="none" stroke="#2a5c5f" strokeWidth="1" />
-                  
-                  {/* Center text area */}
-                  <g className="text-center">
-                    <text x="200" y="180" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">KNOWLEDGE &</text>
-                    <text x="200" y="200" textAnchor="middle" fill="white" fontSize="16" fontWeight="bold">COMMUNITY</text>
-                    <text x="200" y="225" textAnchor="middle" fill="white" fontSize="12">Grow with</text>
-                    <text x="200" y="245" textAnchor="middle" fill="white" fontSize="12">like-minded and</text>
-                    <text x="200" y="265" textAnchor="middle" fill="white" fontSize="12">inspiring people</text>
-                  </g>
-
-                  {/* Mind Circle */}
-                  <g transform="translate(200, 80)">
-                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
-                    <Brain color="white" size={30} x="-15" y="-15" />
-                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">MIND</text>
-                    <text y="-50" textAnchor="middle" fill="white" fontSize="10" width="100">
-                      <tspan x="0">Know how your mind & body</tspan>
-                      <tspan x="0" dy="15">work, and learn new</tspan>
-                      <tspan x="0" dy="15">professional skills</tspan>
-                    </text>
-                  </g>
-
-                  {/* Work Circle */}
-                  <g transform="translate(120, 280)">
-                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
-                    <Briefcase color="white" size={30} x="-15" y="-15" />
-                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">WORK</text>
-                    <text x="-100" y="0" textAnchor="end" fill="white" fontSize="10">A fulfilling job</text>
-                    <text x="-100" y="15" textAnchor="end" fill="white" fontSize="10">reduces the</text>
-                    <text x="-100" y="30" textAnchor="end" fill="white" fontSize="10">level of stress</text>
-                  </g>
-
-                  {/* Body Circle */}
-                  <g transform="translate(280, 280)">
-                    <circle r="40" fill="#1d4c4f" stroke="white" strokeWidth="2" />
-                    <Dumbbell color="white" size={30} x="-15" y="-15" />
-                    <text y="45" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">BODY</text>
-                    <text x="100" y="0" textAnchor="start" fill="white" fontSize="10">A healthy body</text>
-                    <text x="100" y="15" textAnchor="start" fill="white" fontSize="10">strengthens</text>
-                    <text x="100" y="30" textAnchor="start" fill="white" fontSize="10">your attitude</text>
-                  </g>
-
-                  {/* Connecting lines and relationship descriptions */}
-                  <path d="M150 250 L250 250" stroke="white" strokeWidth="1" fill="none" />
-                  <text x="200" y="270" textAnchor="middle" fill="white" fontSize="10">
-                    Lower job stress drives a healthier body
-                  </text>
-
-                  <path d="M160 200 L240 200" stroke="white" strokeWidth="1" fill="none" />
-                  <text x="200" y="190" textAnchor="middle" fill="white" fontSize="10">
-                    A healthier body increases productivity
-                  </text>
-                </svg>
-              </div>
+              <img 
+                src="/images/reneu-framework.jpg" 
+                alt="Reneu Framework" 
+                className="w-full h-auto"
+              />
             </div>
             
             {/* Floating component showing the three dimensions */}
