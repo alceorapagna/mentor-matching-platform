@@ -9,6 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import ReneuCompassCard from '@/components/onboarding/ReneuCompassCard';
+import GoalCoachRecommendations from '@/components/onboarding/GoalCoachRecommendations';
 import { 
   Calendar, 
   ChevronRight, 
@@ -50,6 +51,94 @@ const ClientDashboard = () => {
       body: 8
     }
   };
+  
+  // Mock data for renewal goals
+  const renewalGoals = [
+    {
+      id: "goal1",
+      title: "AI Innovation for Business",
+      description: "Learn how to use AI to innovate our business processes and offerings",
+      category: 'work' as const,
+      progress: 25
+    },
+    {
+      id: "goal2",
+      title: "Growth Mindset Development",
+      description: "Break limiting beliefs and develop a growth-oriented mindset",
+      category: 'mind' as const,
+      progress: 15
+    }
+  ];
+  
+  // Mock data for recommended coaches
+  const recommendedCoaches = [
+    {
+      id: "coach1",
+      name: "Dr. Sarah Johnson",
+      title: "AI & Business Innovation Coach",
+      specialty: ["AI Strategy", "Digital Transformation", "Business Innovation"],
+      rating: 4.9,
+      reviewCount: 127,
+      imageSrc: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'work' as const,
+      availability: 'high' as const
+    },
+    {
+      id: "coach2",
+      name: "David Williams",
+      title: "Tech Leadership Coach",
+      specialty: ["Tech Strategy", "Leadership", "Innovation"],
+      rating: 4.7,
+      reviewCount: 85,
+      imageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'work' as const,
+      availability: 'medium' as const
+    },
+    {
+      id: "coach3",
+      name: "Robert Chen",
+      title: "Business Technology Advisor",
+      specialty: ["Digital Strategy", "AI Implementation", "Process Optimization"],
+      rating: 4.8,
+      reviewCount: 92,
+      imageSrc: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'work' as const,
+      availability: 'low' as const
+    },
+    {
+      id: "coach4",
+      name: "Emily Parker",
+      title: "Mindset & Growth Coach",
+      specialty: ["Limiting Beliefs", "Growth Mindset", "Cognitive Restructuring"],
+      rating: 4.9,
+      reviewCount: 118,
+      imageSrc: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'mind' as const,
+      availability: 'high' as const
+    },
+    {
+      id: "coach5",
+      name: "Michael Thompson",
+      title: "Executive Mindset Coach",
+      specialty: ["Belief Systems", "Mental Resilience", "Performance Psychology"],
+      rating: 4.8,
+      reviewCount: 76,
+      imageSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'mind' as const,
+      availability: 'medium' as const
+    },
+    {
+      id: "coach6",
+      name: "Lisa Rodriguez",
+      title: "Cognitive Behavioral Coach",
+      specialty: ["CBT Techniques", "Thought Patterns", "Behavioral Change"],
+      rating: 4.7,
+      reviewCount: 64,
+      imageSrc: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
+      category: 'mind' as const,
+      availability: 'medium' as const
+    }
+  ];
   
   // Mock data for upcoming sessions
   const upcomingSessions = [
@@ -207,6 +296,14 @@ const ClientDashboard = () => {
           <ReneuCompassCard 
             progress={compassProgress}
             userData={userCompassData}
+          />
+        </div>
+        
+        {/* Goal-specific coach recommendations */}
+        <div className="mb-8">
+          <GoalCoachRecommendations 
+            goals={renewalGoals} 
+            recommendedCoaches={recommendedCoaches} 
           />
         </div>
         
