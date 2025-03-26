@@ -309,9 +309,9 @@ const HowItWorks = () => {
                 Start Your Assessment
               </Button>
             </Link>
-            <Link to="/register">
+            <Link to="/coaches">
               <Button size="lg" variant="outline">
-                Create Account
+                Find a Coach
               </Button>
             </Link>
           </div>

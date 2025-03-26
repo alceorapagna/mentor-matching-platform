@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -160,9 +161,6 @@ const NavLinks = () => (
         </Link>
       </div>
     </div>
-    <Link to="/coaches" className="hover:text-primary transition-colors">
-      Find Coaches
-    </Link>
     <Link to="/how-it-works" className="hover:text-primary transition-colors">
       How It Works
     </Link>
@@ -215,9 +213,6 @@ const MobileNavLinks = ({ closeMenu }: { closeMenu: () => void }) => {
           </div>
         )}
       </div>
-      <Link to="/coaches" className="py-2 block" onClick={closeMenu}>
-        Find Coaches
-      </Link>
       <Link to="/how-it-works" className="py-2 block" onClick={closeMenu}>
         How It Works
       </Link>
