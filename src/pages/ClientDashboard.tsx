@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -438,9 +439,11 @@ const ClientDashboard = () => {
                     <FileText className="mr-2 h-4 w-4" />
                     Prep Notes
                   </Button>
-                  <Button className="premium-button">
-                    <Video className="mr-2 h-4 w-4" />
-                    Join Session
+                  <Button className="premium-button" asChild>
+                    <Link to={`/session/${upcomingSessions[0].id}`}>
+                      <Video className="mr-2 h-4 w-4" />
+                      Join Session
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -797,4 +800,3 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
-
