@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, Lightning } from 'lucide-react';
+import { Loader2, Zap } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +22,6 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const { login, isAuthenticated, isLoading, testAccess } = useAuth();
 
-  // If already authenticated, redirect to dashboard
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
   }
@@ -34,7 +32,6 @@ const Login = () => {
     await login(email, password);
   };
 
-  // Demo accounts for quick login
   const demoAccounts = [
     { label: 'Client Demo', email: 'client@example.com', password: 'password123' },
     { label: 'Coach Demo', email: 'coach@example.com', password: 'password123' },
@@ -48,7 +45,6 @@ const Login = () => {
     await login(demoEmail, demoPassword);
   };
 
-  // Quick test access
   const quickAccessOptions = [
     { label: 'Client Dashboard', role: 'client', path: '/dashboard' },
     { label: 'Coach Dashboard', role: 'coach', path: '/coach-dashboard' },
@@ -178,7 +174,6 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Demo accounts section */}
           <div className="mt-8 border rounded-lg p-4">
             <h3 className="text-sm font-medium mb-2">Demo Accounts</h3>
             <div className="grid grid-cols-2 gap-2">
@@ -200,10 +195,9 @@ const Login = () => {
             </p>
           </div>
           
-          {/* Quick Access Links section */}
           <div className="mt-8 border rounded-lg border-yellow-200 bg-yellow-50 p-4">
             <div className="flex items-center gap-2 mb-2">
-              <Lightning className="h-4 w-4 text-amber-500" />
+              <Zap className="h-4 w-4 text-amber-500" />
               <h3 className="text-sm font-medium text-amber-700">Quick Access (For Testing)</h3>
             </div>
             <div className="grid grid-cols-2 gap-2">
