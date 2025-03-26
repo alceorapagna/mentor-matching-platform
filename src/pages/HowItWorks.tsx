@@ -1,3 +1,4 @@
+
 import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { 
@@ -69,7 +70,7 @@ const HowItWorks = () => {
               </div>
               <div className="bg-white rounded-xl overflow-hidden shadow-lg h-80 order-1 md:order-2">
                 <img 
-                  src="/lovable-uploads/97dd8d6d-87eb-43df-b863-783cf2001c71.png" 
+                  src="/lovable-uploads/15948167-5c62-4bb1-86d4-85389339d83c.png" 
                   alt="Reneu Compass Framework" 
                   className="w-full h-full object-contain p-4"
                 />
