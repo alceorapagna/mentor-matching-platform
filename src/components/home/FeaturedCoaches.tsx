@@ -15,10 +15,10 @@ const coaches: CoachCardProps[] = [
     specialty: ['Holistic', 'Work-Life', 'Transformation'],
     rating: 5.0,
     reviewCount: 142,
-    hourlyRate: 175,
     imageSrc: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
     category: 'reneu',
+    pricingModel: 'custom'
   },
   {
     id: '2',
@@ -27,10 +27,10 @@ const coaches: CoachCardProps[] = [
     specialty: ['Holistic', 'Transformation', 'Balance'],
     rating: 4.8,
     reviewCount: 98,
-    hourlyRate: 160,
     imageSrc: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'medium',
     category: 'reneu',
+    pricingModel: 'custom'
   },
   
   // Business coaches
@@ -41,10 +41,15 @@ const coaches: CoachCardProps[] = [
     specialty: ['Business', 'Leadership', 'Career Transition'],
     rating: 4.9,
     reviewCount: 127,
-    hourlyRate: 150,
     imageSrc: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
     category: 'business',
+    pricingModel: 'packages',
+    packages: {
+      basic: '4 Sessions',
+      standard: '8 Sessions',
+      premium: '12 Sessions + Team Workshop'
+    }
   },
   {
     id: '4',
@@ -53,10 +58,10 @@ const coaches: CoachCardProps[] = [
     specialty: ['Strategic Thinking', 'Team Building', 'Business Growth'],
     rating: 4.9,
     reviewCount: 112,
-    hourlyRate: 150,
     imageSrc: 'https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'medium',
     category: 'business',
+    pricingModel: 'custom'
   },
   
   // Mind coaches
@@ -67,10 +72,15 @@ const coaches: CoachCardProps[] = [
     specialty: ['Life Coaching', 'Mindfulness', 'Stress Management'],
     rating: 4.8,
     reviewCount: 93,
-    hourlyRate: 120,
     imageSrc: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'medium',
     category: 'mind',
+    pricingModel: 'packages',
+    packages: {
+      basic: '4 Sessions',
+      standard: '8 Sessions',
+      premium: '12 Sessions + Monthly Check-ins'
+    }
   },
   {
     id: '6',
@@ -79,10 +89,15 @@ const coaches: CoachCardProps[] = [
     specialty: ['Stress Management', 'Anxiety', 'Resilience'],
     rating: 4.9,
     reviewCount: 107,
-    hourlyRate: 125,
     imageSrc: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
     category: 'mind',
+    pricingModel: 'packages',
+    packages: {
+      basic: '4 Sessions',
+      standard: '8 Sessions + Stress Assessment',
+      premium: '16 Sessions + Monthly Check-ins'
+    }
   },
   
   // Body coaches
@@ -93,10 +108,15 @@ const coaches: CoachCardProps[] = [
     specialty: ['Nutrition', 'Diet Planning', 'Health'],
     rating: 4.9,
     reviewCount: 112,
-    hourlyRate: 130,
     imageSrc: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'low',
     category: 'body',
+    pricingModel: 'packages',
+    packages: {
+      basic: '4 Sessions',
+      standard: '8 Sessions + Nutrition Plan',
+      premium: '12 Sessions + Team Workshop'
+    }
   },
   {
     id: '8',
@@ -105,10 +125,15 @@ const coaches: CoachCardProps[] = [
     specialty: ['Fitness', 'Strength Training', 'Movement'],
     rating: 4.7,
     reviewCount: 85,
-    hourlyRate: 110,
     imageSrc: 'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
     category: 'body',
+    pricingModel: 'packages',
+    packages: {
+      basic: '4 Sessions',
+      standard: '8 Sessions + Personalized Workout Plan',
+      premium: '12 Sessions + Team Workshops'
+    }
   },
 ];
 

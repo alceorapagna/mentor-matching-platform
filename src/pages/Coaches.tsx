@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
@@ -177,8 +178,7 @@ const Coaches = () => {
       
       const matchesCategory = selectedCategory === 'all' || coach.category === selectedCategory;
       
-      const matchesPrice = coach.hourlyRate >= priceRange[0] && coach.hourlyRate <= priceRange[1];
-      
+      // Remove hourlyRate check since we no longer use it
       return matchesSearch && matchesCategory;
     });
   };
