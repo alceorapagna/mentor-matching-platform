@@ -1,4 +1,3 @@
-
 import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { 
@@ -68,11 +67,11 @@ const HowItWorks = () => {
                   </Button>
                 </Link>
               </div>
-              <div className="bg-muted rounded-xl overflow-hidden h-80 order-1 md:order-2">
+              <div className="bg-white rounded-xl overflow-hidden shadow-lg h-80 order-1 md:order-2">
                 <img 
-                  src="https://images.unsplash.com/photo-1494059980473-813e73ee784b?auto=format&fit=crop&q=80&w=1000" 
-                  alt="Person mapping their renewal journey" 
-                  className="w-full h-full object-cover"
+                  src="/lovable-uploads/97dd8d6d-87eb-43df-b863-783cf2001c71.png" 
+                  alt="Reneu Compass Framework" 
+                  className="w-full h-full object-contain p-4"
                 />
               </div>
             </div>
