@@ -22,6 +22,7 @@ import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import HRPortal from "./pages/HRPortal";
 import HRDashboard from "./pages/HRDashboard";
+import CoachDashboard from "./pages/CoachDashboard";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +58,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["client"]}>
                   <ClientDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/coach-dashboard" 
+              element={
+                <ProtectedRoute allowedRoles={["coach"]}>
+                  <CoachDashboard />
                 </ProtectedRoute>
               } 
             />
