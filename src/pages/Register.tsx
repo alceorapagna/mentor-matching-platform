@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   Card, 
@@ -14,10 +14,83 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import MainLayout from '@/components/layout/MainLayout';
+import { useAuth, RegisterData } from '@/contexts/AuthContext';
+import { Loader2 } from 'lucide-react';
 
 const Register = () => {
   const [userType, setUserType] = useState('client');
+  const { register, isAuthenticated, isLoading } = useAuth();
+  
+  // Client form state
+  const [clientData, setClientData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    termsAccepted: false
+  });
+  
+  // Coach form state
+  const [coachData, setCoachData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    specialization: '',
+    termsAccepted: false
+  });
+
+  // If already authenticated, redirect to dashboard
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  const handleClientSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!clientData.termsAccepted) {
+      return;
+    }
+    
+    const userData: RegisterData = {
+      firstName: clientData.firstName,
+      lastName: clientData.lastName,
+      email: clientData.email,
+      password: clientData.password,
+      role: 'client'
+    };
+    
+    await register(userData);
+  };
+  
+  const handleCoachSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!coachData.termsAccepted) {
+      return;
+    }
+    
+    const userData: RegisterData = {
+      firstName: coachData.firstName,
+      lastName: coachData.lastName,
+      email: coachData.email,
+      password: coachData.password,
+      role: 'coach',
+      specialization: coachData.specialization
+    };
+    
+    await register(userData);
+  };
+  
+  const updateClientData = (field: string, value: string | boolean) => {
+    setClientData(prev => ({ ...prev, [field]: value }));
+  };
+  
+  const updateCoachData = (field: string, value: string | boolean) => {
+    setCoachData(prev => ({ ...prev, [field]: value }));
+  };
 
   return (
     <MainLayout>
@@ -25,10 +98,10 @@ const Register = () => {
         <div className="max-w-md mx-auto">
           <h1 className="text-3xl font-bold text-center mb-6">Create Your Account</h1>
           <p className="text-muted-foreground text-center mb-8">
-            Join MentorMatch to connect with expert coaches and accelerate your growth
+            Join Reneu to connect with expert coaches and accelerate your growth
           </p>
           
-          <Tabs defaultValue="client" onValueChange={setUserType} className="mb-8">
+          <Tabs defaultValue="client" value={userType} onValueChange={setUserType} className="mb-8">
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="client">Client Account</TabsTrigger>
               <TabsTrigger value="coach">Coach Account</TabsTrigger>
@@ -36,126 +109,213 @@ const Register = () => {
             
             <TabsContent value="client">
               <Card>
-                <CardHeader>
-                  <CardTitle>Client Registration</CardTitle>
-                  <CardDescription>
-                    Create an account to find and connect with coaches
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="John" />
+                <form onSubmit={handleClientSubmit}>
+                  <CardHeader>
+                    <CardTitle>Client Registration</CardTitle>
+                    <CardDescription>
+                      Create an account to find and connect with coaches
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">First Name</Label>
+                        <Input 
+                          id="firstName" 
+                          placeholder="John"
+                          value={clientData.firstName}
+                          onChange={(e) => updateClientData('firstName', e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Last Name</Label>
+                        <Input 
+                          id="lastName" 
+                          placeholder="Doe"
+                          value={clientData.lastName}
+                          onChange={(e) => updateClientData('lastName', e.target.value)}
+                          required
+                        />
+                      </div>
                     </div>
+                    
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Doe" />
+                      <Label htmlFor="email">Email</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        placeholder="john.doe@example.com"
+                        value={clientData.email}
+                        onChange={(e) => updateClientData('email', e.target.value)}
+                        required
+                      />
                     </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="john.doe@example.com" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" />
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="terms" />
-                    <label
-                      htmlFor="terms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      I agree to the{" "}
-                      <Link to="/terms" className="text-primary hover:underline">
-                        Terms of Service
-                      </Link>{" "}
-                      and{" "}
-                      <Link to="/privacy" className="text-primary hover:underline">
-                        Privacy Policy
-                      </Link>
-                    </label>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">Create Account</Button>
-                </CardFooter>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Password</Label>
+                      <Input 
+                        id="password" 
+                        type="password"
+                        value={clientData.password}
+                        onChange={(e) => updateClientData('password', e.target.value)}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="terms" 
+                        checked={clientData.termsAccepted}
+                        onCheckedChange={(checked) => updateClientData('termsAccepted', checked === true)}
+                        required
+                      />
+                      <label
+                        htmlFor="terms"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        I agree to the{" "}
+                        <Link to="/terms" className="text-primary hover:underline">
+                          Terms of Service
+                        </Link>{" "}
+                        and{" "}
+                        <Link to="/privacy" className="text-primary hover:underline">
+                          Privacy Policy
+                        </Link>
+                      </label>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" type="submit" disabled={isLoading || !clientData.termsAccepted}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Creating Account...
+                        </>
+                      ) : (
+                        'Create Account'
+                      )}
+                    </Button>
+                  </CardFooter>
+                </form>
               </Card>
             </TabsContent>
             
             <TabsContent value="coach">
               <Card>
-                <CardHeader>
-                  <CardTitle>Coach Application</CardTitle>
-                  <CardDescription>
-                    Apply to join our network of professional coaches
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="coachFirstName">First Name</Label>
-                      <Input id="coachFirstName" placeholder="Jane" />
+                <form onSubmit={handleCoachSubmit}>
+                  <CardHeader>
+                    <CardTitle>Coach Application</CardTitle>
+                    <CardDescription>
+                      Apply to join our network of professional coaches
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="coachFirstName">First Name</Label>
+                        <Input 
+                          id="coachFirstName" 
+                          placeholder="Jane"
+                          value={coachData.firstName}
+                          onChange={(e) => updateCoachData('firstName', e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="coachLastName">Last Name</Label>
+                        <Input 
+                          id="coachLastName" 
+                          placeholder="Smith"
+                          value={coachData.lastName}
+                          onChange={(e) => updateCoachData('lastName', e.target.value)}
+                          required
+                        />
+                      </div>
                     </div>
+                    
                     <div className="space-y-2">
-                      <Label htmlFor="coachLastName">Last Name</Label>
-                      <Input id="coachLastName" placeholder="Smith" />
+                      <Label htmlFor="coachEmail">Email</Label>
+                      <Input 
+                        id="coachEmail" 
+                        type="email" 
+                        placeholder="jane.smith@example.com"
+                        value={coachData.email}
+                        onChange={(e) => updateCoachData('email', e.target.value)}
+                        required
+                      />
                     </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="coachEmail">Email</Label>
-                    <Input id="coachEmail" type="email" placeholder="jane.smith@example.com" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="coachPassword">Password</Label>
-                    <Input id="coachPassword" type="password" />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="specialization">Primary Specialization</Label>
-                    <select
-                      id="specialization"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      <option value="">Select a specialization</option>
-                      <option value="business">Business Coaching</option>
-                      <option value="life">Life Coaching</option>
-                      <option value="career">Career Development</option>
-                      <option value="leadership">Leadership</option>
-                      <option value="sports">Sports Performance</option>
-                      <option value="nutrition">Nutrition</option>
-                      <option value="mental">Mental Wellness</option>
-                    </select>
-                  </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="coachTerms" />
-                    <label
-                      htmlFor="coachTerms"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      I agree to the{" "}
-                      <Link to="/terms" className="text-primary hover:underline">
-                        Terms of Service
-                      </Link>,{" "}
-                      <Link to="/privacy" className="text-primary hover:underline">
-                        Privacy Policy
-                      </Link>, and{" "}
-                      <Link to="/coach-terms" className="text-primary hover:underline">
-                        Coach Guidelines
-                      </Link>
-                    </label>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button className="w-full">Submit Application</Button>
-                </CardFooter>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="coachPassword">Password</Label>
+                      <Input 
+                        id="coachPassword" 
+                        type="password"
+                        value={coachData.password}
+                        onChange={(e) => updateCoachData('password', e.target.value)}
+                        required
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="specialization">Primary Specialization</Label>
+                      <Select 
+                        value={coachData.specialization} 
+                        onValueChange={(value) => updateCoachData('specialization', value)}
+                        required
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a specialization" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="business">Business Coaching</SelectItem>
+                          <SelectItem value="life">Life Coaching</SelectItem>
+                          <SelectItem value="career">Career Development</SelectItem>
+                          <SelectItem value="leadership">Leadership</SelectItem>
+                          <SelectItem value="sports">Sports Performance</SelectItem>
+                          <SelectItem value="nutrition">Nutrition</SelectItem>
+                          <SelectItem value="mental">Mental Wellness</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="coachTerms" 
+                        checked={coachData.termsAccepted}
+                        onCheckedChange={(checked) => updateCoachData('termsAccepted', checked === true)}
+                        required
+                      />
+                      <label
+                        htmlFor="coachTerms"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        I agree to the{" "}
+                        <Link to="/terms" className="text-primary hover:underline">
+                          Terms of Service
+                        </Link>,{" "}
+                        <Link to="/privacy" className="text-primary hover:underline">
+                          Privacy Policy
+                        </Link>, and{" "}
+                        <Link to="/coach-terms" className="text-primary hover:underline">
+                          Coach Guidelines
+                        </Link>
+                      </label>
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button className="w-full" type="submit" disabled={isLoading || !coachData.termsAccepted}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Submitting Application...
+                        </>
+                      ) : (
+                        'Submit Application'
+                      )}
+                    </Button>
+                  </CardFooter>
+                </form>
               </Card>
             </TabsContent>
           </Tabs>
