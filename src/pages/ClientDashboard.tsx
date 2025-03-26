@@ -35,6 +35,22 @@ const ClientDashboard = () => {
     percentComplete: 45
   });
   
+  // Mock user data for the Reneu Compass visualization
+  const userCompassData = {
+    purpose: "To create balance and meaning across all areas of my life",
+    coreValues: ["Growth", "Connection", "Authenticity", "Balance"],
+    currentState: {
+      work: 5,
+      mind: 4,
+      body: 3
+    },
+    desiredState: {
+      work: 8,
+      mind: 7,
+      body: 8
+    }
+  };
+  
   // Mock data for upcoming sessions
   const upcomingSessions = [
     {
@@ -186,9 +202,12 @@ const ClientDashboard = () => {
           </div>
         </div>
         
-        {/* Reneu Compass Card */}
+        {/* Reneu Compass Card with user data */}
         <div className="mb-8">
-          <ReneuCompassCard progress={compassProgress} />
+          <ReneuCompassCard 
+            progress={compassProgress}
+            userData={userCompassData}
+          />
         </div>
         
         {/* Quick Stats */}
@@ -651,4 +670,3 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
-
