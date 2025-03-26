@@ -1,14 +1,9 @@
-
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
-import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Search, Filter, Star } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Slider } from '@/components/ui/slider';
+import SearchAndFilter from '@/components/coaches/SearchAndFilter';
+import CoachCategorySection from '@/components/coaches/CoachCategorySection';
+import { Coach } from '@/types/coach';
 
 // Sample coach data with category property
 const coachesData = [
@@ -160,260 +155,58 @@ const Coaches = () => {
           </p>
         </div>
         
-        {/* Search and filter section */}
-        <div className="mb-10">
-          <div className="flex flex-col md:flex-row gap-4 mb-6">
-            <div className="relative flex-grow">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input 
-                type="text" 
-                placeholder="Search by name, specialization, or keyword..." 
-                className="pl-10"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <div className="flex gap-4">
-              <Select 
-                defaultValue="all"
-                onValueChange={(value) => setSelectedCategory(value)}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Coach type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Coaches</SelectItem>
-                  <SelectItem value="reneu">Reneu Coaches</SelectItem>
-                  <SelectItem value="business">Business Coaches</SelectItem>
-                  <SelectItem value="mind">Mental Coaches</SelectItem>
-                  <SelectItem value="body">Body Coaches</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button 
-                variant="outline" 
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center gap-2"
-              >
-                <Filter className="h-4 w-4" />
-                Filters
-              </Button>
-            </div>
-          </div>
-          
-          {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 border rounded-lg mb-6 animate-fade-in">
-              <div>
-                <h3 className="font-medium mb-3">Specialization</h3>
-                <div className="space-y-2">
-                  {['Business', 'Life', 'Career', 'Leadership', 'Sports', 'Nutrition', 'Mental', 'Executive', 'Wellness'].map((spec) => (
-                    <div key={spec} className="flex items-center space-x-2">
-                      <Checkbox id={`spec-${spec.toLowerCase()}`} />
-                      <label
-                        htmlFor={`spec-${spec.toLowerCase()}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        {spec}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-3">Price Range</h3>
-                <div className="px-2">
-                  <Slider 
-                    defaultValue={[0, 200]} 
-                    max={200} 
-                    step={5}
-                    value={priceRange}
-                    onValueChange={setPriceRange}
-                  />
-                  <div className="flex justify-between mt-2 text-sm text-muted-foreground">
-                    <span>${priceRange[0]}</span>
-                    <span>${priceRange[1]}</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-3">Rating</h3>
-                <div className="space-y-2">
-                  {[5, 4, 3, 2, 1].map((rating) => (
-                    <div key={rating} className="flex items-center space-x-2">
-                      <Checkbox id={`rating-${rating}`} />
-                      <label
-                        htmlFor={`rating-${rating}`}
-                        className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center"
-                      >
-                        {rating}+ <Star className="h-3 w-3 ml-1 fill-yellow-400 text-yellow-400" />
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-3">Availability</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="availability-weekends" />
-                    <label
-                      htmlFor="availability-weekends"
-                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Weekends
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="availability-evenings" />
-                    <label
-                      htmlFor="availability-evenings"
-                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Evenings
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="availability-next-week" />
-                    <label
-                      htmlFor="availability-next-week"
-                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                    >
-                      Available next week
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-          
-          <div className="flex flex-wrap gap-2">
-            <Badge 
-              variant={selectedCategory === "all" ? "default" : "outline"} 
-              className={selectedCategory !== "all" ? "bg-background hover:bg-primary/10 cursor-pointer" : ""}
-              onClick={() => setSelectedCategory("all")}
-            >
-              All Coaches
-            </Badge>
-            <Badge 
-              variant={selectedCategory === "reneu" ? "default" : "outline"} 
-              className={selectedCategory !== "reneu" ? "bg-background hover:bg-primary/10 cursor-pointer" : ""}
-              onClick={() => setSelectedCategory("reneu")}
-            >
-              Reneu Coaches
-            </Badge>
-            <Badge 
-              variant={selectedCategory === "business" ? "default" : "outline"} 
-              className={selectedCategory !== "business" ? "bg-background hover:bg-primary/10 cursor-pointer" : ""}
-              onClick={() => setSelectedCategory("business")}
-            >
-              Business
-            </Badge>
-            <Badge 
-              variant={selectedCategory === "mind" ? "default" : "outline"} 
-              className={selectedCategory !== "mind" ? "bg-background hover:bg-primary/10 cursor-pointer" : ""}
-              onClick={() => setSelectedCategory("mind")}
-            >
-              Mental
-            </Badge>
-            <Badge 
-              variant={selectedCategory === "body" ? "default" : "outline"} 
-              className={selectedCategory !== "body" ? "bg-background hover:bg-primary/10 cursor-pointer" : ""}
-              onClick={() => setSelectedCategory("body")}
-            >
-              Body
-            </Badge>
-          </div>
-        </div>
+        <SearchAndFilter 
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          showFilters={showFilters}
+          setShowFilters={setShowFilters}
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+        />
         
-        {/* Coaches grid - now separated by category */}
         <div className="space-y-16">
-          {/* Reneu Coaches Section */}
-          {(selectedCategory === 'all' || selectedCategory === 'reneu') && getReneuCoaches().length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-2xl font-bold">Reneu Coaches</h2>
-                <Badge variant="outline" className="bg-primary/10 border-primary/40">
-                  Holistic Support
-                </Badge>
-              </div>
-              <p className="text-muted-foreground mb-6">
-                Our certified Reneu coaches are dedicated professionals capable of guiding you through your overall renewal journey, 
-                encompassing all aspects of work, mind, and body.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getReneuCoaches().map((coach) => (
-                  <CoachCard key={coach.id} coach={coach} />
-                ))}
-              </div>
-            </div>
+          {(selectedCategory === 'all' || selectedCategory === 'reneu') && (
+            <CoachCategorySection
+              title="Reneu Coaches"
+              description="Our certified Reneu coaches are dedicated professionals capable of guiding you through your overall renewal journey, encompassing all aspects of work, mind, and body."
+              badgeText="Holistic Support"
+              badgeClassName="bg-primary/10 border-primary/40"
+              coaches={getReneuCoaches()}
+            />
           )}
 
-          {/* Business Coaches Section */}
-          {(selectedCategory === 'all' || selectedCategory === 'business') && getBusinessCoaches().length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-2xl font-bold">Business Coaches</h2>
-                <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-                  Professional Goals
-                </Badge>
-              </div>
-              <p className="text-muted-foreground mb-6">
-                Our business coaches provide focused support for your professional goals, career advancement, 
-                leadership development, and work-related challenges.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getBusinessCoaches().map((coach) => (
-                  <CoachCard key={coach.id} coach={coach} />
-                ))}
-              </div>
-            </div>
+          {(selectedCategory === 'all' || selectedCategory === 'business') && (
+            <CoachCategorySection
+              title="Business Coaches"
+              description="Our business coaches provide focused support for your professional goals, career advancement, leadership development, and work-related challenges."
+              badgeText="Professional Goals"
+              badgeClassName="bg-amber-50 text-amber-700 border-amber-200"
+              coaches={getBusinessCoaches()}
+            />
           )}
 
-          {/* Mental Coaches Section */}
-          {(selectedCategory === 'all' || selectedCategory === 'mind') && getMindCoaches().length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-2xl font-bold">Mental Coaches</h2>
-                <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
-                  Mental Wellbeing
-                </Badge>
-              </div>
-              <p className="text-muted-foreground mb-6">
-                Our mental coaches specialize in supporting your mental wellbeing, emotional resilience, 
-                stress management, and personal growth.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getMindCoaches().map((coach) => (
-                  <CoachCard key={coach.id} coach={coach} />
-                ))}
-              </div>
-            </div>
+          {(selectedCategory === 'all' || selectedCategory === 'mind') && (
+            <CoachCategorySection
+              title="Mental Coaches"
+              description="Our mental coaches specialize in supporting your mental wellbeing, emotional resilience, stress management, and personal growth."
+              badgeText="Mental Wellbeing"
+              badgeClassName="bg-purple-50 text-purple-700 border-purple-200"
+              coaches={getMindCoaches()}
+            />
           )}
 
-          {/* Body Coaches Section */}
-          {(selectedCategory === 'all' || selectedCategory === 'body') && getBodyCoaches().length > 0 && (
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <h2 className="text-2xl font-bold">Body Coaches</h2>
-                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
-                  Physical Wellness
-                </Badge>
-              </div>
-              <p className="text-muted-foreground mb-6">
-                Our body coaches focus on physical wellness, nutrition, fitness, energy management, 
-                and establishing healthy habits.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {getBodyCoaches().map((coach) => (
-                  <CoachCard key={coach.id} coach={coach} />
-                ))}
-              </div>
-            </div>
+          {(selectedCategory === 'all' || selectedCategory === 'body') && (
+            <CoachCategorySection
+              title="Body Coaches"
+              description="Our body coaches focus on physical wellness, nutrition, fitness, energy management, and establishing healthy habits."
+              badgeText="Physical Wellness"
+              badgeClassName="bg-green-50 text-green-700 border-green-200"
+              coaches={getBodyCoaches()}
+            />
           )}
 
-          {/* No results message */}
           {getFilteredCoaches().length === 0 && (
             <div className="text-center py-12">
               <p className="text-lg text-muted-foreground">No coaches found matching your criteria.</p>
@@ -432,7 +225,6 @@ const Coaches = () => {
           )}
         </div>
         
-        {/* Pagination - only shown if we have coaches */}
         {getFilteredCoaches().length > 0 && (
           <div className="flex justify-center mt-12">
             <div className="flex gap-1">
@@ -463,53 +255,5 @@ const Coaches = () => {
     </MainLayout>
   );
 };
-
-// Coach card component to avoid repetition
-const CoachCard = ({ coach }) => (
-  <Link 
-    to={`/coaches/${coach.id}`} 
-    key={coach.id}
-    className="group"
-  >
-    <div className="border rounded-xl overflow-hidden hover:shadow-md transition-all h-full flex flex-col">
-      <div className="aspect-video relative overflow-hidden">
-        <img 
-          src={coach.imageSrc} 
-          alt={coach.name} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-        />
-        <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
-          <div className="flex items-center text-white">
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-            <span className="font-medium">{coach.rating}</span>
-            <span className="text-xs ml-1">({coach.reviewCount} reviews)</span>
-          </div>
-        </div>
-      </div>
-      
-      <div className="p-5 flex-grow flex flex-col">
-        <h3 className="font-bold text-lg group-hover:text-primary transition-colors">{coach.name}</h3>
-        <p className="text-muted-foreground">{coach.title}</p>
-        
-        <div className="flex flex-wrap gap-2 mt-3 mb-4">
-          {coach.specializations.map((spec) => (
-            <Badge key={spec} variant="secondary" className="text-xs">
-              {spec}
-            </Badge>
-          ))}
-        </div>
-        
-        <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{coach.bio}</p>
-        
-        <div className="mt-auto">
-          <div className="flex items-center justify-between">
-            <span className="font-bold text-lg">${coach.hourlyRate}</span>
-            <span className="text-sm text-muted-foreground">per hour</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Link>
-);
 
 export default Coaches;
