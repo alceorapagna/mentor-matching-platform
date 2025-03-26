@@ -15,13 +15,13 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lightning } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const { login, isAuthenticated, isLoading } = useAuth();
+  const { login, isAuthenticated, isLoading, testAccess } = useAuth();
 
   // If already authenticated, redirect to dashboard
   if (isAuthenticated) {
@@ -47,6 +47,16 @@ const Login = () => {
     setPassword(demoPassword);
     await login(demoEmail, demoPassword);
   };
+
+  // Quick test access
+  const quickAccessOptions = [
+    { label: 'Client Dashboard', role: 'client', path: '/dashboard' },
+    { label: 'Coach Dashboard', role: 'coach', path: '/coach-dashboard' },
+    { label: 'Admin Dashboard', role: 'admin', path: '/admin' },
+    { label: 'HR Dashboard', role: 'hr', path: '/hr-dashboard' },
+    { label: 'Coaching Session', role: 'client', path: '/session/test-session-1' },
+    { label: 'Reneu Compass', role: 'client', path: '/reneu-compass' },
+  ];
 
   return (
     <MainLayout>
@@ -187,6 +197,30 @@ const Login = () => {
             </div>
             <p className="text-xs text-muted-foreground mt-2">
               Click any button above to instantly log in with a demo account
+            </p>
+          </div>
+          
+          {/* Quick Access Links section */}
+          <div className="mt-8 border rounded-lg border-yellow-200 bg-yellow-50 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Lightning className="h-4 w-4 text-amber-500" />
+              <h3 className="text-sm font-medium text-amber-700">Quick Access (For Testing)</h3>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {quickAccessOptions.map((option) => (
+                <Button
+                  key={option.path}
+                  variant="outline"
+                  size="sm"
+                  className="text-xs bg-amber-100 border-amber-200 text-amber-800 hover:bg-amber-200"
+                  onClick={() => testAccess(option.role as any)}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
+            <p className="text-xs text-amber-600 mt-2">
+              Bypass login and directly access protected pages for testing
             </p>
           </div>
         </div>

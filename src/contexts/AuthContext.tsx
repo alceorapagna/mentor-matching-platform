@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -23,6 +22,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
+  testAccess: (role: UserRole) => void;
 }
 
 // Registration data type
@@ -43,6 +43,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   register: async () => {},
   logout: () => {},
+  testAccess: () => {},
 });
 
 // Mock user data - in a real app, this would come from an API/database
@@ -201,6 +202,43 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     navigate('/');
   };
 
+  // Function for quick test access
+  const testAccess = (role: UserRole) => {
+    // Create a test user based on the requested role
+    const testUser: User = {
+      id: `test_${role}_${Date.now()}`,
+      email: `${role}@test.com`,
+      firstName: 'Test',
+      lastName: role.charAt(0).toUpperCase() + role.slice(1),
+      role: role,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Test${role}`,
+    };
+    
+    // Set the user in state and localStorage
+    setUser(testUser);
+    localStorage.setItem('reneu_user', JSON.stringify(testUser));
+    
+    toast.success(`Quick access as ${role} activated`);
+    
+    // Redirect to appropriate dashboard
+    switch (role) {
+      case 'client':
+        navigate('/dashboard');
+        break;
+      case 'coach':
+        navigate('/coach-dashboard');
+        break;
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'hr':
+        navigate('/hr-dashboard');
+        break;
+      default:
+        navigate('/dashboard');
+    }
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
@@ -208,7 +246,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       isLoading,
       login, 
       register, 
-      logout 
+      logout,
+      testAccess
     }}>
       {children}
     </AuthContext.Provider>
