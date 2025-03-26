@@ -15,6 +15,7 @@ export interface CoachCardProps {
   hourlyRate: number;
   imageSrc: string;
   availability?: 'high' | 'medium' | 'low';
+  category?: 'reneu' | 'business' | 'mind' | 'body';
 }
 
 export function CoachCard({
@@ -26,9 +27,43 @@ export function CoachCard({
   reviewCount,
   hourlyRate,
   imageSrc,
-  availability = 'medium'
+  availability = 'medium',
+  category
 }: CoachCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+
+  const getCategoryBadge = () => {
+    if (!category) return null;
+    
+    switch (category) {
+      case 'reneu':
+        return (
+          <Badge className="absolute top-4 left-4 bg-primary/20 text-primary border-primary/20 backdrop-blur-sm">
+            Reneu Coach
+          </Badge>
+        );
+      case 'business':
+        return (
+          <Badge className="absolute top-4 left-4 bg-amber-500/20 text-amber-700 border-amber-200 backdrop-blur-sm">
+            Business Coach
+          </Badge>
+        );
+      case 'mind':
+        return (
+          <Badge className="absolute top-4 left-4 bg-purple-500/20 text-purple-700 border-purple-200 backdrop-blur-sm">
+            Mental Coach
+          </Badge>
+        );
+      case 'body':
+        return (
+          <Badge className="absolute top-4 left-4 bg-green-500/20 text-green-700 border-green-200 backdrop-blur-sm">
+            Body Coach
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div 
@@ -46,6 +81,9 @@ export function CoachCard({
           }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-50"></div>
+        
+        {/* Category Badge */}
+        {getCategoryBadge()}
         
         {/* Availability Badge */}
         <div className="absolute top-4 right-4">

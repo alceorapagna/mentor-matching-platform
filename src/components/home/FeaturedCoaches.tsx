@@ -17,6 +17,7 @@ const coaches: CoachCardProps[] = [
     hourlyRate: 150,
     imageSrc: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
+    category: 'business',
   },
   {
     id: '2',
@@ -28,17 +29,19 @@ const coaches: CoachCardProps[] = [
     hourlyRate: 120,
     imageSrc: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'medium',
+    category: 'mind',
   },
   {
     id: '3',
-    name: 'Rebecca Martinez',
-    title: 'Sports Performance Coach',
-    specialty: ['Sports', 'Athletes', 'Performance'],
-    rating: 4.7,
-    reviewCount: 68,
-    hourlyRate: 110,
-    imageSrc: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Thomas Reynolds',
+    title: 'Reneu Master Coach',
+    specialty: ['Holistic', 'Work-Life', 'Transformation'],
+    rating: 5.0,
+    reviewCount: 142,
+    hourlyRate: 175,
+    imageSrc: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'high',
+    category: 'reneu',
   },
   {
     id: '4',
@@ -50,16 +53,24 @@ const coaches: CoachCardProps[] = [
     hourlyRate: 130,
     imageSrc: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     availability: 'low',
+    category: 'body',
   },
 ];
 
-// Specialized categories
+// Categories aligned with our new structure
 const categories = [
-  'All', 'Business', 'Life Coaching', 'Sports', 'Nutrition', 'Mental Health'
+  'All', 'Reneu', 'Business', 'Mind', 'Body'
 ];
 
 const FeaturedCoaches = () => {
   const [activeCategory, setActiveCategory] = useState('All');
+
+  // Filter coaches by category
+  const filteredCoaches = activeCategory === 'All' 
+    ? coaches 
+    : coaches.filter(coach => 
+        coach.category?.toLowerCase() === activeCategory.toLowerCase()
+      );
 
   return (
     <section className="py-16 md:py-24">
@@ -90,7 +101,7 @@ const FeaturedCoaches = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {coaches.map((coach) => (
+          {filteredCoaches.map((coach) => (
             <CoachCard key={coach.id} {...coach} />
           ))}
         </div>
