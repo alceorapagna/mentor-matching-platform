@@ -25,7 +25,10 @@ import {
   Circle, 
   Bookmark,
   FileUp,
-  PlusCircle
+  PlusCircle,
+  Briefcase,
+  Brain,
+  Heart
 } from 'lucide-react';
 
 const ClientDashboard = () => {
@@ -36,7 +39,6 @@ const ClientDashboard = () => {
     percentComplete: 45
   });
   
-  // Mock user data for the Reneu Compass visualization
   const userCompassData = {
     purpose: "To create balance and meaning across all areas of my life",
     coreValues: ["Growth", "Connection", "Authenticity", "Balance"],
@@ -52,7 +54,6 @@ const ClientDashboard = () => {
     }
   };
   
-  // Mock data for renewal goals
   const renewalGoals = [
     {
       id: "goal1",
@@ -70,7 +71,6 @@ const ClientDashboard = () => {
     }
   ];
   
-  // Mock data for recommended coaches
   const recommendedCoaches = [
     {
       id: "coach1",
@@ -140,7 +140,6 @@ const ClientDashboard = () => {
     }
   ];
   
-  // Mock data for upcoming sessions
   const upcomingSessions = [
     {
       id: 1,
@@ -171,7 +170,6 @@ const ClientDashboard = () => {
     }
   ];
   
-  // Mock data for past sessions
   const pastSessions = [
     {
       id: 101,
@@ -197,7 +195,6 @@ const ClientDashboard = () => {
     }
   ];
   
-  // Mock data for development goals
   const developmentGoals = [
     {
       id: 1,
@@ -250,7 +247,6 @@ const ClientDashboard = () => {
     }
   ];
   
-  // Mock data for coaches
   const myCoaches = [
     {
       id: 1,
@@ -278,6 +274,52 @@ const ClientDashboard = () => {
     }
   ];
   
+  const getCategoryColors = (category) => {
+    switch (category) {
+      case 'work':
+        return {
+          bgColor: 'bg-amber-50',
+          textColor: 'text-amber-600',
+          iconColor: 'text-amber-600',
+          borderColor: 'border-amber-200'
+        };
+      case 'mind':
+        return {
+          bgColor: 'bg-purple-50',
+          textColor: 'text-purple-600',
+          iconColor: 'text-purple-600',
+          borderColor: 'border-purple-200'
+        };
+      case 'body':
+        return {
+          bgColor: 'bg-green-50',
+          textColor: 'text-green-600',
+          iconColor: 'text-green-600',
+          borderColor: 'border-green-200'
+        };
+      default:
+        return {
+          bgColor: 'bg-primary/10',
+          textColor: 'text-primary',
+          iconColor: 'text-primary',
+          borderColor: 'border-primary/20'
+        };
+    }
+  };
+  
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case 'work':
+        return <Briefcase className="h-5 w-5 text-amber-600" />;
+      case 'mind':
+        return <Brain className="h-5 w-5 text-purple-600" />;
+      case 'body':
+        return <Heart className="h-5 w-5 text-green-600" />;
+      default:
+        return <Compass className="h-5 w-5 text-primary" />;
+    }
+  };
+  
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8">
@@ -291,7 +333,6 @@ const ClientDashboard = () => {
           </div>
         </div>
         
-        {/* Reneu Compass Card with user data */}
         <div className="mb-8">
           <ReneuCompassCard 
             progress={compassProgress}
@@ -299,7 +340,6 @@ const ClientDashboard = () => {
           />
         </div>
         
-        {/* Goal-specific coach recommendations */}
         <div className="mb-8">
           <GoalCoachRecommendations 
             goals={renewalGoals} 
@@ -307,7 +347,6 @@ const ClientDashboard = () => {
           />
         </div>
         
-        {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardContent className="p-6">
@@ -366,7 +405,6 @@ const ClientDashboard = () => {
           </Card>
         </div>
         
-        {/* Next Session */}
         <div className="mb-8">
           <h2 className="text-xl font-bold mb-4">Your Next Session</h2>
           <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
@@ -413,7 +451,6 @@ const ClientDashboard = () => {
           </Card>
         </div>
         
-        {/* Main Dashboard Tabs */}
         <Tabs defaultValue="goals" className="space-y-4">
           <TabsList>
             <TabsTrigger value="goals">
@@ -434,7 +471,6 @@ const ClientDashboard = () => {
             </TabsTrigger>
           </TabsList>
           
-          {/* Goals Tab Content */}
           <TabsContent value="goals" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">Development Goals</h2>
@@ -494,7 +530,6 @@ const ClientDashboard = () => {
             ))}
           </TabsContent>
           
-          {/* Sessions Tab Content */}
           <TabsContent value="sessions" className="space-y-6">
             <div id="upcoming">
               <h2 className="text-xl font-bold mb-4">Upcoming Sessions</h2>
@@ -603,7 +638,6 @@ const ClientDashboard = () => {
             </div>
           </TabsContent>
           
-          {/* Coaches Tab Content */}
           <TabsContent value="coaches" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">My Coaching Team</h2>
@@ -651,7 +685,6 @@ const ClientDashboard = () => {
             </div>
           </TabsContent>
           
-          {/* Resources Tab Content */}
           <TabsContent value="resources" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-xl font-bold">Resources & Materials</h2>
@@ -767,3 +800,4 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
