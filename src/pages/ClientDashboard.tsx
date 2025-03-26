@@ -147,6 +147,8 @@ const ClientDashboard = () => {
       coachName: 'Dr. Sarah Johnson',
       coachImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80',
       type: 'Leadership Development',
+      coachType: 'work',
+      isReneuCoach: true,
       date: 'Today',
       time: '3:00 PM - 4:00 PM',
       status: 'upcoming'
@@ -156,6 +158,8 @@ const ClientDashboard = () => {
       coachName: 'Mark Williams',
       coachImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
       type: 'Career Coaching',
+      coachType: 'work',
+      isReneuCoach: false,
       date: 'Tomorrow',
       time: '11:00 AM - 12:00 PM',
       status: 'upcoming'
@@ -165,6 +169,8 @@ const ClientDashboard = () => {
       coachName: 'Emily Chen',
       coachImage: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1622&q=80',
       type: 'Wellness Coaching',
+      coachType: 'body',
+      isReneuCoach: false,
       date: 'Nov 10, 2023',
       time: '2:00 PM - 3:00 PM',
       status: 'upcoming'
@@ -419,7 +425,19 @@ const ClientDashboard = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold">{upcomingSessions[0].coachName}</h3>
-                    <p className="text-sm text-muted-foreground">{upcomingSessions[0].type}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-muted-foreground">{upcomingSessions[0].type}</p>
+                      {upcomingSessions[0].isReneuCoach && (
+                        <Badge variant="outline" className="bg-primary/10 border-primary/20 text-xs">
+                          Reneu Coach
+                        </Badge>
+                      )}
+                      {!upcomingSessions[0].isReneuCoach && upcomingSessions[0].coachType && (
+                        <Badge variant="outline" className={`text-xs ${getCategoryColors(upcomingSessions[0].coachType).bgColor} ${getCategoryColors(upcomingSessions[0].coachType).textColor} ${getCategoryColors(upcomingSessions[0].coachType).borderColor}`}>
+                          {upcomingSessions[0].coachType.charAt(0).toUpperCase() + upcomingSessions[0].coachType.slice(1)} Coach
+                        </Badge>
+                      )}
+                    </div>
                   </div>
                 </div>
                 
