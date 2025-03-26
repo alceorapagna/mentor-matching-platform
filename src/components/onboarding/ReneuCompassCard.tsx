@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,78 +78,110 @@ const ReneuCompassCard = ({
         ) : null}
 
         <div className="flex flex-col space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            {/* Left side: Compass with user's purpose and values */}
-            <div className="relative rounded-md overflow-hidden bg-muted/30 p-3">
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Compass className="h-10 w-10 text-primary" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-4">
+              <div className="rounded-md overflow-hidden bg-muted/30 p-6 flex items-center justify-center">
+                <div className="relative w-48 h-48">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-full h-full rounded-full border-2 border-primary/30 flex items-center justify-center">
+                      <Compass className="h-16 w-16 text-primary" />
+                    </div>
+                  </div>
+                  
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-full h-full rounded-full border border-dashed border-primary/20"></div>
+                  </div>
+                  
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Mind</div>
+                  </div>
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
+                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Body</div>
+                  </div>
+                  <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Work</div>
+                  </div>
+                  <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2">
+                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Balance</div>
                   </div>
                 </div>
-                
-                {/* Purpose Circle */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-40 h-40 rounded-full border-2 border-dashed border-primary/30"></div>
-                </div>
-                
-                {/* Values Placement */}
-                {userData.coreValues.map((value, index) => {
-                  // Calculate position in a circle
-                  const angle = (index * (360 / userData.coreValues.length)) * (Math.PI / 180);
-                  const radius = 90; // Distance from center
-                  const top = 50 + Math.sin(angle) * radius;
-                  const left = 50 + Math.cos(angle) * radius;
-                  
-                  return (
-                    <div 
-                      key={value} 
-                      className="absolute transform -translate-x-1/2 -translate-y-1/2 bg-background px-2 py-1 rounded-md text-xs font-medium shadow-sm"
-                      style={{ top: `${top}%`, left: `${left}%` }}
-                    >
-                      {value}
-                    </div>
-                  );
-                })}
               </div>
               
-              {/* Central purpose text */}
-              <div className="relative h-48 flex items-center justify-center">
-                <div className="text-center max-w-32 z-10">
-                  <p className="text-xs font-semibold mb-1 text-primary">Your Purpose</p>
-                  <p className="text-xs">{userData.purpose}</p>
+              <div className="space-y-4">
+                <div className="bg-background rounded-md p-4 shadow-sm border">
+                  <h4 className="text-sm font-semibold text-primary mb-1">My Purpose</h4>
+                  <p className="text-sm">{userData.purpose}</p>
+                </div>
+                
+                <div className="bg-background rounded-md p-4 shadow-sm border">
+                  <h4 className="text-sm font-semibold text-primary mb-1">My Values</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {userData.coreValues.map(value => (
+                      <span key={value} className="inline-flex items-center bg-primary/10 text-xs px-2 py-1 rounded">
+                        {value}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
             
-            {/* Right side: Journey visualization */}
-            <div className="rounded-md overflow-hidden bg-muted/30 p-3">
-              <div className="h-48 flex flex-col justify-between">
-                <div className="bg-background rounded-md p-2 shadow-sm">
-                  <h4 className="text-xs font-semibold text-amber-600">Present</h4>
-                  <div className="flex items-center justify-between text-xs mt-1">
-                    <span>Work: {userData.currentState.work}/10</span>
-                    <span>Mind: {userData.currentState.mind}/10</span>
-                    <span>Body: {userData.currentState.body}/10</span>
+            <div className="flex flex-col gap-4">
+              <div className="rounded-md overflow-hidden bg-muted/30 p-6 flex items-center justify-center">
+                <div className="relative h-48 w-full flex items-center justify-between">
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-full border-2 border-amber-500 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-amber-500"></div>
+                      <div className="absolute top-1/2 right-0 w-8 h-0.5 bg-amber-500 transform -translate-y-1/2"></div>
+                    </div>
+                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">A</span>
                   </div>
-                </div>
-                
-                <div className="relative">
-                  <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-primary/20 -translate-x-1/2"></div>
-                  <div className="flex justify-center">
-                    <div className="bg-primary/10 rounded-full p-1.5">
-                      <ArrowRight className="h-4 w-4 text-primary rotate-90" />
+                  
+                  <div className="flex-1 mx-4 relative">
+                    <div className="h-0.5 w-full bg-gray-300"></div>
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                      <div className="w-12 h-12 rounded-full border-2 border-primary/50 flex items-center justify-center rotate-45">
+                        <div className="w-2 h-2 rounded-full bg-primary/50"></div>
+                        <div className="absolute top-1/2 right-0 w-6 h-0.5 bg-primary/50 transform -translate-y-1/2"></div>
+                      </div>
+                      <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">?</span>
                     </div>
                   </div>
+                  
+                  <div className="relative">
+                    <div className="w-16 h-16 rounded-full border-2 border-green-500 bg-green-50 flex items-center justify-center">
+                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                      <div className="absolute top-1/2 right-0 w-8 h-0.5 bg-green-500 transform -translate-y-1/2"></div>
+                    </div>
+                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">B</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-background rounded-md p-4 shadow-sm border">
+                    <h4 className="text-sm font-semibold text-amber-600 mb-1">The Present</h4>
+                    <ul className="text-xs space-y-1">
+                      <li>Work: {userData.currentState.work}/10</li>
+                      <li>Mind: {userData.currentState.mind}/10</li>
+                      <li>Body: {userData.currentState.body}/10</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-background rounded-md p-4 shadow-sm border">
+                    <h4 className="text-sm font-semibold text-green-600 mb-1">The Future</h4>
+                    <ul className="text-xs space-y-1">
+                      <li>Work: {userData.desiredState.work}/10</li>
+                      <li>Mind: {userData.desiredState.mind}/10</li>
+                      <li>Body: {userData.desiredState.body}/10</li>
+                    </ul>
+                  </div>
                 </div>
                 
-                <div className="bg-background rounded-md p-2 shadow-sm">
-                  <h4 className="text-xs font-semibold text-green-600">Future</h4>
-                  <div className="flex items-center justify-between text-xs mt-1">
-                    <span>Work: {userData.desiredState.work}/10</span>
-                    <span>Mind: {userData.desiredState.mind}/10</span>
-                    <span>Body: {userData.desiredState.body}/10</span>
-                  </div>
+                <div className="bg-background rounded-md p-4 shadow-sm border">
+                  <h4 className="text-sm font-semibold text-primary mb-1">The Journey</h4>
+                  <p className="text-xs">Guided by expert coaches to bridge your current state to your desired future across work, mind, and body dimensions.</p>
                 </div>
               </div>
             </div>
