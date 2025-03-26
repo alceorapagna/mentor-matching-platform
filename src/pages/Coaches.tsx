@@ -5,6 +5,14 @@ import { Button } from '@/components/ui/button';
 import SearchAndFilter from '@/components/coaches/SearchAndFilter';
 import CoachCategorySection from '@/components/coaches/CoachCategorySection';
 import { Coach } from '@/types/coach';
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from '@/components/ui/pagination';
 
 // Sample coach data with category property
 const coachesData: Coach[] = [
@@ -123,6 +131,8 @@ const Coaches = () => {
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   
   // Filter coaches by search term and selected category
   const getFilteredCoaches = () => {
@@ -140,11 +150,56 @@ const Coaches = () => {
     });
   };
 
-  // Get coaches grouped by category
-  const getReneuCoaches = () => getFilteredCoaches().filter(coach => coach.category === 'reneu');
-  const getBusinessCoaches = () => getFilteredCoaches().filter(coach => coach.category === 'business');
-  const getMindCoaches = () => getFilteredCoaches().filter(coach => coach.category === 'mind');
-  const getBodyCoaches = () => getFilteredCoaches().filter(coach => coach.category === 'body');
+  const filteredCoaches = getFilteredCoaches();
+  const totalPages = Math.ceil(filteredCoaches.length / itemsPerPage);
+  
+  // Get paginated coaches
+  const getPaginatedCoaches = () => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return filteredCoaches.slice(startIndex, endIndex);
+  };
+
+  // Get coaches grouped by category from the paginated results
+  const getReneuCoaches = () => getPaginatedCoaches().filter(coach => coach.category === 'reneu');
+  const getBusinessCoaches = () => getPaginatedCoaches().filter(coach => coach.category === 'business');
+  const getMindCoaches = () => getPaginatedCoaches().filter(coach => coach.category === 'mind');
+  const getBodyCoaches = () => getPaginatedCoaches().filter(coach => coach.category === 'body');
+  
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Generate pagination items
+  const generatePaginationItems = () => {
+    const items = [];
+    const maxVisible = 5; // Maximum number of page links to show
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+    
+    // Adjust start page if we're near the end
+    if (endPage - startPage + 1 < maxVisible) {
+      startPage = Math.max(1, endPage - maxVisible + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink 
+            isActive={currentPage === i} 
+            onClick={() => handlePageChange(i)}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+    
+    return items;
+  };
   
   return (
     <MainLayout>
@@ -208,7 +263,7 @@ const Coaches = () => {
             />
           )}
 
-          {getFilteredCoaches().length === 0 && (
+          {filteredCoaches.length === 0 && (
             <div className="text-center py-12">
               <p className="text-lg text-muted-foreground">No coaches found matching your criteria.</p>
               <Button 
@@ -226,30 +281,27 @@ const Coaches = () => {
           )}
         </div>
         
-        {getFilteredCoaches().length > 0 && (
+        {filteredCoaches.length > 0 && totalPages > 1 && (
           <div className="flex justify-center mt-12">
-            <div className="flex gap-1">
-              <Button variant="outline" size="icon" disabled>
-                <span className="sr-only">Previous page</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><polyline points="15 18 9 12 15 6"></polyline></svg>
-              </Button>
-              <Button variant="outline" size="icon" className="bg-primary/10 border-primary">
-                <span className="sr-only">Page 1</span>
-                1
-              </Button>
-              <Button variant="outline" size="icon">
-                <span className="sr-only">Page 2</span>
-                2
-              </Button>
-              <Button variant="outline" size="icon">
-                <span className="sr-only">Page 3</span>
-                3
-              </Button>
-              <Button variant="outline" size="icon">
-                <span className="sr-only">Next page</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </Button>
-            </div>
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious 
+                    onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
+                    className={currentPage <= 1 ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+                
+                {generatePaginationItems()}
+                
+                <PaginationItem>
+                  <PaginationNext 
+                    onClick={() => currentPage < totalPages && handlePageChange(currentPage + 1)}
+                    className={currentPage >= totalPages ? "pointer-events-none opacity-50" : ""}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         )}
       </div>
