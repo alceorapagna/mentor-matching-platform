@@ -1,4 +1,4 @@
-import { useState } from "react";
+
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -79,32 +79,14 @@ const ReneuCompassCard = ({
 
         <div className="flex flex-col space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Left side - Compass with Purpose & Values */}
             <div className="flex flex-col gap-4">
-              <div className="rounded-md overflow-hidden bg-muted/30 p-6 flex items-center justify-center">
-                <div className="relative w-48 h-48">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full rounded-full border-2 border-primary/30 flex items-center justify-center">
-                      <Compass className="h-16 w-16 text-primary" />
-                    </div>
-                  </div>
-                  
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full rounded-full border border-dashed border-primary/20"></div>
-                  </div>
-                  
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Mind</div>
-                  </div>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2">
-                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Body</div>
-                  </div>
-                  <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Work</div>
-                  </div>
-                  <div className="absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2">
-                    <div className="bg-background px-2 py-1 rounded text-xs font-medium">Balance</div>
-                  </div>
-                </div>
+              <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/a593cfde-fb00-4d7e-b456-468cbafb302f.png" 
+                  alt="Reneu Compass" 
+                  className="w-full max-w-[240px] h-auto"
+                />
               </div>
               
               <div className="space-y-4">
@@ -126,36 +108,14 @@ const ReneuCompassCard = ({
               </div>
             </div>
             
+            {/* Right side - Journey with Current & Desired State */}
             <div className="flex flex-col gap-4">
-              <div className="rounded-md overflow-hidden bg-muted/30 p-6 flex items-center justify-center">
-                <div className="relative h-48 w-full flex items-center justify-between">
-                  <div className="relative">
-                    <div className="w-16 h-16 rounded-full border-2 border-amber-500 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-amber-500"></div>
-                      <div className="absolute top-1/2 right-0 w-8 h-0.5 bg-amber-500 transform -translate-y-1/2"></div>
-                    </div>
-                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">A</span>
-                  </div>
-                  
-                  <div className="flex-1 mx-4 relative">
-                    <div className="h-0.5 w-full bg-gray-300"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                      <div className="w-12 h-12 rounded-full border-2 border-primary/50 flex items-center justify-center rotate-45">
-                        <div className="w-2 h-2 rounded-full bg-primary/50"></div>
-                        <div className="absolute top-1/2 right-0 w-6 h-0.5 bg-primary/50 transform -translate-y-1/2"></div>
-                      </div>
-                      <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">?</span>
-                    </div>
-                  </div>
-                  
-                  <div className="relative">
-                    <div className="w-16 h-16 rounded-full border-2 border-green-500 bg-green-50 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <div className="absolute top-1/2 right-0 w-8 h-0.5 bg-green-500 transform -translate-y-1/2"></div>
-                    </div>
-                    <span className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-xs">B</span>
-                  </div>
-                </div>
+              <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/40ea9949-3751-4b9d-afdc-0b46d8dc00e3.png" 
+                  alt="Reneu Journey" 
+                  className="w-full max-w-[240px] h-auto"
+                />
               </div>
               
               <div className="space-y-4">
