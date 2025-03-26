@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import MainLayout from '@/components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import CoachCategorySection from '@/components/coaches/CoachCategorySection';
 import { Coach } from '@/types/coach';
 
 // Sample coach data with category property
-const coachesData = [
+const coachesData: Coach[] = [
   {
     id: 1,
     name: 'Sarah Johnson',
