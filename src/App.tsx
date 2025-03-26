@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import HRPortal from "./pages/HRPortal";
 import HRDashboard from "./pages/HRDashboard";
 import CoachDashboard from "./pages/CoachDashboard";
+import ReneuCompass from "./pages/ReneuCompass";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,14 @@ const App = () => (
             <Route path="/register" element={<Register />} />
             
             {/* Protected routes */}
+            <Route 
+              path="/reneu-compass" 
+              element={
+                <ProtectedRoute allowedRoles={["client"]}>
+                  <ReneuCompass />
+                </ProtectedRoute>
+              } 
+            />
             <Route 
               path="/session/:id" 
               element={
