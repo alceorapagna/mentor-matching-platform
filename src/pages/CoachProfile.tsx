@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -9,12 +8,13 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
-import { Star, Calendar as CalendarIcon, Clock, Video, MapPin, GraduationCap, Award, Briefcase, BookOpen, Languages, Check, MessageCircle, User } from 'lucide-react';
+import { Star, Calendar as CalendarIcon, Clock, Video, MapPin, GraduationCap, Award, Briefcase, BookOpen, Languages, Check, MessageCircle, User, Users, FileCheck, Clock3 } from 'lucide-react';
 
 const CoachProfile = () => {
   const { id } = useParams();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
+  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   
   // Mock coach data
   const coach = {
@@ -24,7 +24,6 @@ const CoachProfile = () => {
     bio: 'With over 15 years of experience in executive coaching, I help professionals unlock their leadership potential and achieve both personal and organizational goals. My approach combines neuroscience, behavioral psychology, and practical business strategies.',
     rating: 4.9,
     reviewCount: 127,
-    hourlyRate: 150,
     specialties: ['Executive Leadership', 'Career Transitions', 'Stress Management', 'Team Building', 'Public Speaking'],
     experience: '15+ years',
     education: [
@@ -42,27 +41,49 @@ const CoachProfile = () => {
     packages: [
       { 
         id: 1, 
-        name: 'Single Session', 
-        description: 'One-time 60-minute coaching session',
-        price: 150,
-        type: 'one-time'
+        name: 'Basic Package', 
+        description: '4 coaching sessions for one team member',
+        features: [
+          '4 sessions (60 minutes each)',
+          'Initial assessment',
+          'Basic goal setting',
+          'Email support'
+        ],
+        type: 'team-member'
       },
       { 
         id: 2, 
-        name: 'Monthly Package', 
-        description: '4 sessions per month, plus email support between sessions',
-        price: 520,
-        discountedFrom: 600,
-        type: 'recurring'
+        name: 'Standard Package', 
+        description: '8 sessions for one team member plus assessment and planning',
+        features: [
+          '8 sessions (60 minutes each)',
+          'Comprehensive assessment',
+          'Detailed development plan',
+          'Email and chat support',
+          'Monthly progress reports'
+        ],
+        type: 'team-member'
       },
       { 
         id: 3, 
-        name: 'Quarterly Intensive', 
-        description: '12 sessions over 3 months, personalized development plan, unlimited messaging support',
-        price: 1450,
-        discountedFrom: 1800,
-        type: 'recurring'
+        name: 'Premium Team Package', 
+        description: 'Coaching for multiple team members plus team workshops',
+        features: [
+          'Sessions for up to 5 team members',
+          'Bi-weekly team workshops',
+          'Leadership assessment for all participants',
+          'Customized team development plan',
+          'Unlimited support',
+          'Detailed analytics and ROI reporting'
+        ],
+        type: 'team'
       }
+    ],
+    customSolutions: [
+      'Enterprise-wide coaching programs',
+      'Leadership development for entire departments',
+      'Specialized workshops for specific challenges',
+      'Integration with existing L&D initiatives'
     ],
     reviews: [
       {
@@ -163,7 +184,7 @@ const CoachProfile = () => {
             </div>
             
             <div className="flex flex-wrap gap-4">
-              <Button className="hover-scale">Book a Session</Button>
+              <Button className="hover-scale">Request Corporate Package</Button>
               <Button variant="outline"><MessageCircle className="mr-2 h-4 w-4" />Contact</Button>
               <Button variant="outline"><User className="mr-2 h-4 w-4" />View Full Profile</Button>
             </div>
@@ -171,13 +192,19 @@ const CoachProfile = () => {
         </div>
         
         {/* Main Content Tabs */}
-        <Tabs defaultValue="booking" className="mb-10">
+        <Tabs defaultValue="packages" className="mb-10">
           <TabsList className="w-full justify-start border-b rounded-none px-0 h-auto">
+            <TabsTrigger 
+              value="packages" 
+              className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
+            >
+              Packages & Pricing
+            </TabsTrigger>
             <TabsTrigger 
               value="booking" 
               className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
             >
-              Book a Session
+              Book a Consultation
             </TabsTrigger>
             <TabsTrigger 
               value="about" 
@@ -186,18 +213,86 @@ const CoachProfile = () => {
               About
             </TabsTrigger>
             <TabsTrigger 
-              value="packages" 
-              className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-            >
-              Packages & Pricing
-            </TabsTrigger>
-            <TabsTrigger 
               value="reviews" 
               className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
             >
               Reviews
             </TabsTrigger>
           </TabsList>
+          
+          {/* Packages & Pricing Tab Content */}
+          <TabsContent value="packages">
+            <div className="space-y-10">
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Coaching Packages</h2>
+                <p className="text-muted-foreground mb-6">
+                  Our coaching packages are designed to provide flexible options for organizations of all sizes.
+                  Whether you need coaching for individual team members or comprehensive team development, we have solutions to fit your needs.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {coach.packages.map((pkg) => (
+                    <Card key={pkg.id} className={pkg.id === 2 ? "border-primary border-2" : ""}>
+                      {pkg.id === 2 && (
+                        <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
+                          Most Popular
+                        </div>
+                      )}
+                      <CardHeader>
+                        <CardTitle>{pkg.name}</CardTitle>
+                        <CardDescription>{pkg.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="mb-4">
+                          <span className="text-lg font-semibold flex items-center gap-2">
+                            {pkg.type === 'team-member' ? (
+                              <User className="h-5 w-5 text-muted-foreground" />
+                            ) : (
+                              <Users className="h-5 w-5 text-muted-foreground" />
+                            )}
+                            {pkg.type === 'team-member' ? 'Individual Coaching' : 'Team Coaching'}
+                          </span>
+                        </div>
+                        <ul className="space-y-2">
+                          {pkg.features.map((feature, index) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <Check className="h-4 w-4 text-green-600 mt-1" />
+                              <span>{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                      <CardFooter>
+                        <Button 
+                          className="w-full" 
+                          variant={selectedPackage === pkg.name ? "default" : "outline"}
+                          onClick={() => setSelectedPackage(pkg.name)}
+                        >
+                          {selectedPackage === pkg.name ? "Selected" : "Select Package"}
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-muted/50 rounded-lg p-6">
+                <h3 className="text-xl font-bold mb-4">Custom Enterprise Solutions</h3>
+                <p className="text-muted-foreground mb-4">
+                  For larger organizations or specialized needs, we offer custom coaching solutions tailored to your specific requirements.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  {coach.customSolutions.map((solution, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <FileCheck className="h-5 w-5 text-primary mt-0.5" />
+                      <span>{solution}</span>
+                    </div>
+                  ))}
+                </div>
+                <Button>Request Custom Proposal</Button>
+              </div>
+            </div>
+          </TabsContent>
           
           {/* Booking Tab Content */}
           <TabsContent value="booking">
@@ -330,110 +425,6 @@ const CoachProfile = () => {
                   </div>
                 </div>
               </section>
-            </div>
-          </TabsContent>
-          
-          {/* Packages & Pricing Tab Content */}
-          <TabsContent value="packages">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {coach.packages.map((pkg) => (
-                <Card key={pkg.id} className={pkg.id === 2 ? "border-primary border-2" : ""}>
-                  {pkg.id === 2 && (
-                    <div className="bg-primary text-primary-foreground text-center py-1 text-sm font-medium">
-                      Most Popular
-                    </div>
-                  )}
-                  <CardHeader>
-                    <CardTitle>{pkg.name}</CardTitle>
-                    <CardDescription>{pkg.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="mb-4">
-                      <span className="text-3xl font-bold">${pkg.price}</span>
-                      {pkg.type === 'recurring' && <span className="text-muted-foreground"> /month</span>}
-                      {pkg.discountedFrom && (
-                        <span className="text-muted-foreground line-through ml-2">
-                          ${pkg.discountedFrom}
-                        </span>
-                      )}
-                    </div>
-                    <ul className="space-y-2">
-                      {pkg.id === 1 && (
-                        <>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>60-minute video session</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Session recording available</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Follow-up resources</span>
-                          </li>
-                        </>
-                      )}
-                      {pkg.id === 2 && (
-                        <>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>4 sessions per month (60 min each)</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Email support between sessions</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Customized exercises and resources</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Monthly progress assessment</span>
-                          </li>
-                        </>
-                      )}
-                      {pkg.id === 3 && (
-                        <>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>12 sessions over 3 months</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Comprehensive development plan</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Unlimited messaging support</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Personalized resource library</span>
-                          </li>
-                          <li className="flex items-start gap-2">
-                            <Check className="h-4 w-4 text-green-600 mt-1" />
-                            <span>Weekly progress tracking</span>
-                          </li>
-                        </>
-                      )}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button className="w-full">Select Package</Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-            
-            <div className="mt-8 bg-muted/50 rounded-lg p-6">
-              <h3 className="font-semibold mb-4">Corporate Packages</h3>
-              <p className="text-muted-foreground mb-4">
-                Special packages are available for organizations looking to provide coaching for multiple team members.
-                Custom programs can be designed to address specific organizational challenges.
-              </p>
-              <Button variant="outline">Contact for Corporate Rates</Button>
             </div>
           </TabsContent>
           

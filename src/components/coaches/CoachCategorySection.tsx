@@ -41,9 +41,11 @@ const CoachCategorySection = ({
             specialty={coach.specializations}
             rating={coach.rating}
             reviewCount={coach.reviewCount}
-            hourlyRate={coach.hourlyRate}
             imageSrc={coach.imageSrc}
             category={coach.category}
+            availability={coach.availability}
+            pricingModel={coach.pricingModel}
+            packages={coach.packages}
           />
         ))}
       </div>

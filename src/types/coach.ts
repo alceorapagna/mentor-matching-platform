@@ -5,9 +5,15 @@ export interface Coach {
   title: string;
   rating: number;
   reviewCount: number;
-  hourlyRate: number;
   specializations: string[];
   imageSrc: string;
   bio: string;
   category: 'reneu' | 'business' | 'mind' | 'body';
+  availability?: 'high' | 'medium' | 'low';
+  pricingModel?: 'custom' | 'packages';
+  packages?: {
+    basic?: string;
+    standard?: string;
+    premium?: string;
+  };
 }

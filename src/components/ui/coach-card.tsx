@@ -12,10 +12,15 @@ export interface CoachCardProps {
   specialty: string[];
   rating: number;
   reviewCount: number;
-  hourlyRate: number;
   imageSrc: string;
   availability?: 'high' | 'medium' | 'low';
   category?: 'reneu' | 'business' | 'mind' | 'body';
+  pricingModel?: 'custom' | 'packages';
+  packages?: {
+    basic?: string;
+    standard?: string;
+    premium?: string;
+  };
 }
 
 export function CoachCard({
@@ -25,10 +30,10 @@ export function CoachCard({
   specialty,
   rating,
   reviewCount,
-  hourlyRate,
   imageSrc,
   availability = 'medium',
-  category
+  category,
+  pricingModel = 'custom'
 }: CoachCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -123,7 +128,9 @@ export function CoachCard({
         
         <div className="flex items-center justify-between pt-4 border-t border-border/30">
           <div>
-            <span className="block text-lg font-semibold">${hourlyRate}/hr</span>
+            <span className="block text-sm text-muted-foreground">
+              {pricingModel === 'custom' ? 'Custom Corporate Pricing' : 'Multiple Packages Available'}
+            </span>
           </div>
           
           <Link to={`/coaches/${id}`}>
