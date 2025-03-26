@@ -33,7 +33,18 @@ const CoachCategorySection = ({
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {coaches.map((coach) => (
-          <CoachCard key={coach.id} {...coach} />
+          <CoachCard 
+            key={coach.id} 
+            id={coach.id.toString()} 
+            name={coach.name}
+            title={coach.title}
+            specialty={coach.specializations}
+            rating={coach.rating}
+            reviewCount={coach.reviewCount}
+            hourlyRate={coach.hourlyRate}
+            imageSrc={coach.imageSrc}
+            category={coach.category}
+          />
         ))}
       </div>
     </div>
