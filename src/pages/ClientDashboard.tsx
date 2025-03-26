@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -9,6 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import ReneuCompassCard from '@/components/onboarding/ReneuCompassCard';
 import { 
   Calendar, 
   ChevronRight, 
@@ -29,6 +29,11 @@ import {
 
 const ClientDashboard = () => {
   const [currentGoalProgress, setCurrentGoalProgress] = useState(65);
+  const [compassProgress, setCompassProgress] = useState({
+    hasStarted: true,
+    hasCompleted: false,
+    percentComplete: 45
+  });
   
   // Mock data for upcoming sessions
   const upcomingSessions = [
@@ -179,6 +184,11 @@ const ClientDashboard = () => {
           <div className="mt-4 md:mt-0">
             <Button className="premium-button">Find a New Coach</Button>
           </div>
+        </div>
+        
+        {/* Reneu Compass Card */}
+        <div className="mb-8">
+          <ReneuCompassCard progress={compassProgress} />
         </div>
         
         {/* Quick Stats */}
@@ -641,3 +651,4 @@ const ClientDashboard = () => {
 };
 
 export default ClientDashboard;
+
