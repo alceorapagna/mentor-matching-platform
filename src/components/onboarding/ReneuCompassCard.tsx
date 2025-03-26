@@ -46,20 +46,28 @@ const ReneuCompassCard = ({
           </div>
         ) : null}
 
-        <div className="grid grid-cols-3 gap-3">
-          <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-            <Briefcase className="h-5 w-5 text-amber-600 mb-1" />
-            <span className="text-xs font-medium">Work</span>
-          </div>
+        <div className="flex flex-col space-y-4">
+          <img 
+            src="/lovable-uploads/0a737529-dc6b-4836-ab2c-e082aa4ea1b7.png" 
+            alt="Reneu Compass Journey Framework" 
+            className="w-full rounded-md" 
+          />
           
-          <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-            <Brain className="h-5 w-5 text-purple-600 mb-1" />
-            <span className="text-xs font-medium">Mind</span>
-          </div>
-          
-          <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-            <Activity className="h-5 w-5 text-green-600 mb-1" />
-            <span className="text-xs font-medium">Body</span>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
+              <Briefcase className="h-5 w-5 text-amber-600 mb-1" />
+              <span className="text-xs font-medium">Work</span>
+            </div>
+            
+            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
+              <Brain className="h-5 w-5 text-purple-600 mb-1" />
+              <span className="text-xs font-medium">Mind</span>
+            </div>
+            
+            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
+              <Activity className="h-5 w-5 text-green-600 mb-1" />
+              <span className="text-xs font-medium">Body</span>
+            </div>
           </div>
         </div>
       </CardContent>
