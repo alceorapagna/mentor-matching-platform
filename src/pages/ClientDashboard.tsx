@@ -328,9 +328,6 @@ const ClientDashboard = () => {
             <h1 className="text-3xl font-bold">Welcome back, Alex</h1>
             <p className="text-muted-foreground">Track your progress and manage your coaching journey</p>
           </div>
-          <div className="mt-4 md:mt-0">
-            <Button className="premium-button">Find a New Coach</Button>
-          </div>
         </div>
         
         <div className="mb-8">
