@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -31,8 +30,11 @@ import {
   Info,
   Download,
   Check,
-  X
+  X,
+  Settings
 } from 'lucide-react';
+import VideoProviderSelector, { VideoProvider } from '@/components/session/VideoProviderSelector';
+import ExternalVideoProvider from '@/components/session/ExternalVideoProvider';
 
 const CoachingSession = () => {
   const { id } = useParams();
@@ -47,7 +49,9 @@ const CoachingSession = () => {
   const [surveyCreationOpen, setSurveyCreationOpen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
-  // Mock data for messages
+  const [videoProvider, setVideoProvider] = useState<VideoProvider>('embedded');
+  const [externalMeetingUrl, setExternalMeetingUrl] = useState('');
+  
   const [messages, setMessages] = useState([
     { id: 1, sender: 'coach', text: 'Hello! Welcome to our session today.', time: '10:01 AM' },
     { id: 2, sender: 'client', text: 'Hi, thanks for having me!', time: '10:02 AM' },
@@ -56,7 +60,6 @@ const CoachingSession = () => {
     { id: 5, sender: 'coach', text: 'Also, please complete the mid-program evaluation survey when you have time.', time: '10:05 AM' },
   ]);
 
-  // Mock data for documents
   const [documents, setDocuments] = useState([
     { id: 1, name: 'Leadership Fundamentals.pdf', type: 'pdf', date: '2023-10-15', description: 'Core principles of effective leadership' },
     { id: 2, name: 'Weekly Progress Template.docx', type: 'document', date: '2023-10-10', description: 'Template for tracking weekly goals' },
@@ -64,7 +67,6 @@ const CoachingSession = () => {
     { id: 4, name: 'Strategic Planning Guide.pdf', type: 'pdf', date: '2023-10-25', description: 'Framework for long-term goal setting' },
   ]);
 
-  // Mock data for surveys
   const [surveys, setSurveys] = useState([
     { id: 1, name: 'Initial Assessment', completed: true, date: '2023-09-30', progress: 100, questions: 12 },
     { id: 2, name: 'Mid-program Evaluation', completed: false, date: '2023-11-15', progress: 0, questions: 8 },
@@ -72,26 +74,22 @@ const CoachingSession = () => {
     { id: 4, name: 'Communication Style Analysis', completed: true, date: '2023-10-18', progress: 100, questions: 10 },
   ]);
 
-  // Mock video stream setup
   useEffect(() => {
     setIsMounted(true);
     
-    // Simulating video setup instead of actual navigator.mediaDevices
-    // In a real application, you would use:
-    // navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-    const setupMockVideo = () => {
-      if (videoRef.current) {
-        // Mock video element with a colored background to simulate a video feed
-        videoRef.current.style.backgroundColor = '#000';
-      }
-    };
-    
-    setupMockVideo();
+    if (videoProvider === 'embedded') {
+      const setupMockVideo = () => {
+        if (videoRef.current) {
+          videoRef.current.style.backgroundColor = '#000';
+        }
+      };
+      
+      setupMockVideo();
+    }
     
     return () => {
-      // Clean up resources
     };
-  }, []);
+  }, [videoProvider]);
   
   const toggleVideo = () => {
     setIsVideoOn(!isVideoOn);
@@ -102,7 +100,6 @@ const CoachingSession = () => {
   };
   
   const endCall = () => {
-    // Handle ending the call
     console.log('Call ended');
   };
   
@@ -133,7 +130,6 @@ const CoachingSession = () => {
   };
 
   const handleUploadDocument = () => {
-    // Mock document upload
     const newDocument = {
       id: documents.length + 1,
       name: 'New Uploaded Document.pdf',
@@ -147,12 +143,11 @@ const CoachingSession = () => {
   };
 
   const handleCreateSurvey = () => {
-    // Mock survey creation
     const newSurvey = {
       id: surveys.length + 1,
       name: 'New Custom Survey',
       completed: false,
-      date: format(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'), // Due in a week
+      date: format(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd'),
       progress: 0,
       questions: 5
     };
@@ -160,72 +155,91 @@ const CoachingSession = () => {
     setSurveys([...surveys, newSurvey]);
     setSurveyCreationOpen(false);
   };
+
+  const getProviderName = (provider: VideoProvider) => {
+    switch (provider) {
+      case 'zoom': return 'Zoom';
+      case 'teams': return 'Microsoft Teams';
+      case 'meet': return 'Google Meet';
+      default: return 'Reneu';
+    }
+  };
   
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-6">
-        <h1 className="text-2xl font-bold mb-6">
-          Coaching Session with Mark Johnson
-        </h1>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">
+            Coaching Session with Mark Johnson
+          </h1>
+          <VideoProviderSelector
+            selectedProvider={videoProvider}
+            onSelectProvider={setVideoProvider}
+            externalMeetingUrl={externalMeetingUrl}
+            onExternalMeetingUrlChange={setExternalMeetingUrl}
+          />
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[calc(100vh-16rem)]">
-          {/* Video Conference Area */}
           <div className={`${showRightPanel ? 'lg:col-span-2' : 'lg:col-span-3'} h-full`}>
-            <div className="relative bg-muted rounded-lg overflow-hidden h-[calc(100vh-20rem)]">
-              {/* Main Video */}
-              <div className="absolute inset-0">
-                <video 
-                  ref={videoRef}
-                  className={`w-full h-full object-cover ${isVideoOn ? '' : 'hidden'}`}
-                  autoPlay 
-                  muted 
-                />
-                {!isVideoOn && (
-                  <div className="w-full h-full flex items-center justify-center bg-slate-800">
-                    <div className="w-24 h-24 rounded-full bg-slate-700 flex items-center justify-center">
-                      <span className="text-2xl text-white">MJ</span>
+            {videoProvider === 'embedded' ? (
+              <div className="relative bg-muted rounded-lg overflow-hidden h-[calc(100vh-20rem)]">
+                <div className="absolute inset-0">
+                  <video 
+                    ref={videoRef}
+                    className={`w-full h-full object-cover ${isVideoOn ? '' : 'hidden'}`}
+                    autoPlay 
+                    muted 
+                  />
+                  {!isVideoOn && (
+                    <div className="w-full h-full flex items-center justify-center bg-slate-800">
+                      <div className="w-24 h-24 rounded-full bg-slate-700 flex items-center justify-center">
+                        <span className="text-2xl text-white">MJ</span>
+                      </div>
                     </div>
+                  )}
+                </div>
+                
+                <div className="absolute bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden border-2 border-background shadow-lg">
+                  <div className="w-full h-full bg-slate-900 flex items-center justify-center">
+                    <span className="text-xl text-white">You</span>
                   </div>
-                )}
-              </div>
-              
-              {/* User's own video (picture-in-picture) */}
-              <div className="absolute bottom-4 right-4 w-48 h-32 rounded-lg overflow-hidden border-2 border-background shadow-lg">
-                <div className="w-full h-full bg-slate-900 flex items-center justify-center">
-                  <span className="text-xl text-white">You</span>
+                </div>
+                
+                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-background/90 p-2 rounded-full">
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`rounded-full ${isAudioOn ? '' : 'bg-red-500 text-white hover:bg-red-600'}`}
+                    onClick={toggleAudio}
+                  >
+                    {isAudioOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className={`rounded-full ${isVideoOn ? '' : 'bg-red-500 text-white hover:bg-red-600'}`}
+                    onClick={toggleVideo}
+                  >
+                    {isVideoOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
+                  </Button>
+                  <Button 
+                    variant="destructive" 
+                    size="icon" 
+                    className="rounded-full"
+                    onClick={endCall}
+                  >
+                    <Phone className="h-5 w-5 rotate-135" />
+                  </Button>
                 </div>
               </div>
-              
-              {/* Controls */}
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-4 bg-background/90 p-2 rounded-full">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className={`rounded-full ${isAudioOn ? '' : 'bg-red-500 text-white hover:bg-red-600'}`}
-                  onClick={toggleAudio}
-                >
-                  {isAudioOn ? <Mic className="h-5 w-5" /> : <MicOff className="h-5 w-5" />}
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className={`rounded-full ${isVideoOn ? '' : 'bg-red-500 text-white hover:bg-red-600'}`}
-                  onClick={toggleVideo}
-                >
-                  {isVideoOn ? <Video className="h-5 w-5" /> : <VideoOff className="h-5 w-5" />}
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  size="icon" 
-                  className="rounded-full"
-                  onClick={endCall}
-                >
-                  <Phone className="h-5 w-5 rotate-135" />
-                </Button>
-              </div>
-            </div>
+            ) : (
+              <ExternalVideoProvider 
+                providerName={getProviderName(videoProvider)}
+                meetingUrl={externalMeetingUrl}
+              />
+            )}
             
-            {/* Chat Area */}
             <div className="mt-6 bg-card border rounded-lg h-64 flex flex-col">
               <div className="p-3 border-b font-medium flex justify-between items-center">
                 <div>Chat</div>
@@ -296,7 +310,6 @@ const CoachingSession = () => {
             </div>
           </div>
           
-          {/* Right Panel - Resources, Surveys, and Schedule */}
           {showRightPanel && (
             <div className="col-span-1 space-y-6 bg-card border rounded-lg p-4">
               <Tabs defaultValue="resources" value={activeTab} onValueChange={handleTabChange}>
