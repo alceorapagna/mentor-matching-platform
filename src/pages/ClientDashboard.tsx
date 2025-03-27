@@ -30,6 +30,7 @@ import {
   Brain,
   Heart
 } from 'lucide-react';
+import { Coach } from '@/types/coach';
 
 const ClientDashboard = () => {
   const [currentGoalProgress, setCurrentGoalProgress] = useState(65);
@@ -71,116 +72,126 @@ const ClientDashboard = () => {
     }
   ];
   
-  const allCoaches = [
+  const allCoaches: Coach[] = [
     {
-      id: "coach-reneu",
+      id: 101,
       name: "Dr. Jessica Reynolds",
       title: "Reneu Master Coach",
-      specialty: ["Holistic Development", "Leadership", "Personal Growth"],
+      specializations: ["Holistic Development", "Leadership", "Personal Growth"],
       rating: 4.9,
       reviewCount: 145,
       imageSrc: "https://images.unsplash.com/photo-1577565177023-d0f29c354b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'reneu' as const,
-      availability: 'high' as const
+      bio: "Dr. Reynolds specializes in holistic development and leadership coaching.",
+      category: 'reneu',
+      availability: 'high'
     },
     {
-      id: "coach1",
+      id: 102,
       name: "Dr. Sarah Johnson",
       title: "AI & Business Innovation Coach",
-      specialty: ["AI Strategy", "Digital Transformation", "Business Innovation"],
+      specializations: ["AI Strategy", "Digital Transformation", "Business Innovation"],
       rating: 4.9,
       reviewCount: 127,
       imageSrc: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'business' as const,
-      availability: 'high' as const
+      bio: "Dr. Johnson helps businesses leverage AI for innovation and growth.",
+      category: 'business',
+      availability: 'high'
     },
     {
-      id: "coach2",
+      id: 103,
       name: "David Williams",
       title: "Tech Leadership Coach",
-      specialty: ["Tech Strategy", "Leadership", "Innovation"],
+      specializations: ["Tech Strategy", "Leadership", "Innovation"],
       rating: 4.7,
       reviewCount: 85,
       imageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'business' as const,
-      availability: 'medium' as const
+      bio: "David specializes in tech leadership and innovation strategies.",
+      category: 'business',
+      availability: 'medium'
     },
     {
-      id: "coach3",
+      id: 104,
       name: "Robert Chen",
       title: "Business Technology Advisor",
-      specialty: ["Digital Strategy", "AI Implementation", "Process Optimization"],
+      specializations: ["Digital Strategy", "AI Implementation", "Process Optimization"],
       rating: 4.8,
       reviewCount: 92,
       imageSrc: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'business' as const,
-      availability: 'low' as const
+      bio: "Robert helps businesses optimize their technology processes.",
+      category: 'business',
+      availability: 'low'
     },
     {
-      id: "coach4",
+      id: 105,
       name: "Emily Parker",
       title: "Mindset & Growth Coach",
-      specialty: ["Limiting Beliefs", "Growth Mindset", "Cognitive Restructuring"],
+      specializations: ["Limiting Beliefs", "Growth Mindset", "Cognitive Restructuring"],
       rating: 4.9,
       reviewCount: 118,
       imageSrc: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'mind' as const,
-      availability: 'high' as const
+      bio: "Emily specializes in helping clients overcome limiting beliefs.",
+      category: 'mind',
+      availability: 'high'
     },
     {
-      id: "coach5",
+      id: 106,
       name: "Michael Thompson",
       title: "Executive Mindset Coach",
-      specialty: ["Belief Systems", "Mental Resilience", "Performance Psychology"],
+      specializations: ["Belief Systems", "Mental Resilience", "Performance Psychology"],
       rating: 4.8,
       reviewCount: 76,
       imageSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'mind' as const,
-      availability: 'medium' as const
+      bio: "Michael focuses on building mental resilience for executives.",
+      category: 'mind',
+      availability: 'medium'
     },
     {
-      id: "coach6",
+      id: 107,
       name: "Lisa Rodriguez",
       title: "Cognitive Behavioral Coach",
-      specialty: ["CBT Techniques", "Thought Patterns", "Behavioral Change"],
+      specializations: ["CBT Techniques", "Thought Patterns", "Behavioral Change"],
       rating: 4.7,
       reviewCount: 64,
       imageSrc: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-      category: 'mind' as const,
-      availability: 'medium' as const
+      bio: "Lisa uses CBT techniques to help clients change negative thought patterns.",
+      category: 'mind',
+      availability: 'medium'
     },
     {
-      id: "coach7",
+      id: 108,
       name: "Jason Miller",
       title: "Physical Wellness Coach",
-      specialty: ["Fitness", "Nutrition", "Physical Recovery"],
+      specializations: ["Fitness", "Nutrition", "Physical Recovery"],
       rating: 4.8,
       reviewCount: 91,
       imageSrc: "https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'body' as const,
-      availability: 'high' as const
+      bio: "Jason specializes in physical wellness and recovery techniques.",
+      category: 'body',
+      availability: 'high'
     },
     {
-      id: "coach8",
+      id: 109,
       name: "Sophia Lee",
       title: "Holistic Health Coach",
-      specialty: ["Health Integration", "Stress Reduction", "Work-Life Balance"],
+      specializations: ["Health Integration", "Stress Reduction", "Work-Life Balance"],
       rating: 4.9,
       reviewCount: 103,
       imageSrc: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'body' as const,
-      availability: 'medium' as const
+      bio: "Sophia takes a holistic approach to health and stress reduction.",
+      category: 'body',
+      availability: 'medium'
     },
     {
-      id: "coach9",
+      id: 110,
       name: "Marcus Wilson",
       title: "Executive Performance Coach",
-      specialty: ["Physical Optimization", "Energy Management", "Recovery"],
+      specializations: ["Physical Optimization", "Energy Management", "Recovery"],
       rating: 4.7,
       reviewCount: 68,
       imageSrc: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'body' as const,
-      availability: 'low' as const
+      bio: "Marcus helps executives optimize their physical performance and energy.",
+      category: 'body',
+      availability: 'low'
     }
   ];
   

@@ -9,7 +9,7 @@ export interface CoachCardProps {
   id: string;
   name: string;
   title: string;
-  specialty: string[];
+  specialty?: string[];
   rating: number;
   reviewCount: number;
   imageSrc: string;
