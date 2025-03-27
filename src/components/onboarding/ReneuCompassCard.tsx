@@ -83,7 +83,7 @@ const ReneuCompassCard = ({
             <div className="flex flex-col gap-4">
               <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
+                  src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
                   alt="Reneu Compass" 
                   className="w-full max-w-[240px] h-auto"
                 />
@@ -112,7 +112,7 @@ const ReneuCompassCard = ({
             <div className="flex flex-col gap-4">
               <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
                 <img 
-                  src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
+                  src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
                   alt="Reneu Journey" 
                   className="w-full max-w-[240px] h-auto"
                 />
