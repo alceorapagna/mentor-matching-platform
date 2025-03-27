@@ -78,22 +78,24 @@ const ReneuCompassCard = ({
         ) : null}
 
         <div className="flex flex-col space-y-4">
-          {/* Compass Visual */}
-          <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
-            <img 
-              src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
-              alt="Reneu Compass" 
-              className="w-full max-w-[240px] h-auto"
-            />
-          </div>
-              
-          {/* Purpose and Values in line */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Compass Visual with Purpose and Values on sides */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+            {/* Purpose on left */}
             <div className="bg-background rounded-md p-4 shadow-sm border">
               <h4 className="text-sm font-semibold text-primary mb-1">My Purpose</h4>
               <p className="text-sm">{userData.purpose}</p>
             </div>
             
+            {/* Compass in center */}
+            <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
+                alt="Reneu Compass" 
+                className="w-full max-w-[240px] h-auto"
+              />
+            </div>
+            
+            {/* Values on right */}
             <div className="bg-background rounded-md p-4 shadow-sm border">
               <h4 className="text-sm font-semibold text-primary mb-1">My Values</h4>
               <div className="flex flex-wrap gap-2">
