@@ -238,37 +238,11 @@ const ClientDashboard = () => {
               </TabsList>
               
               <TabsContent value="overview" className="space-y-8 mt-6">
-                {/* Upcoming sessions summary */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-xl flex items-center">
-                      <Calendar className="mr-2 h-5 w-5 text-primary" />
-                      Upcoming Sessions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {upcomingSessions.length > 0 ? (
-                      <div className="space-y-3">
-                        {upcomingSessions.map(session => (
-                          <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">
-                            <div>
-                              <h4 className="font-medium">{session.coachName}</h4>
-                              <p className="text-sm text-muted-foreground">
-                                {session.date} at {session.time}
-                              </p>
-                            </div>
-                            <Button size="sm">Join</Button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-6">
-                        <p className="text-muted-foreground">No upcoming sessions</p>
-                        <Button variant="outline" className="mt-2">Schedule a Session</Button>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
+                {/* Reneu Compass Card - Moved to the top */}
+                <ReneuCompassCard
+                  progress={compassProgress}
+                  userData={userData}
+                />
                 
                 {/* Your overall Reneu goals and coach section */}
                 <section className="space-y-4">
@@ -338,6 +312,38 @@ const ClientDashboard = () => {
                     )}
                   </div>
                 </section>
+                
+                {/* Upcoming sessions summary - Moved after the main sections */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-xl flex items-center">
+                      <Calendar className="mr-2 h-5 w-5 text-primary" />
+                      Upcoming Sessions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {upcomingSessions.length > 0 ? (
+                      <div className="space-y-3">
+                        {upcomingSessions.map(session => (
+                          <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">
+                            <div>
+                              <h4 className="font-medium">{session.coachName}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {session.date} at {session.time}
+                              </p>
+                            </div>
+                            <Button size="sm">Join</Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-6">
+                        <p className="text-muted-foreground">No upcoming sessions</p>
+                        <Button variant="outline" className="mt-2">Schedule a Session</Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
                 
                 {/* Your Professional Goals and Coaches section */}
                 <section className="space-y-4">
@@ -609,13 +615,6 @@ const ClientDashboard = () => {
           
           {/* Sidebar */}
           <div className="space-y-6">
-            {/* Reneu Compass Card */}
-            <ReneuCompassCard
-              progress={compassProgress}
-              userData={userData}
-              className="sticky top-6"
-            />
-            
             {/* Messages Card */}
             <Card>
               <CardHeader className="pb-3">
