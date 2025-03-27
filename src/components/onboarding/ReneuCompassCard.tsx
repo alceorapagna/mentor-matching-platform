@@ -113,21 +113,14 @@ const ReneuCompassCard = ({
           <div className="bg-background rounded-md p-4 shadow-sm border">
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-sm font-semibold text-primary">The Journey</h4>
-              <div className="rounded-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
-                  alt="Reneu Journey" 
-                  className="w-auto h-12"
-                />
-              </div>
             </div>
             
-            {/* Journey image - now larger */}
+            {/* Journey image - medium sized */}
             <div className="mb-6 flex justify-center">
               <img 
                 src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
                 alt="Reneu Journey" 
-                className="w-full max-w-md h-auto"
+                className="w-full max-w-sm h-auto"
               />
             </div>
             
