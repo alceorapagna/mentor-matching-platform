@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
 import { Compass, ArrowRight, Briefcase, Brain, Activity } from "lucide-react";
 
 type CompassProgress = {
@@ -116,46 +117,133 @@ const ReneuCompassCard = ({
                 <img 
                   src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
                   alt="Reneu Journey" 
-                  className="w-auto h-8"
+                  className="w-auto h-12"
                 />
               </div>
             </div>
             
+            {/* Journey image - now larger */}
+            <div className="mb-6 flex justify-center">
+              <img 
+                src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
+                alt="Reneu Journey" 
+                className="w-full max-w-md h-auto"
+              />
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-muted/30 p-3 rounded flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
+              {/* Work pillar */}
+              <div className="bg-muted/30 p-4 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
                   <Briefcase className="h-5 w-5 text-amber-600" />
                   <span className="text-sm font-medium">Work</span>
                 </div>
-                <div className="text-xs mb-1 flex justify-between">
-                  <span>Current: {userData.currentState.work}/10</span>
-                  <span>Goal: {userData.desiredState.work}/10</span>
+                
+                <div className="space-y-3 mb-3">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Current: {userData.currentState.work}/10</span>
+                    </div>
+                    <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-amber-500 rounded-full" 
+                        style={{ width: `${userData.currentState.work * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Goal: {userData.desiredState.work}/10</span>
+                    </div>
+                    <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-amber-600 rounded-full" 
+                        style={{ width: `${userData.desiredState.work * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">Achieve greater career fulfillment and work-life harmony.</p>
+                
+                <p className="text-xs text-muted-foreground mt-auto">
+                  Achieve greater career fulfillment and work-life harmony.
+                </p>
               </div>
               
-              <div className="bg-muted/30 p-3 rounded flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
+              {/* Mind pillar */}
+              <div className="bg-muted/30 p-4 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
                   <Brain className="h-5 w-5 text-purple-600" />
                   <span className="text-sm font-medium">Mind</span>
                 </div>
-                <div className="text-xs mb-1 flex justify-between">
-                  <span>Current: {userData.currentState.mind}/10</span>
-                  <span>Goal: {userData.desiredState.mind}/10</span>
+                
+                <div className="space-y-3 mb-3">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Current: {userData.currentState.mind}/10</span>
+                    </div>
+                    <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-purple-500 rounded-full" 
+                        style={{ width: `${userData.currentState.mind * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Goal: {userData.desiredState.mind}/10</span>
+                    </div>
+                    <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-purple-600 rounded-full" 
+                        style={{ width: `${userData.desiredState.mind * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">Develop mental clarity and emotional resilience.</p>
+                
+                <p className="text-xs text-muted-foreground mt-auto">
+                  Develop mental clarity and emotional resilience.
+                </p>
               </div>
               
-              <div className="bg-muted/30 p-3 rounded flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
+              {/* Body pillar */}
+              <div className="bg-muted/30 p-4 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
                   <Activity className="h-5 w-5 text-green-600" />
                   <span className="text-sm font-medium">Body</span>
                 </div>
-                <div className="text-xs mb-1 flex justify-between">
-                  <span>Current: {userData.currentState.body}/10</span>
-                  <span>Goal: {userData.desiredState.body}/10</span>
+                
+                <div className="space-y-3 mb-3">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Current: {userData.currentState.body}/10</span>
+                    </div>
+                    <div className="h-2 bg-green-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-green-500 rounded-full" 
+                        style={{ width: `${userData.currentState.body * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-xs">
+                      <span>Goal: {userData.desiredState.body}/10</span>
+                    </div>
+                    <div className="h-2 bg-green-100 rounded-full overflow-hidden">
+                      <div 
+                        className="h-full bg-green-600 rounded-full" 
+                        style={{ width: `${userData.desiredState.body * 10}%` }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-xs text-muted-foreground">Build sustainable health habits and increase energy levels.</p>
+                
+                <p className="text-xs text-muted-foreground mt-auto">
+                  Build sustainable health habits and increase energy levels.
+                </p>
               </div>
             </div>
           </div>
