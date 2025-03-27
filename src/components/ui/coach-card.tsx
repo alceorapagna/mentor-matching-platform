@@ -127,13 +127,7 @@ export function CoachCard({
           ))}
         </div>
         
-        <div className="flex items-center justify-between pt-4 border-t border-border/30">
-          <div>
-            <span className="block text-sm text-muted-foreground">
-              {pricingModel === 'custom' ? 'Custom Corporate Pricing' : 'Multiple Packages Available'}
-            </span>
-          </div>
-          
+        <div className="flex items-center justify-end pt-4 border-t border-border/30">
           <Link to={`/coaches/${id}`}>
             <Button 
               size="sm" 
