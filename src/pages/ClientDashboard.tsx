@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -10,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import ReneuCompassCard from '@/components/onboarding/ReneuCompassCard';
-import GoalCoachRecommendations from '@/components/onboarding/GoalCoachRecommendations';
+import CoachCategorySection from '@/components/coaches/CoachCategorySection';
 import { 
   Calendar, 
   ChevronRight, 
@@ -72,7 +71,18 @@ const ClientDashboard = () => {
     }
   ];
   
-  const recommendedCoaches = [
+  const allCoaches = [
+    {
+      id: "coach-reneu",
+      name: "Dr. Jessica Reynolds",
+      title: "Reneu Master Coach",
+      specialty: ["Holistic Development", "Leadership", "Personal Growth"],
+      rating: 4.9,
+      reviewCount: 145,
+      imageSrc: "https://images.unsplash.com/photo-1577565177023-d0f29c354b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'reneu' as const,
+      availability: 'high' as const
+    },
     {
       id: "coach1",
       name: "Dr. Sarah Johnson",
@@ -81,7 +91,7 @@ const ClientDashboard = () => {
       rating: 4.9,
       reviewCount: 127,
       imageSrc: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'work' as const,
+      category: 'business' as const,
       availability: 'high' as const
     },
     {
@@ -92,7 +102,7 @@ const ClientDashboard = () => {
       rating: 4.7,
       reviewCount: 85,
       imageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'work' as const,
+      category: 'business' as const,
       availability: 'medium' as const
     },
     {
@@ -103,7 +113,7 @@ const ClientDashboard = () => {
       rating: 4.8,
       reviewCount: 92,
       imageSrc: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      category: 'work' as const,
+      category: 'business' as const,
       availability: 'low' as const
     },
     {
@@ -138,8 +148,46 @@ const ClientDashboard = () => {
       imageSrc: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
       category: 'mind' as const,
       availability: 'medium' as const
+    },
+    {
+      id: "coach7",
+      name: "Jason Miller",
+      title: "Physical Wellness Coach",
+      specialty: ["Fitness", "Nutrition", "Physical Recovery"],
+      rating: 4.8,
+      reviewCount: 91,
+      imageSrc: "https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'body' as const,
+      availability: 'high' as const
+    },
+    {
+      id: "coach8",
+      name: "Sophia Lee",
+      title: "Holistic Health Coach",
+      specialty: ["Health Integration", "Stress Reduction", "Work-Life Balance"],
+      rating: 4.9,
+      reviewCount: 103,
+      imageSrc: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'body' as const,
+      availability: 'medium' as const
+    },
+    {
+      id: "coach9",
+      name: "Marcus Wilson",
+      title: "Executive Performance Coach",
+      specialty: ["Physical Optimization", "Energy Management", "Recovery"],
+      rating: 4.7,
+      reviewCount: 68,
+      imageSrc: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      category: 'body' as const,
+      availability: 'low' as const
     }
   ];
+  
+  const reneuCoach = allCoaches.filter(coach => coach.category === 'reneu');
+  const businessCoaches = allCoaches.filter(coach => coach.category === 'business');
+  const mindCoaches = allCoaches.filter(coach => coach.category === 'mind');
+  const bodyCoaches = allCoaches.filter(coach => coach.category === 'body');
   
   const upcomingSessions = [
     {
@@ -284,6 +332,7 @@ const ClientDashboard = () => {
   const getCategoryColors = (category) => {
     switch (category) {
       case 'work':
+      case 'business':
         return {
           bgColor: 'bg-amber-50',
           textColor: 'text-amber-600',
@@ -304,6 +353,13 @@ const ClientDashboard = () => {
           iconColor: 'text-green-600',
           borderColor: 'border-green-200'
         };
+      case 'reneu':
+        return {
+          bgColor: 'bg-primary/10',
+          textColor: 'text-primary',
+          iconColor: 'text-primary',
+          borderColor: 'border-primary/20'
+        };
       default:
         return {
           bgColor: 'bg-primary/10',
@@ -322,6 +378,8 @@ const ClientDashboard = () => {
         return <Brain className="h-5 w-5 text-purple-600" />;
       case 'body':
         return <Heart className="h-5 w-5 text-green-600" />;
+      case 'reneu':
+        return <Compass className="h-5 w-5 text-primary" />;
       default:
         return <Compass className="h-5 w-5 text-primary" />;
     }
@@ -344,12 +402,41 @@ const ClientDashboard = () => {
           />
         </div>
         
-        <div className="mb-8">
-          <GoalCoachRecommendations 
-            goals={renewalGoals} 
-            recommendedCoaches={recommendedCoaches} 
-          />
-        </div>
+        <CoachCategorySection
+          title="Your Reneu Coach"
+          description="Your dedicated coach who will guide you through your entire renewal journey"
+          badgeText="Reneu"
+          badgeClassName="bg-primary/10 text-primary border-primary/20"
+          coaches={reneuCoach}
+          isSingleCoach={true}
+        />
+        
+        <CoachCategorySection
+          title="Your Business Coaches"
+          description="Specialized coaches to help with your professional growth and business objectives"
+          badgeText="Business"
+          badgeClassName="bg-amber-50 text-amber-600 border-amber-200"
+          coaches={businessCoaches}
+          allowAddMore={true}
+        />
+        
+        <CoachCategorySection
+          title="Your Mental Coaches"
+          description="Coaches specialized in mindset development and cognitive improvement"
+          badgeText="Mind"
+          badgeClassName="bg-purple-50 text-purple-600 border-purple-200"
+          coaches={mindCoaches}
+          allowAddMore={true}
+        />
+        
+        <CoachCategorySection
+          title="Your Body Coaches"
+          description="Coaches focused on physical wellness and holistic health"
+          badgeText="Body"
+          badgeClassName="bg-green-50 text-green-600 border-green-200"
+          coaches={bodyCoaches}
+          allowAddMore={true}
+        />
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>

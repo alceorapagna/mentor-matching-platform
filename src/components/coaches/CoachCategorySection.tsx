@@ -31,7 +31,7 @@ const CoachCategorySection = ({
   const displayCoaches = isSingleCoach ? coaches.slice(0, 1) : coaches;
 
   return (
-    <div>
+    <div className="mb-12">
       <div className="flex items-center gap-2 mb-6">
         <h2 className="text-2xl font-bold">{title}</h2>
         <Badge variant="outline" className={badgeClassName}>
