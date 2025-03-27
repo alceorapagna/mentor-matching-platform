@@ -251,9 +251,9 @@ const ReneuCompassCard = ({
             </Link>
           </Button>
         ) : (
-          <Button className="w-full" asChild>
+          <Button variant="outline" className="w-full" asChild>
             <Link to="/reneu-compass">
-              {progress.hasStarted ? "Continue Assessment" : "Start Your Assessment"}
+              View Compass
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -264,3 +264,4 @@ const ReneuCompassCard = ({
 };
 
 export default ReneuCompassCard;
+
