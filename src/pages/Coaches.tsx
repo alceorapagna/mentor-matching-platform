@@ -178,7 +178,6 @@ const Coaches = () => {
       
       const matchesCategory = selectedCategory === 'all' || coach.category === selectedCategory;
       
-      // Remove hourlyRate check since we no longer use it
       return matchesSearch && matchesCategory;
     });
   };
@@ -238,7 +237,7 @@ const Coaches = () => {
     <MainLayout>
       <div className="container mx-auto px-6 py-12">
         <div className="mb-12 text-center">
-          <h1 className="text-4xl font-bold mb-4">Find Your Perfect Coach</h1>
+          <h1 className="text-4xl font-bold mb-4">Your Coaches</h1>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Browse our network of certified coaches for your organization. Custom packages available for teams of all sizes.
           </p>
@@ -258,41 +257,45 @@ const Coaches = () => {
         <div className="space-y-16">
           {(selectedCategory === 'all' || selectedCategory === 'reneu') && (
             <CoachCategorySection
-              title="Reneu Coaches"
-              description="Our certified Reneu coaches are dedicated professionals capable of guiding you through your overall renewal journey, encompassing all aspects of work, mind, and body."
+              title="Your Reneu Coach"
+              description="Your dedicated Reneu coach is a certified professional capable of guiding you through your overall renewal journey, encompassing all aspects of work, mind, and body."
               badgeText="Holistic Support"
               badgeClassName="bg-primary/10 border-primary/40"
               coaches={getReneuCoaches()}
+              isSingleCoach={true}
             />
           )}
 
           {(selectedCategory === 'all' || selectedCategory === 'business') && (
             <CoachCategorySection
-              title="Business Coaches"
-              description="Our business coaches provide focused support for your professional goals, career advancement, leadership development, and work-related challenges."
+              title="Your Professional Coaches"
+              description="These specialists provide focused support for your professional goals, career advancement, leadership development, and work-related challenges."
               badgeText="Professional Goals"
               badgeClassName="bg-amber-50 text-amber-700 border-amber-200"
               coaches={getBusinessCoaches()}
+              allowAddMore={true}
             />
           )}
 
           {(selectedCategory === 'all' || selectedCategory === 'mind') && (
             <CoachCategorySection
-              title="Mental Coaches"
-              description="Our mental coaches specialize in supporting your mental wellbeing, emotional resilience, stress management, and personal growth."
+              title="Your Mental Coaches"
+              description="These specialists focus on supporting your mental wellbeing, emotional resilience, stress management, and personal growth."
               badgeText="Mental Wellbeing"
               badgeClassName="bg-purple-50 text-purple-700 border-purple-200"
               coaches={getMindCoaches()}
+              allowAddMore={true}
             />
           )}
 
           {(selectedCategory === 'all' || selectedCategory === 'body') && (
             <CoachCategorySection
-              title="Body Coaches"
-              description="Our body coaches focus on physical wellness, nutrition, fitness, energy management, and establishing healthy habits."
+              title="Your Physical Coaches"
+              description="These specialists focus on physical wellness, nutrition, fitness, energy management, and establishing healthy habits."
               badgeText="Physical Wellness"
               badgeClassName="bg-green-50 text-green-700 border-green-200"
               coaches={getBodyCoaches()}
+              allowAddMore={true}
             />
           )}
 
