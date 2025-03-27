@@ -1,48 +1,189 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import MainLayout from '@/components/layout/MainLayout';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Progress } from '@/components/ui/progress';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
-import ReneuCompassCard from '@/components/onboarding/ReneuCompassCard';
-import CoachCategorySection from '@/components/coaches/CoachCategorySection';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import MainLayout from "@/components/layout/MainLayout";
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle,
+  CardFooter
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { CoachCard } from "@/components/ui/coach-card";
+import { Separator } from "@/components/ui/separator";
+import ReneuCompassCard from "@/components/onboarding/ReneuCompassCard";
+import WelcomeSection from "@/components/onboarding/WelcomeSection";
 import { 
   Calendar, 
-  ChevronRight, 
-  Clock, 
-  Compass, 
-  FileText, 
-  BarChart2, 
-  Video, 
-  Users, 
-  Star, 
-  Award, 
   CheckCircle, 
-  Circle, 
-  Bookmark,
-  FileUp,
-  PlusCircle,
+  Compass, 
+  MessageSquare, 
+  UserCircle, 
+  Users,
+  ArrowUpRight,
   Briefcase,
   Brain,
+  Activity,
   Heart
-} from 'lucide-react';
-import { Coach } from '@/types/coach';
+} from "lucide-react";
+
+// Mock coach data
+const COACHES = [
+  {
+    id: "coach1",
+    name: "Dr. Sarah Williams",
+    title: "Reneu Life Coach & Psychologist",
+    specialty: ["Purpose Discovery", "Life Transitions", "Holistic Wellbeing"],
+    rating: 4.9,
+    reviewCount: 127,
+    imageSrc: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    availability: "high",
+    category: "reneu",
+    pricingModel: "custom"
+  },
+  {
+    id: "coach2",
+    name: "James Richardson",
+    title: "Executive Business Coach",
+    specialty: ["Leadership Development", "Career Transitions", "Executive Presence"],
+    rating: 4.8,
+    reviewCount: 93,
+    imageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    availability: "medium",
+    category: "business",
+    pricingModel: "packages",
+    packages: {
+      basic: "$249/month",
+      standard: "$449/month",
+      premium: "$849/month"
+    }
+  },
+  {
+    id: "coach3",
+    name: "Dr. Maya Patel",
+    title: "Mind & Wellness Coach",
+    specialty: ["Stress Management", "Mindfulness", "Emotional Intelligence"],
+    rating: 4.9,
+    reviewCount: 156,
+    imageSrc: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    availability: "low",
+    category: "mind",
+    pricingModel: "packages",
+    packages: {
+      basic: "$199/month",
+      standard: "$399/month",
+      premium: "$699/month"
+    }
+  },
+  {
+    id: "coach4",
+    name: "Michael Torres",
+    title: "Fitness & Nutrition Coach",
+    specialty: ["Holistic Fitness", "Nutrition Planning", "Energy Management"],
+    rating: 4.7,
+    reviewCount: 89,
+    imageSrc: "https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+    availability: "high",
+    category: "body",
+    pricingModel: "packages",
+    packages: {
+      basic: "$149/month",
+      standard: "$349/month",
+      premium: "$599/month"
+    }
+  }
+];
+
+// Mock goals data organized by category
+const GOALS = {
+  overall: [
+    {
+      id: "goal1",
+      title: "Create a more balanced and purposeful life",
+      progress: 32,
+      updates: [
+        { date: "2 days ago", text: "Completed purpose mapping session" },
+        { date: "1 week ago", text: "Started Reneu Compass assessment" }
+      ]
+    }
+  ],
+  professional: [
+    {
+      id: "goal2",
+      title: "Transition to a more fulfilling career path",
+      progress: 45,
+      updates: [
+        { date: "3 days ago", text: "Completed skills assessment" },
+        { date: "2 weeks ago", text: "Identified target roles and industries" }
+      ]
+    },
+    {
+      id: "goal3",
+      title: "Develop leadership and management skills",
+      progress: 20,
+      updates: [
+        { date: "1 day ago", text: "Started emotional intelligence module" }
+      ]
+    }
+  ],
+  mental: [
+    {
+      id: "goal4",
+      title: "Reduce daily stress and anxiety",
+      progress: 60,
+      updates: [
+        { date: "Yesterday", text: "Completed first mindfulness session" },
+        { date: "5 days ago", text: "Started daily meditation practice" }
+      ]
+    }
+  ],
+  physical: [
+    {
+      id: "goal5",
+      title: "Establish sustainable exercise routine",
+      progress: 15,
+      updates: [
+        { date: "4 days ago", text: "Initial fitness assessment completed" }
+      ]
+    },
+    {
+      id: "goal6",
+      title: "Improve sleep quality and consistency",
+      progress: 25,
+      updates: [
+        { date: "6 days ago", text: "Began sleep tracking" }
+      ]
+    }
+  ]
+};
+
+// Associate coaches with goal categories
+const reneuCoach = COACHES.find(coach => coach.category === "reneu");
+const professionalCoaches = COACHES.filter(coach => coach.category === "business");
+const mentalCoaches = COACHES.filter(coach => coach.category === "mind");
+const bodyCoaches = COACHES.filter(coach => coach.category === "body");
 
 const ClientDashboard = () => {
-  const [currentGoalProgress, setCurrentGoalProgress] = useState(65);
-  const [compassProgress, setCompassProgress] = useState({
-    hasStarted: true,
-    hasCompleted: false,
-    percentComplete: 45
-  });
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [tab, setTab] = useState("overview");
   
-  const userCompassData = {
-    purpose: "To create balance and meaning across all areas of my life",
-    coreValues: ["Growth", "Connection", "Authenticity", "Balance"],
+  // Mock Reneu Compass progress data
+  const compassProgress = { 
+    hasStarted: true, 
+    hasCompleted: true, 
+    percentComplete: 100 
+  };
+  
+  // Mock user data for compass
+  const userData = {
+    purpose: "To create a balanced life centered around personal growth and meaningful connections",
+    coreValues: ["Growth", "Balance", "Authenticity", "Impact"],
     currentState: {
       work: 5,
       mind: 4,
@@ -55,861 +196,463 @@ const ClientDashboard = () => {
     }
   };
   
-  const renewalGoals = [
-    {
-      id: "goal1",
-      title: "AI Innovation for Business",
-      description: "Learn how to use AI to innovate our business processes and offerings",
-      category: 'work' as const,
-      progress: 25
-    },
-    {
-      id: "goal2",
-      title: "Growth Mindset Development",
-      description: "Break limiting beliefs and develop a growth-oriented mindset",
-      category: 'mind' as const,
-      progress: 15
-    }
-  ];
-  
-  const allCoaches: Coach[] = [
-    {
-      id: 101,
-      name: "Dr. Jessica Reynolds",
-      title: "Reneu Master Coach",
-      specializations: ["Holistic Development", "Leadership", "Personal Growth"],
-      rating: 4.9,
-      reviewCount: 145,
-      imageSrc: "https://images.unsplash.com/photo-1577565177023-d0f29c354b69?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Dr. Reynolds specializes in holistic development and leadership coaching.",
-      category: 'reneu',
-      availability: 'high'
-    },
-    {
-      id: 102,
-      name: "Dr. Sarah Johnson",
-      title: "AI & Business Innovation Coach",
-      specializations: ["AI Strategy", "Digital Transformation", "Business Innovation"],
-      rating: 4.9,
-      reviewCount: 127,
-      imageSrc: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Dr. Johnson helps businesses leverage AI for innovation and growth.",
-      category: 'business',
-      availability: 'high'
-    },
-    {
-      id: 103,
-      name: "David Williams",
-      title: "Tech Leadership Coach",
-      specializations: ["Tech Strategy", "Leadership", "Innovation"],
-      rating: 4.7,
-      reviewCount: 85,
-      imageSrc: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "David specializes in tech leadership and innovation strategies.",
-      category: 'business',
-      availability: 'medium'
-    },
-    {
-      id: 104,
-      name: "Robert Chen",
-      title: "Business Technology Advisor",
-      specializations: ["Digital Strategy", "AI Implementation", "Process Optimization"],
-      rating: 4.8,
-      reviewCount: 92,
-      imageSrc: "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Robert helps businesses optimize their technology processes.",
-      category: 'business',
-      availability: 'low'
-    },
-    {
-      id: 105,
-      name: "Emily Parker",
-      title: "Mindset & Growth Coach",
-      specializations: ["Limiting Beliefs", "Growth Mindset", "Cognitive Restructuring"],
-      rating: 4.9,
-      reviewCount: 118,
-      imageSrc: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Emily specializes in helping clients overcome limiting beliefs.",
-      category: 'mind',
-      availability: 'high'
-    },
-    {
-      id: 106,
-      name: "Michael Thompson",
-      title: "Executive Mindset Coach",
-      specializations: ["Belief Systems", "Mental Resilience", "Performance Psychology"],
-      rating: 4.8,
-      reviewCount: 76,
-      imageSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Michael focuses on building mental resilience for executives.",
-      category: 'mind',
-      availability: 'medium'
-    },
-    {
-      id: 107,
-      name: "Lisa Rodriguez",
-      title: "Cognitive Behavioral Coach",
-      specializations: ["CBT Techniques", "Thought Patterns", "Behavioral Change"],
-      rating: 4.7,
-      reviewCount: 64,
-      imageSrc: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", 
-      bio: "Lisa uses CBT techniques to help clients change negative thought patterns.",
-      category: 'mind',
-      availability: 'medium'
-    },
-    {
-      id: 108,
-      name: "Jason Miller",
-      title: "Physical Wellness Coach",
-      specializations: ["Fitness", "Nutrition", "Physical Recovery"],
-      rating: 4.8,
-      reviewCount: 91,
-      imageSrc: "https://images.unsplash.com/photo-1594381898411-846e7d193883?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Jason specializes in physical wellness and recovery techniques.",
-      category: 'body',
-      availability: 'high'
-    },
-    {
-      id: 109,
-      name: "Sophia Lee",
-      title: "Holistic Health Coach",
-      specializations: ["Health Integration", "Stress Reduction", "Work-Life Balance"],
-      rating: 4.9,
-      reviewCount: 103,
-      imageSrc: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Sophia takes a holistic approach to health and stress reduction.",
-      category: 'body',
-      availability: 'medium'
-    },
-    {
-      id: 110,
-      name: "Marcus Wilson",
-      title: "Executive Performance Coach",
-      specializations: ["Physical Optimization", "Energy Management", "Recovery"],
-      rating: 4.7,
-      reviewCount: 68,
-      imageSrc: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      bio: "Marcus helps executives optimize their physical performance and energy.",
-      category: 'body',
-      availability: 'low'
-    }
-  ];
-  
-  const reneuCoach = allCoaches.filter(coach => coach.category === 'reneu');
-  const businessCoaches = allCoaches.filter(coach => coach.category === 'business');
-  const mindCoaches = allCoaches.filter(coach => coach.category === 'mind');
-  const bodyCoaches = allCoaches.filter(coach => coach.category === 'body');
-  
+  // Mock upcoming sessions
   const upcomingSessions = [
     {
-      id: 1,
-      coachName: 'Dr. Sarah Johnson',
-      coachImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80',
-      type: 'Leadership Development',
-      coachType: 'work',
-      isReneuCoach: true,
-      date: 'Today',
-      time: '3:00 PM - 4:00 PM',
-      status: 'upcoming'
+      id: "session1",
+      coachName: "Dr. Sarah Williams",
+      coachCategory: "reneu",
+      date: "Tomorrow",
+      time: "10:00 AM",
     },
     {
-      id: 2,
-      coachName: 'Mark Williams',
-      coachImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-      type: 'Career Coaching',
-      coachType: 'work',
-      isReneuCoach: false,
-      date: 'Tomorrow',
-      time: '11:00 AM - 12:00 PM',
-      status: 'upcoming'
-    },
-    {
-      id: 3,
-      coachName: 'Emily Chen',
-      coachImage: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1622&q=80',
-      type: 'Wellness Coaching',
-      coachType: 'body',
-      isReneuCoach: false,
-      date: 'Nov 10, 2023',
-      time: '2:00 PM - 3:00 PM',
-      status: 'upcoming'
+      id: "session2",
+      coachName: "James Richardson",
+      coachCategory: "business",
+      date: "Friday, Nov 18",
+      time: "2:00 PM",
     }
   ];
   
-  const pastSessions = [
-    {
-      id: 101,
-      coachName: 'Dr. Sarah Johnson',
-      coachImage: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80',
-      type: 'Leadership Development',
-      date: 'Nov 1, 2023',
-      time: '3:00 PM - 4:00 PM',
-      status: 'completed',
-      hasRecording: true,
-      hasNotes: true
-    },
-    {
-      id: 102,
-      coachName: 'Mark Williams',
-      coachImage: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-      type: 'Career Coaching',
-      date: 'Oct 25, 2023',
-      time: '11:00 AM - 12:00 PM',
-      status: 'completed',
-      hasRecording: true,
-      hasNotes: true
-    }
-  ];
-  
-  const developmentGoals = [
-    {
-      id: 1,
-      title: 'Improve public speaking skills',
-      description: 'Become more comfortable and effective when presenting to large groups',
-      progress: 65,
-      startDate: 'Oct 1, 2023',
-      targetDate: 'Dec 15, 2023',
-      coach: 'Dr. Sarah Johnson',
-      status: 'in-progress',
-      milestones: [
-        { id: 1, title: 'Complete initial assessment', completed: true },
-        { id: 2, title: 'Practice speech techniques', completed: true },
-        { id: 3, title: 'Deliver practice presentation to team', completed: false },
-        { id: 4, title: 'Record and analyze performance', completed: false },
-        { id: 5, title: 'Present at company all-hands', completed: false }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Develop strategic thinking',
-      description: 'Enhance ability to think long-term and make strategic decisions',
-      progress: 30,
-      startDate: 'Oct 15, 2023',
-      targetDate: 'Jan 15, 2024',
-      coach: 'Mark Williams',
-      status: 'in-progress',
-      milestones: [
-        { id: 1, title: 'Complete strategic thinking assessment', completed: true },
-        { id: 2, title: 'Read recommended literature', completed: true },
-        { id: 3, title: 'Apply frameworks to current projects', completed: false },
-        { id: 4, title: 'Develop strategic plan for department', completed: false }
-      ]
-    },
-    {
-      id: 3,
-      title: 'Work-life balance improvement',
-      description: 'Develop better boundaries between work and personal life',
-      progress: 45,
-      startDate: 'Sep 15, 2023',
-      targetDate: 'Dec 1, 2023',
-      coach: 'Emily Chen',
-      status: 'in-progress',
-      milestones: [
-        { id: 1, title: 'Complete stress assessment', completed: true },
-        { id: 2, title: 'Implement daily mindfulness practice', completed: true },
-        { id: 3, title: 'Establish work boundaries', completed: true },
-        { id: 4, title: 'Track progress and adjust as needed', completed: false }
-      ]
-    }
-  ];
-  
-  const myCoaches = [
-    {
-      id: 1,
-      name: 'Dr. Sarah Johnson',
-      title: 'Executive & Leadership Coach',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80',
-      focus: 'Leadership Development',
-      nextSession: 'Today, 3:00 PM'
-    },
-    {
-      id: 2,
-      name: 'Mark Williams',
-      title: 'Career Development Specialist',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1740&q=80',
-      focus: 'Career Transitions',
-      nextSession: 'Tomorrow, 11:00 AM'
-    },
-    {
-      id: 3,
-      name: 'Emily Chen',
-      title: 'Wellness & Balance Coach',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1622&q=80',
-      focus: 'Mental Well-being',
-      nextSession: 'Nov 10, 2:00 PM'
-    }
-  ];
-  
-  const getCategoryColors = (category) => {
-    switch (category) {
-      case 'work':
-      case 'business':
-        return {
-          bgColor: 'bg-amber-50',
-          textColor: 'text-amber-600',
-          iconColor: 'text-amber-600',
-          borderColor: 'border-amber-200'
-        };
-      case 'mind':
-        return {
-          bgColor: 'bg-purple-50',
-          textColor: 'text-purple-600',
-          iconColor: 'text-purple-600',
-          borderColor: 'border-purple-200'
-        };
-      case 'body':
-        return {
-          bgColor: 'bg-green-50',
-          textColor: 'text-green-600',
-          iconColor: 'text-green-600',
-          borderColor: 'border-green-200'
-        };
-      case 'reneu':
-        return {
-          bgColor: 'bg-primary/10',
-          textColor: 'text-primary',
-          iconColor: 'text-primary',
-          borderColor: 'border-primary/20'
-        };
-      default:
-        return {
-          bgColor: 'bg-primary/10',
-          textColor: 'text-primary',
-          iconColor: 'text-primary',
-          borderColor: 'border-primary/20'
-        };
-    }
-  };
-  
-  const getCategoryIcon = (category) => {
-    switch (category) {
-      case 'work':
-        return <Briefcase className="h-5 w-5 text-amber-600" />;
-      case 'mind':
-        return <Brain className="h-5 w-5 text-purple-600" />;
-      case 'body':
-        return <Heart className="h-5 w-5 text-green-600" />;
-      case 'reneu':
-        return <Compass className="h-5 w-5 text-primary" />;
-      default:
-        return <Compass className="h-5 w-5 text-primary" />;
-    }
-  };
+  if (!user) return null;
   
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Welcome back, Alex</h1>
-            <p className="text-muted-foreground">Track your progress and manage your coaching journey</p>
-          </div>
-        </div>
-        
-        <div className="mb-8">
-          <ReneuCompassCard 
-            progress={compassProgress}
-            userData={userCompassData}
-          />
-        </div>
-        
-        <CoachCategorySection
-          title="Your Reneu Coach"
-          description="Your dedicated coach who will guide you through your entire renewal journey"
-          badgeText="Reneu"
-          badgeClassName="bg-primary/10 text-primary border-primary/20"
-          coaches={reneuCoach}
-          isSingleCoach={true}
+        {/* Welcome section with user greeting and initial steps */}
+        <WelcomeSection 
+          userName={user.firstName || "Alex"} 
+          hasCompletedCompass={compassProgress.hasCompleted}
+          compassProgress={compassProgress}
         />
         
-        <CoachCategorySection
-          title="Your Business Coaches"
-          description="Specialized coaches to help with your professional growth and business objectives"
-          badgeText="Business"
-          badgeClassName="bg-amber-50 text-amber-600 border-amber-200"
-          coaches={businessCoaches}
-          allowAddMore={true}
-        />
-        
-        <CoachCategorySection
-          title="Your Mental Coaches"
-          description="Coaches specialized in mindset development and cognitive improvement"
-          badgeText="Mind"
-          badgeClassName="bg-purple-50 text-purple-600 border-purple-200"
-          coaches={mindCoaches}
-          allowAddMore={true}
-        />
-        
-        <CoachCategorySection
-          title="Your Body Coaches"
-          description="Coaches focused on physical wellness and holistic health"
-          badgeText="Body"
-          badgeClassName="bg-green-50 text-green-600 border-green-200"
-          coaches={bodyCoaches}
-          allowAddMore={true}
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground">Upcoming Sessions</p>
-                  <p className="text-3xl font-bold mt-1">3</p>
-                </div>
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <Calendar className="h-6 w-6 text-primary" />
-                </div>
-              </div>
-              <Link to="#upcoming" className="flex items-center mt-4 text-sm text-primary">
-                <span>View schedule</span>
-                <ChevronRight className="h-4 w-4 ml-1" />
-              </Link>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground">Active Goals</p>
-                  <p className="text-3xl font-bold mt-1">3</p>
-                </div>
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <Compass className="h-6 w-6 text-primary" />
-                </div>
-              </div>
-              <div className="mt-4">
-                <div className="flex items-center justify-between text-sm mb-1">
-                  <span>Overall Progress</span>
-                  <span className="font-medium">{currentGoalProgress}%</span>
-                </div>
-                <Progress value={currentGoalProgress} className="h-2" />
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground">Total Sessions</p>
-                  <p className="text-3xl font-bold mt-1">12</p>
-                </div>
-                <div className="p-3 bg-primary/10 rounded-full">
-                  <Clock className="h-6 w-6 text-primary" />
-                </div>
-              </div>
-              <div className="flex items-center mt-4 text-sm text-muted-foreground">
-                <span>18 hours of coaching</span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Your Next Session</h2>
-          <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
-            <CardContent className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="flex items-center gap-4">
-                  <div className="relative">
-                    <img 
-                      src={upcomingSessions[0].coachImage} 
-                      alt={upcomingSessions[0].coachName}
-                      className="h-16 w-16 rounded-full object-cover border-2 border-background"
-                    />
-                    <div className="absolute -bottom-1 -right-1 bg-green-500 w-4 h-4 rounded-full border-2 border-background"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{upcomingSessions[0].coachName}</h3>
-                    <div className="flex items-center gap-2">
-                      <p className="text-sm text-muted-foreground">{upcomingSessions[0].type}</p>
-                      {upcomingSessions[0].isReneuCoach && (
-                        <Badge variant="outline" className="bg-primary/10 border-primary/20 text-xs">
-                          Reneu Coach
-                        </Badge>
-                      )}
-                      {!upcomingSessions[0].isReneuCoach && upcomingSessions[0].coachType && (
-                        <Badge variant="outline" className={`text-xs ${getCategoryColors(upcomingSessions[0].coachType).bgColor} ${getCategoryColors(upcomingSessions[0].coachType).textColor} ${getCategoryColors(upcomingSessions[0].coachType).borderColor}`}>
-                          {upcomingSessions[0].coachType.charAt(0).toUpperCase() + upcomingSessions[0].coachType.slice(1)} Coach
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-10">
+          {/* Main content column */}
+          <div className="lg:col-span-2 space-y-8">
+            <Tabs value={tab} onValueChange={setTab} className="w-full">
+              <TabsList className="w-full bg-muted/50">
+                <TabsTrigger value="overview" className="flex-1">Overview</TabsTrigger>
+                <TabsTrigger value="sessions" className="flex-1">Sessions</TabsTrigger>
+                <TabsTrigger value="goals" className="flex-1">Goals</TabsTrigger>
+                <TabsTrigger value="resources" className="flex-1">Resources</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="overview" className="space-y-8 mt-6">
+                {/* Upcoming sessions summary */}
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-xl flex items-center">
+                      <Calendar className="mr-2 h-5 w-5 text-primary" />
+                      Upcoming Sessions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {upcomingSessions.length > 0 ? (
+                      <div className="space-y-3">
+                        {upcomingSessions.map(session => (
+                          <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">
+                            <div>
+                              <h4 className="font-medium">{session.coachName}</h4>
+                              <p className="text-sm text-muted-foreground">
+                                {session.date} at {session.time}
+                              </p>
+                            </div>
+                            <Button size="sm">Join</Button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-6">
+                        <p className="text-muted-foreground">No upcoming sessions</p>
+                        <Button variant="outline" className="mt-2">Schedule a Session</Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
                 
-                <div className="flex flex-col justify-center md:items-center">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="font-medium">{upcomingSessions[0].date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>{upcomingSessions[0].time}</span>
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-center md:justify-end gap-3">
-                  <Button>
-                    <FileText className="mr-2 h-4 w-4" />
-                    Prep Notes
-                  </Button>
-                  <Button className="premium-button" asChild>
-                    <Link to={`/session/${upcomingSessions[0].id}`}>
-                      <Video className="mr-2 h-4 w-4" />
-                      Join Session
-                    </Link>
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <Tabs defaultValue="goals" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="goals">
-              <Compass className="mr-2 h-4 w-4" />
-              My Goals
-            </TabsTrigger>
-            <TabsTrigger value="sessions">
-              <Calendar className="mr-2 h-4 w-4" />
-              Sessions
-            </TabsTrigger>
-            <TabsTrigger value="coaches">
-              <Users className="mr-2 h-4 w-4" />
-              My Coaches
-            </TabsTrigger>
-            <TabsTrigger value="resources">
-              <FileUp className="mr-2 h-4 w-4" />
-              Resources
-            </TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="goals" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Development Goals</h2>
-              <Button variant="outline">
-                <PlusCircle className="mr-2 h-4 w-4" />
-                New Goal
-              </Button>
-            </div>
-            
-            {developmentGoals.map((goal) => (
-              <Card key={goal.id} className="overflow-hidden">
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle>{goal.title}</CardTitle>
-                      <CardDescription>{goal.description}</CardDescription>
-                    </div>
-                    <Badge variant={goal.progress > 50 ? "default" : "outline"}>
-                      {goal.progress}% Complete
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <div className="mb-4">
-                    <Progress value={goal.progress} className="h-2 mb-2" />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>Started: {goal.startDate}</span>
-                      <span>Target: {goal.targetDate}</span>
-                    </div>
+                {/* Your overall Reneu goals and coach section */}
+                <section className="space-y-4">
+                  <div className="flex items-center">
+                    <Compass className="mr-2 h-5 w-5 text-primary" />
+                    <h2 className="text-xl font-semibold">Your Overall Reneu Goals and Coach</h2>
                   </div>
                   
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-sm">Milestones</h4>
-                    <ul className="space-y-2">
-                      {goal.milestones.map((milestone) => (
-                        <li key={milestone.id} className="flex items-start gap-2">
-                          {milestone.completed ? (
-                            <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          ) : (
-                            <Circle className="h-5 w-5 text-muted-foreground mt-0.5 flex-shrink-0" />
-                          )}
-                          <span className={milestone.completed ? "line-through text-muted-foreground" : ""}>
-                            {milestone.title}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </CardContent>
-                <CardFooter className="pt-2 flex justify-between">
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <span>Coach: {goal.coach}</span>
-                  </div>
-                  <Button variant="outline" size="sm">View Details</Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </TabsContent>
-          
-          <TabsContent value="sessions" className="space-y-6">
-            <div id="upcoming">
-              <h2 className="text-xl font-bold mb-4">Upcoming Sessions</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {upcomingSessions.map((session) => (
-                  <Card key={session.id} className="overflow-hidden">
-                    <CardContent className="p-0">
-                      <div className="p-4 flex gap-4">
-                        <img 
-                          src={session.coachImage} 
-                          alt={session.coachName}
-                          className="h-14 w-14 rounded-full object-cover"
-                        />
-                        <div className="flex-1">
-                          <h3 className="font-semibold">{session.coachName}</h3>
-                          <p className="text-sm text-muted-foreground">{session.type}</p>
-                          <div className="flex items-center gap-4 mt-2">
-                            <div className="flex items-center gap-1 text-sm">
-                              <Calendar className="h-4 w-4 text-muted-foreground" />
-                              <span>{session.date}</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Overall Goals */}
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">Overall Renewal Goals</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {GOALS.overall.map(goal => (
+                          <div key={goal.id} className="space-y-2">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{goal.title}</h4>
+                              <span className="text-sm">{goal.progress}%</span>
                             </div>
-                            <div className="flex items-center gap-1 text-sm">
-                              <Clock className="h-4 w-4 text-muted-foreground" />
-                              <span>{session.time}</span>
+                            <Progress value={goal.progress} className="h-2" />
+                            <div className="space-y-1 mt-2">
+                              {goal.updates.map((update, idx) => (
+                                <div key={idx} className="flex gap-2 text-sm">
+                                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                  <div>
+                                    <span className="font-medium">{update.text}</span>
+                                    <span className="text-muted-foreground ml-2">{update.date}</span>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
-                        </div>
-                        <div className="flex items-center">
-                          <Button size="sm" asChild>
-                            <Link to={`/session/${session.id}`}>
-                              {session.date === 'Today' ? 'Join' : 'View'}
-                            </Link>
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-            
-            <Separator />
-            
-            <div>
-              <h2 className="text-xl font-bold mb-4">Past Sessions</h2>
-              <div className="bg-card rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[250px]">Coach</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Date & Time</TableHead>
-                      <TableHead>Resources</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {pastSessions.map((session) => (
-                      <TableRow key={session.id}>
-                        <TableCell>
+                        ))}
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Reneu Coach */}
+                    {reneuCoach && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Your Reneu Coach</CardTitle>
+                        </CardHeader>
+                        <CardContent>
                           <div className="flex items-center gap-3">
-                            <img 
-                              src={session.coachImage} 
-                              alt={session.coachName}
-                              className="h-8 w-8 rounded-full object-cover"
-                            />
-                            <span>{session.coachName}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell>{session.type}</TableCell>
-                        <TableCell>
-                          <div>
-                            <div>{session.date}</div>
-                            <div className="text-xs text-muted-foreground">{session.time}</div>
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-                            {session.hasRecording && (
-                              <Badge variant="outline" className="bg-primary/10 border-primary/20">
-                                Recording
+                            <div className="h-16 w-16 rounded-full overflow-hidden">
+                              <img 
+                                src={reneuCoach.imageSrc} 
+                                alt={reneuCoach.name} 
+                                className="h-full w-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <h4 className="font-medium">{reneuCoach.name}</h4>
+                              <p className="text-sm text-muted-foreground">{reneuCoach.title}</p>
+                              <Badge variant="outline" className="mt-1 bg-primary/10 text-primary border-primary/10">
+                                Reneu Coach
                               </Badge>
-                            )}
-                            {session.hasNotes && (
-                              <Badge variant="outline" className="bg-primary/10 border-primary/20">
-                                Notes
-                              </Badge>
-                            )}
+                            </div>
                           </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="ghost" size="sm" asChild>
-                            <Link to={`/session/${session.id}`}>
-                              View
-                            </Link>
+                          <Button variant="outline" size="sm" className="w-full mt-4">
+                            Schedule Session
                           </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <div className="mt-4 flex justify-center">
-                <Button variant="outline">View All Sessions</Button>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="coaches" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">My Coaching Team</h2>
-              <Button variant="outline">Find More Coaches</Button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {myCoaches.map((coach) => (
-                <Card key={coach.id} className="overflow-hidden">
-                  <div className="aspect-[3/1] relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/0"></div>
-                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                      <div className="text-white">
-                        <h3 className="font-bold text-lg">{coach.name}</h3>
-                        <p className="text-white/80 text-sm">{coach.focus}</p>
-                      </div>
-                      <Button size="icon" variant="ghost" className="text-white border border-white/20 bg-black/30 backdrop-blur-sm">
-                        <Bookmark className="h-4 w-4" />
-                      </Button>
-                    </div>
+                        </CardContent>
+                      </Card>
+                    )}
                   </div>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between mb-4">
-                      <div>
-                        <p className="text-sm font-medium">Next Session</p>
-                        <p className="text-sm text-muted-foreground">{coach.nextSession}</p>
-                      </div>
-                      <div className="flex">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
-                      </div>
-                    </div>
-                    <div className="flex justify-between">
-                      <Button variant="outline" size="sm">Message</Button>
-                      <Button size="sm" asChild>
-                        <Link to={`/coaches/${coach.id}`}>View Profile</Link>
-                      </Button>
+                </section>
+                
+                {/* Your Professional Goals and Coaches section */}
+                <section className="space-y-4">
+                  <div className="flex items-center">
+                    <Briefcase className="mr-2 h-5 w-5 text-amber-600" />
+                    <h2 className="text-xl font-semibold">Your Professional Goals and Coaches</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Professional Goals */}
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">Professional Goals</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {GOALS.professional.map(goal => (
+                          <div key={goal.id} className="space-y-2">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{goal.title}</h4>
+                              <span className="text-sm">{goal.progress}%</span>
+                            </div>
+                            <Progress value={goal.progress} className="h-2" />
+                            <div className="space-y-1 mt-2">
+                              {goal.updates.map((update, idx) => (
+                                <div key={idx} className="flex gap-2 text-sm">
+                                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                  <div>
+                                    <span className="font-medium">{update.text}</span>
+                                    <span className="text-muted-foreground ml-2">{update.date}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Professional Coaches */}
+                    {professionalCoaches.length > 0 && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Your Professional Coaches</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          {professionalCoaches.map(coach => (
+                            <div key={coach.id} className="flex items-center gap-3 mb-4">
+                              <div className="h-16 w-16 rounded-full overflow-hidden">
+                                <img 
+                                  src={coach.imageSrc} 
+                                  alt={coach.name} 
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">{coach.name}</h4>
+                                <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                <Badge variant="outline" className="mt-1 bg-amber-500/10 text-amber-700 border-amber-200">
+                                  Business Coach
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                          <Button variant="outline" size="sm" className="w-full">
+                            Schedule Session
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </section>
+                
+                {/* Your Mental Goals and Coaches section */}
+                <section className="space-y-4">
+                  <div className="flex items-center">
+                    <Brain className="mr-2 h-5 w-5 text-purple-600" />
+                    <h2 className="text-xl font-semibold">Your Mental Goals and Coaches</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Mental Goals */}
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">Mental Wellbeing Goals</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {GOALS.mental.map(goal => (
+                          <div key={goal.id} className="space-y-2">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{goal.title}</h4>
+                              <span className="text-sm">{goal.progress}%</span>
+                            </div>
+                            <Progress value={goal.progress} className="h-2" />
+                            <div className="space-y-1 mt-2">
+                              {goal.updates.map((update, idx) => (
+                                <div key={idx} className="flex gap-2 text-sm">
+                                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                  <div>
+                                    <span className="font-medium">{update.text}</span>
+                                    <span className="text-muted-foreground ml-2">{update.date}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Mental Coaches */}
+                    {mentalCoaches.length > 0 && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Your Mental Coaches</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          {mentalCoaches.map(coach => (
+                            <div key={coach.id} className="flex items-center gap-3 mb-4">
+                              <div className="h-16 w-16 rounded-full overflow-hidden">
+                                <img 
+                                  src={coach.imageSrc} 
+                                  alt={coach.name} 
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">{coach.name}</h4>
+                                <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                <Badge variant="outline" className="mt-1 bg-purple-500/10 text-purple-700 border-purple-200">
+                                  Mental Coach
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                          <Button variant="outline" size="sm" className="w-full">
+                            Schedule Session
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </section>
+                
+                {/* Your Body Goals and Coaches section */}
+                <section className="space-y-4">
+                  <div className="flex items-center">
+                    <Heart className="mr-2 h-5 w-5 text-green-600" />
+                    <h2 className="text-xl font-semibold">Your Body Goals and Coaches</h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* Body Goals */}
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">Physical Health Goals</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        {GOALS.physical.map(goal => (
+                          <div key={goal.id} className="space-y-2">
+                            <div className="flex justify-between">
+                              <h4 className="font-medium">{goal.title}</h4>
+                              <span className="text-sm">{goal.progress}%</span>
+                            </div>
+                            <Progress value={goal.progress} className="h-2" />
+                            <div className="space-y-1 mt-2">
+                              {goal.updates.map((update, idx) => (
+                                <div key={idx} className="flex gap-2 text-sm">
+                                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 shrink-0" />
+                                  <div>
+                                    <span className="font-medium">{update.text}</span>
+                                    <span className="text-muted-foreground ml-2">{update.date}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </CardContent>
+                    </Card>
+                    
+                    {/* Body Coaches */}
+                    {bodyCoaches.length > 0 && (
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Your Body Coaches</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          {bodyCoaches.map(coach => (
+                            <div key={coach.id} className="flex items-center gap-3 mb-4">
+                              <div className="h-16 w-16 rounded-full overflow-hidden">
+                                <img 
+                                  src={coach.imageSrc} 
+                                  alt={coach.name} 
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div>
+                                <h4 className="font-medium">{coach.name}</h4>
+                                <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                <Badge variant="outline" className="mt-1 bg-green-500/10 text-green-700 border-green-200">
+                                  Body Coach
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                          <Button variant="outline" size="sm" className="w-full">
+                            Schedule Session
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                </section>
+              </TabsContent>
+              
+              {/* Other tabs content */}
+              <TabsContent value="sessions">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Your Coaching Sessions</CardTitle>
+                    <CardDescription>View and manage all your scheduled coaching sessions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      {/* Sessions content would go here */}
+                      <p className="text-muted-foreground text-center py-8">
+                        Sessions tab content coming soon
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="resources" className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">Resources & Materials</h2>
-              <div className="flex gap-2">
-                <Button variant="outline">
-                  <FileUp className="mr-2 h-4 w-4" />
-                  Upload
-                </Button>
-                <Button variant="outline">
-                  <BarChart2 className="mr-2 h-4 w-4" />
-                  Progress Reports
-                </Button>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Latest Worksheets</CardTitle>
-                  <CardDescription>Materials shared by your coaches</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <ul className="divide-y">
-                    <li className="flex items-center justify-between p-4 hover:bg-muted">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Leadership Self-Assessment</p>
-                          <p className="text-xs text-muted-foreground">Shared by Dr. Sarah Johnson • 2 days ago</p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">Download</Button>
-                    </li>
-                    <li className="flex items-center justify-between p-4 hover:bg-muted">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Career Planning Worksheet</p>
-                          <p className="text-xs text-muted-foreground">Shared by Mark Williams • 1 week ago</p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">Download</Button>
-                    </li>
-                    <li className="flex items-center justify-between p-4 hover:bg-muted">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 bg-primary/10 rounded">
-                          <FileText className="h-5 w-5 text-primary" />
-                        </div>
-                        <div>
-                          <p className="font-medium">Stress Management Guide</p>
-                          <p className="text-xs text-muted-foreground">Shared by Emily Chen • 2 weeks ago</p>
-                        </div>
-                      </div>
-                      <Button variant="ghost" size="sm">Download</Button>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="flex justify-center p-4">
-                  <Button variant="ghost">View All Resources</Button>
-                </CardFooter>
-              </Card>
+              </TabsContent>
               
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Achievements</CardTitle>
-                  <CardDescription>Your progress and milestones</CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <ul className="divide-y">
-                    <li className="flex items-center gap-3 p-4 hover:bg-muted">
-                      <div className="p-2 bg-green-500/10 rounded">
-                        <Award className="h-5 w-5 text-green-500" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Public Speaking - Level 1</p>
-                        <p className="text-xs text-muted-foreground">Completed 1 week ago</p>
-                      </div>
-                    </li>
-                    <li className="flex items-center gap-3 p-4 hover:bg-muted">
-                      <div className="p-2 bg-amber-500/10 rounded">
-                        <CheckCircle className="h-5 w-5 text-amber-500" />
-                      </div>
-                      <div>
-                        <p className="font-medium">10 Hours of Coaching</p>
-                        <p className="text-xs text-muted-foreground">Milestone reached 2 weeks ago</p>
-                      </div>
-                    </li>
-                    <li className="flex items-center gap-3 p-4 hover:bg-muted">
-                      <div className="p-2 bg-blue-500/10 rounded">
-                        <Award className="h-5 w-5 text-blue-500" />
-                      </div>
-                      <div>
-                        <p className="font-medium">Strategic Planning - Intermediate</p>
-                        <p className="text-xs text-muted-foreground">Completed 3 weeks ago</p>
-                      </div>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="flex justify-center p-4">
-                  <Button variant="ghost">View All Achievements</Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+              <TabsContent value="goals">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Your Goals & Progress</CardTitle>
+                    <CardDescription>Track your progress across all dimensions of your renewal journey</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      {/* Goals content would go here */}
+                      <p className="text-muted-foreground text-center py-8">
+                        Detailed goals tracking coming soon
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="resources">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Your Resources</CardTitle>
+                    <CardDescription>Access materials and tools shared by your coaches</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid gap-4">
+                      {/* Resources content would go here */}
+                      <p className="text-muted-foreground text-center py-8">
+                        Resources library coming soon
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+          
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Reneu Compass Card */}
+            <ReneuCompassCard
+              progress={compassProgress}
+              userData={userData}
+              className="sticky top-6"
+            />
+            
+            {/* Messages Card */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center text-lg">
+                  <MessageSquare className="mr-2 h-5 w-5 text-primary" />
+                  Messages
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  You have 3 unread messages from your coaches.
+                </p>
+                <Button variant="outline" className="w-full mt-4" size="sm">
+                  View Messages
+                </Button>
+              </CardContent>
+            </Card>
+            
+            {/* Community Card */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center text-lg">
+                  <Users className="mr-2 h-5 w-5 text-primary" />
+                  Reneu Community
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Connect with others on their renewal journey in our community forums.
+                </p>
+                <Button variant="outline" className="w-full mt-4" size="sm">
+                  Join Community
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </MainLayout>
   );
