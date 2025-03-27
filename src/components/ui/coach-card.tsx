@@ -27,13 +27,14 @@ export function CoachCard({
   id,
   name,
   title,
-  specialty,
+  specialty = [],
   rating,
   reviewCount,
   imageSrc,
   availability = 'medium',
   category,
-  pricingModel = 'custom'
+  pricingModel = 'custom',
+  packages
 }: CoachCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -119,7 +120,7 @@ export function CoachCard({
         <p className="text-muted-foreground mb-3">{title}</p>
         
         <div className="flex flex-wrap gap-2 mb-4">
-          {specialty.map((spec) => (
+          {specialty && specialty.map((spec) => (
             <Badge key={spec} variant="secondary" className="font-normal">
               {spec}
             </Badge>
