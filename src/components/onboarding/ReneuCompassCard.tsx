@@ -78,89 +78,83 @@ const ReneuCompassCard = ({
         ) : null}
 
         <div className="flex flex-col space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left side - Compass with Purpose & Values */}
-            <div className="flex flex-col gap-4">
-              <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
-                  alt="Reneu Compass" 
-                  className="w-full max-w-[240px] h-auto"
-                />
-              </div>
+          {/* Compass Visual */}
+          <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/b8d1a7c5-6316-49b0-825b-46493c676efe.png" 
+              alt="Reneu Compass" 
+              className="w-full max-w-[240px] h-auto"
+            />
+          </div>
               
-              <div className="space-y-4">
-                <div className="bg-background rounded-md p-4 shadow-sm border">
-                  <h4 className="text-sm font-semibold text-primary mb-1">My Purpose</h4>
-                  <p className="text-sm">{userData.purpose}</p>
-                </div>
-                
-                <div className="bg-background rounded-md p-4 shadow-sm border">
-                  <h4 className="text-sm font-semibold text-primary mb-1">My Values</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {userData.coreValues.map(value => (
-                      <span key={value} className="inline-flex items-center bg-primary/10 text-xs px-2 py-1 rounded">
-                        {value}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+          {/* Purpose and Values in line */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-background rounded-md p-4 shadow-sm border">
+              <h4 className="text-sm font-semibold text-primary mb-1">My Purpose</h4>
+              <p className="text-sm">{userData.purpose}</p>
             </div>
             
-            {/* Right side - Journey with Current & Desired State */}
-            <div className="flex flex-col gap-4">
-              <div className="rounded-md overflow-hidden bg-muted/30 p-4 flex items-center justify-center">
-                <img 
-                  src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
-                  alt="Reneu Journey" 
-                  className="w-full max-w-[240px] h-auto"
-                />
-              </div>
-              
-              <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-background rounded-md p-4 shadow-sm border">
-                    <h4 className="text-sm font-semibold text-amber-600 mb-1">The Present</h4>
-                    <ul className="text-xs space-y-1">
-                      <li>Work: {userData.currentState.work}/10</li>
-                      <li>Mind: {userData.currentState.mind}/10</li>
-                      <li>Body: {userData.currentState.body}/10</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="bg-background rounded-md p-4 shadow-sm border">
-                    <h4 className="text-sm font-semibold text-green-600 mb-1">The Future</h4>
-                    <ul className="text-xs space-y-1">
-                      <li>Work: {userData.desiredState.work}/10</li>
-                      <li>Mind: {userData.desiredState.mind}/10</li>
-                      <li>Body: {userData.desiredState.body}/10</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="bg-background rounded-md p-4 shadow-sm border">
-                  <h4 className="text-sm font-semibold text-primary mb-1">The Journey</h4>
-                  <p className="text-xs">Guided by expert coaches to bridge your current state to your desired future across work, mind, and body dimensions.</p>
-                </div>
+            <div className="bg-background rounded-md p-4 shadow-sm border">
+              <h4 className="text-sm font-semibold text-primary mb-1">My Values</h4>
+              <div className="flex flex-wrap gap-2">
+                {userData.coreValues.map(value => (
+                  <span key={value} className="inline-flex items-center bg-primary/10 text-xs px-2 py-1 rounded">
+                    {value}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
           
-          <div className="grid grid-cols-3 gap-3">
-            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-              <Briefcase className="h-5 w-5 text-amber-600 mb-1" />
-              <span className="text-xs font-medium">Work</span>
+          {/* The Journey section */}
+          <div className="bg-background rounded-md p-4 shadow-sm border">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-sm font-semibold text-primary">The Journey</h4>
+              <div className="rounded-md overflow-hidden">
+                <img 
+                  src="/lovable-uploads/d59bb3a9-3dca-426c-a2df-a5d9e65985ff.png" 
+                  alt="Reneu Journey" 
+                  className="w-auto h-8"
+                />
+              </div>
             </div>
             
-            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-              <Brain className="h-5 w-5 text-purple-600 mb-1" />
-              <span className="text-xs font-medium">Mind</span>
-            </div>
-            
-            <div className="bg-muted/50 p-3 rounded flex flex-col items-center justify-center text-center">
-              <Activity className="h-5 w-5 text-green-600 mb-1" />
-              <span className="text-xs font-medium">Body</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-muted/30 p-3 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Briefcase className="h-5 w-5 text-amber-600" />
+                  <span className="text-sm font-medium">Work</span>
+                </div>
+                <div className="text-xs mb-1 flex justify-between">
+                  <span>Current: {userData.currentState.work}/10</span>
+                  <span>Goal: {userData.desiredState.work}/10</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Achieve greater career fulfillment and work-life harmony.</p>
+              </div>
+              
+              <div className="bg-muted/30 p-3 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Brain className="h-5 w-5 text-purple-600" />
+                  <span className="text-sm font-medium">Mind</span>
+                </div>
+                <div className="text-xs mb-1 flex justify-between">
+                  <span>Current: {userData.currentState.mind}/10</span>
+                  <span>Goal: {userData.desiredState.mind}/10</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Develop mental clarity and emotional resilience.</p>
+              </div>
+              
+              <div className="bg-muted/30 p-3 rounded flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <Activity className="h-5 w-5 text-green-600" />
+                  <span className="text-sm font-medium">Body</span>
+                </div>
+                <div className="text-xs mb-1 flex justify-between">
+                  <span>Current: {userData.currentState.body}/10</span>
+                  <span>Goal: {userData.desiredState.body}/10</span>
+                </div>
+                <p className="text-xs text-muted-foreground">Build sustainable health habits and increase energy levels.</p>
+              </div>
             </div>
           </div>
         </div>
