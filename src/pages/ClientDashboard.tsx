@@ -200,15 +200,11 @@ const ClientDashboard = () => {
   const upcomingSessions = [
     {
       id: "session1",
-      coachName: "Dr. Sarah Williams",
-      coachCategory: "reneu",
       date: "Tomorrow",
       time: "10:00 AM",
     },
     {
       id: "session2",
-      coachName: "James Richardson",
-      coachCategory: "business",
       date: "Friday, Nov 18",
       time: "2:00 PM",
     }
@@ -327,7 +323,6 @@ const ClientDashboard = () => {
                         {upcomingSessions.map(session => (
                           <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">
                             <div>
-                              <h4 className="font-medium">{session.coachName}</h4>
                               <p className="text-sm text-muted-foreground">
                                 {session.date} at {session.time}
                               </p>
