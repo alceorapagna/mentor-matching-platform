@@ -17,8 +17,10 @@ import {
   FileText, 
   Settings, 
   PlusCircle,
-  MessageSquare
+  MessageSquare,
+  Eye
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import MainLayout from "@/components/layout/MainLayout";
 
 // Mock upcoming sessions data
@@ -26,6 +28,7 @@ const UPCOMING_SESSIONS = [
   {
     id: "session1",
     clientName: "Alex Johnson",
+    clientId: "client1",
     date: "2023-11-15",
     time: "10:00 AM",
     duration: 60,
@@ -34,6 +37,7 @@ const UPCOMING_SESSIONS = [
   {
     id: "session2",
     clientName: "Maria Garcia",
+    clientId: "client2",
     date: "2023-11-16",
     time: "2:00 PM",
     duration: 45,
@@ -42,6 +46,7 @@ const UPCOMING_SESSIONS = [
   {
     id: "session3",
     clientName: "Ravi Patel",
+    clientId: "client3",
     date: "2023-11-17",
     time: "11:30 AM",
     duration: 60,
@@ -56,36 +61,78 @@ const CLIENTS = [
     name: "Alex Johnson",
     email: "alex@example.com",
     sessionsCompleted: 5,
-    lastSession: "2023-11-08"
+    lastSession: "2023-11-08",
+    goals: [
+      "Improve work-life balance",
+      "Develop better communication skills",
+      "Reduce stress"
+    ],
+    sessionNotes: [
+      { date: "2023-11-08", note: "Discussed communication strategies in team settings. Alex is making good progress with active listening techniques." },
+      { date: "2023-10-25", note: "Reviewed stress management techniques. Alex has been implementing daily meditation." }
+    ]
   },
   {
     id: "client2",
     name: "Maria Garcia",
     email: "maria@example.com",
     sessionsCompleted: 3,
-    lastSession: "2023-11-05"
+    lastSession: "2023-11-05",
+    goals: [
+      "Career transition planning",
+      "Building confidence in leadership role"
+    ],
+    sessionNotes: [
+      { date: "2023-11-05", note: "Worked on leadership vision statement. Maria identified key values she wants to embody as a leader." },
+      { date: "2023-10-22", note: "Explored career options and created a 6-month action plan." }
+    ]
   },
   {
     id: "client3",
     name: "Ravi Patel",
     email: "ravi@example.com",
     sessionsCompleted: 1,
-    lastSession: "2023-11-01"
+    lastSession: "2023-11-01",
+    goals: [
+      "Launch new business venture",
+      "Improve time management"
+    ],
+    sessionNotes: [
+      { date: "2023-11-01", note: "Initial session. Discussed business concept and identified key challenges. Ravi will work on market research before next session." }
+    ]
   },
   {
     id: "client4",
     name: "Sarah Williams",
     email: "sarah@example.com",
     sessionsCompleted: 0,
-    lastSession: null
+    lastSession: null,
+    goals: [
+      "Set career development goals",
+      "Improve work relationships"
+    ],
+    sessionNotes: []
   }
 ];
 
 const CoachDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   
   if (!user) return null;
+
+  const handleViewClient = (clientId: string) => {
+    // Find the client in our data
+    const client = CLIENTS.find(c => c.id === clientId);
+    if (client) {
+      setSelectedClientId(clientId);
+      // Switch to clients tab to show the detailed view
+      setActiveTab("clients");
+    }
+  };
+
+  const selectedClient = selectedClientId ? CLIENTS.find(c => c.id === selectedClientId) : null;
 
   return (
     <MainLayout>
@@ -170,6 +217,14 @@ const CoachDashboard = () => {
                         </p>
                       </div>
                       <div className="flex gap-2 mt-3 md:mt-0">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleViewClient(session.clientId)}
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          View
+                        </Button>
                         <Button variant="outline" size="sm">Reschedule</Button>
                         <Button size="sm">Join Session</Button>
                       </div>
@@ -215,36 +270,111 @@ const CoachDashboard = () => {
               </Button>
             </div>
             
-            <Card>
-              <CardContent className="p-0">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left p-4">Name</th>
-                        <th className="text-left p-4">Email</th>
-                        <th className="text-left p-4">Sessions</th>
-                        <th className="text-left p-4">Last Session</th>
-                        <th className="text-left p-4">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {CLIENTS.map(client => (
-                        <tr key={client.id} className="border-b hover:bg-muted/30">
-                          <td className="p-4">{client.name}</td>
-                          <td className="p-4">{client.email}</td>
-                          <td className="p-4">{client.sessionsCompleted}</td>
-                          <td className="p-4">{client.lastSession || "No sessions yet"}</td>
-                          <td className="p-4">
-                            <Button variant="ghost" size="sm">View</Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+            {selectedClient ? (
+              <div className="space-y-6">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-lg font-medium">{selectedClient.name}'s Profile</h3>
+                  <Button variant="outline" size="sm" onClick={() => setSelectedClientId(null)}>
+                    Back to All Clients
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Client Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Email</p>
+                        <p>{selectedClient.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Sessions Completed</p>
+                        <p>{selectedClient.sessionsCompleted}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">Last Session</p>
+                        <p>{selectedClient.lastSession || "No sessions yet"}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Goals</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="list-disc pl-5 space-y-2">
+                      {selectedClient.goals.map((goal, index) => (
+                        <li key={index} className="text-muted-foreground">
+                          <span className="text-foreground">{goal}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg">Session Notes</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    {selectedClient.sessionNotes.length > 0 ? (
+                      <div className="space-y-4">
+                        {selectedClient.sessionNotes.map((note, index) => (
+                          <div key={index} className="border-b pb-3 last:border-0 last:pb-0">
+                            <p className="font-medium">{note.date}</p>
+                            <p className="text-muted-foreground">{note.note}</p>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground">No session notes yet</p>
+                    )}
+                  </CardContent>
+                </Card>
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="border-b">
+                          <th className="text-left p-4">Name</th>
+                          <th className="text-left p-4">Email</th>
+                          <th className="text-left p-4">Sessions</th>
+                          <th className="text-left p-4">Last Session</th>
+                          <th className="text-left p-4">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {CLIENTS.map(client => (
+                          <tr key={client.id} className="border-b hover:bg-muted/30">
+                            <td className="p-4">{client.name}</td>
+                            <td className="p-4">{client.email}</td>
+                            <td className="p-4">{client.sessionsCompleted}</td>
+                            <td className="p-4">{client.lastSession || "No sessions yet"}</td>
+                            <td className="p-4">
+                              <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => handleViewClient(client.id)}
+                              >
+                                <Eye className="mr-2 h-4 w-4" />
+                                View
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="resources" className="space-y-6">
