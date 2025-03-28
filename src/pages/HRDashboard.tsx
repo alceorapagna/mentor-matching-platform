@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { Calendar, Clock, FileText, Filter, MessageSquare, Search, Users, TrendingUp } from 'lucide-react';
@@ -23,6 +24,7 @@ type Employee = {
     sessionsCompleted: number;
     sessionDuration: number;
     engagementScore: number;
+    impactScore: number; // New field for impact metric
   };
   status: EmployeeStatus;
   joinDate: string;
@@ -33,7 +35,7 @@ const HRDashboard = () => {
   const [filterDepartment, setFilterDepartment] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
-  // Dummy data for employees with additional activity metrics
+  // Dummy data for employees with additional activity metrics including impact score
   const employees: Employee[] = [
     {
       id: '1',
@@ -47,7 +49,8 @@ const HRDashboard = () => {
         lastLogin: '2023-09-28 14:30',
         sessionsCompleted: 12,
         sessionDuration: 45,
-        engagementScore: 85
+        engagementScore: 85,
+        impactScore: 78
       }
     },
     {
@@ -62,7 +65,8 @@ const HRDashboard = () => {
         lastLogin: '2023-09-27 09:15',
         sessionsCompleted: 8,
         sessionDuration: 30,
-        engagementScore: 72
+        engagementScore: 72,
+        impactScore: 65
       }
     },
     {
@@ -77,7 +81,8 @@ const HRDashboard = () => {
         lastLogin: '2023-09-25 11:45',
         sessionsCompleted: 4,
         sessionDuration: 60,
-        engagementScore: 63
+        engagementScore: 63,
+        impactScore: 58
       }
     },
     {
@@ -92,7 +97,8 @@ const HRDashboard = () => {
         lastLogin: '2023-09-28 16:20',
         sessionsCompleted: 15,
         sessionDuration: 55,
-        engagementScore: 92
+        engagementScore: 92,
+        impactScore: 88
       }
     },
     {
@@ -107,7 +113,8 @@ const HRDashboard = () => {
         lastLogin: 'Never',
         sessionsCompleted: 0,
         sessionDuration: 0,
-        engagementScore: 0
+        engagementScore: 0,
+        impactScore: 0
       }
     }
   ];
@@ -218,10 +225,10 @@ const HRDashboard = () => {
           </Card>
         </div>
 
-        {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content - Reordered to put Department Engagement before Employee Activity */}
+        <div className="grid grid-cols-1 gap-6 mb-6">
           {/* Chart */}
-          <Card className="lg:col-span-1">
+          <Card>
             <CardHeader>
               <CardTitle>Department Engagement</CardTitle>
               <CardDescription>
@@ -256,8 +263,8 @@ const HRDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Employee Table */}
-          <Card className="lg:col-span-2">
+          {/* Employee Table - Moved below Department Engagement */}
+          <Card>
             <CardHeader>
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -318,6 +325,7 @@ const HRDashboard = () => {
                       <TableHead className="hidden md:table-cell">Status</TableHead>
                       <TableHead className="hidden lg:table-cell">Last Activity</TableHead>
                       <TableHead className="text-right">Engagement</TableHead>
+                      <TableHead className="text-right">Impact</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -355,11 +363,27 @@ const HRDashboard = () => {
                               </div>
                             </div>
                           </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex items-center justify-end">
+                              <div className="w-10 text-right mr-2">{employee.activity.impactScore}%</div>
+                              <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div 
+                                  className={`h-full rounded-full ${
+                                    employee.activity.impactScore > 80 ? 'bg-green-500' : 
+                                    employee.activity.impactScore > 60 ? 'bg-blue-500' : 
+                                    employee.activity.impactScore > 30 ? 'bg-amber-500' : 
+                                    'bg-red-500'
+                                  }`}
+                                  style={{ width: `${employee.activity.impactScore}%` }}
+                                />
+                              </div>
+                            </div>
+                          </TableCell>
                         </TableRow>
                       ))
                     ) : (
                       <TableRow>
-                        <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
+                        <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
                           No employees found matching your filters
                         </TableCell>
                       </TableRow>
