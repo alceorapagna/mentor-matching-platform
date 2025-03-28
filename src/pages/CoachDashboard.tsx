@@ -18,10 +18,19 @@ import {
   Settings, 
   PlusCircle,
   MessageSquare,
-  Eye
+  Eye,
+  ArrowLeft
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import MainLayout from "@/components/layout/MainLayout";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 // Mock upcoming sessions data
 const UPCOMING_SESSIONS = [
@@ -119,6 +128,7 @@ const CoachDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [displayClientDetails, setDisplayClientDetails] = useState(false);
   
   if (!user) return null;
 
@@ -127,12 +137,33 @@ const CoachDashboard = () => {
     const client = CLIENTS.find(c => c.id === clientId);
     if (client) {
       setSelectedClientId(clientId);
+      setDisplayClientDetails(true);
       // Switch to clients tab to show the detailed view
       setActiveTab("clients");
     }
   };
 
-  const selectedClient = selectedClientId ? CLIENTS.find(c => c.id === selectedClientId) : null;
+  const handleBackToClientList = () => {
+    setDisplayClientDetails(false);
+  };
+
+  // Get selected clients (show up to 4 clients at a time)
+  const getSelectedClients = () => {
+    if (!selectedClientId) return [];
+    
+    const selectedClientIndex = CLIENTS.findIndex(c => c.id === selectedClientId);
+    if (selectedClientIndex === -1) return [];
+    
+    // Get 3 more clients after the selected one, wrap around if needed
+    const result = [];
+    for (let i = 0; i < 4; i++) {
+      const index = (selectedClientIndex + i) % CLIENTS.length;
+      result.push(CLIENTS[index]);
+    }
+    return result;
+  };
+
+  const selectedClients = getSelectedClients();
 
   return (
     <MainLayout>
@@ -270,108 +301,105 @@ const CoachDashboard = () => {
               </Button>
             </div>
             
-            {selectedClient ? (
+            {displayClientDetails ? (
               <div className="space-y-6">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium">{selectedClient.name}'s Profile</h3>
-                  <Button variant="outline" size="sm" onClick={() => setSelectedClientId(null)}>
+                  <Button variant="outline" size="sm" onClick={handleBackToClientList}>
+                    <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to All Clients
                   </Button>
                 </div>
                 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Client Details</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Email</p>
-                        <p>{selectedClient.email}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Sessions Completed</p>
-                        <p>{selectedClient.sessionsCompleted}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-muted-foreground">Last Session</p>
-                        <p>{selectedClient.lastSession || "No sessions yet"}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Goals</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="list-disc pl-5 space-y-2">
-                      {selectedClient.goals.map((goal, index) => (
-                        <li key={index} className="text-muted-foreground">
-                          <span className="text-foreground">{goal}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">Session Notes</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {selectedClient.sessionNotes.length > 0 ? (
-                      <div className="space-y-4">
-                        {selectedClient.sessionNotes.map((note, index) => (
-                          <div key={index} className="border-b pb-3 last:border-0 last:pb-0">
-                            <p className="font-medium">{note.date}</p>
-                            <p className="text-muted-foreground">{note.note}</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {selectedClients.map(client => (
+                    <Card key={client.id} className="overflow-hidden">
+                      <div className={`h-2 ${client.id === selectedClientId ? 'bg-primary' : 'bg-muted'}`} />
+                      <CardHeader>
+                        <CardTitle className="text-lg">{client.name}'s Profile</CardTitle>
+                        <CardDescription>{client.email}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Sessions Completed</p>
+                            <p>{client.sessionsCompleted}</p>
                           </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-muted-foreground">No session notes yet</p>
-                    )}
-                  </CardContent>
-                </Card>
+                          <div>
+                            <p className="text-sm font-medium text-muted-foreground">Last Session</p>
+                            <p>{client.lastSession || "No sessions yet"}</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium mb-2">Goals</h4>
+                          <ul className="list-disc pl-5 space-y-1">
+                            {client.goals.map((goal, index) => (
+                              <li key={index} className="text-muted-foreground">
+                                <span className="text-foreground">{goal}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-medium mb-2">Recent Session Notes</h4>
+                          {client.sessionNotes.length > 0 ? (
+                            <div className="space-y-2 max-h-48 overflow-y-auto">
+                              {client.sessionNotes.slice(0, 2).map((note, index) => (
+                                <div key={index} className="border-b pb-2 last:border-0 last:pb-0">
+                                  <p className="font-medium text-sm">{note.date}</p>
+                                  <p className="text-sm text-muted-foreground">{note.note}</p>
+                                </div>
+                              ))}
+                              {client.sessionNotes.length > 2 && (
+                                <Button variant="ghost" size="sm" className="w-full text-sm">
+                                  View all {client.sessionNotes.length} notes
+                                </Button>
+                              )}
+                            </div>
+                          ) : (
+                            <p className="text-sm text-muted-foreground">No session notes yet</p>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
               </div>
             ) : (
               <Card>
                 <CardContent className="p-0">
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-4">Name</th>
-                          <th className="text-left p-4">Email</th>
-                          <th className="text-left p-4">Sessions</th>
-                          <th className="text-left p-4">Last Session</th>
-                          <th className="text-left p-4">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {CLIENTS.map(client => (
-                          <tr key={client.id} className="border-b hover:bg-muted/30">
-                            <td className="p-4">{client.name}</td>
-                            <td className="p-4">{client.email}</td>
-                            <td className="p-4">{client.sessionsCompleted}</td>
-                            <td className="p-4">{client.lastSession || "No sessions yet"}</td>
-                            <td className="p-4">
-                              <Button 
-                                variant="ghost" 
-                                size="sm"
-                                onClick={() => handleViewClient(client.id)}
-                              >
-                                <Eye className="mr-2 h-4 w-4" />
-                                View
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Sessions</TableHead>
+                        <TableHead>Last Session</TableHead>
+                        <TableHead>Actions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {CLIENTS.map(client => (
+                        <TableRow key={client.id}>
+                          <TableCell>{client.name}</TableCell>
+                          <TableCell>{client.email}</TableCell>
+                          <TableCell>{client.sessionsCompleted}</TableCell>
+                          <TableCell>{client.lastSession || "No sessions yet"}</TableCell>
+                          <TableCell>
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleViewClient(client.id)}
+                            >
+                              <Eye className="mr-2 h-4 w-4" />
+                              View
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
                 </CardContent>
               </Card>
             )}
