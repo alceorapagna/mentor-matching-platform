@@ -36,10 +36,13 @@ import {
   Target,
   History,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Flag
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import VideoProviderSelector, { VideoProvider } from '@/components/session/VideoProviderSelector';
 import ExternalVideoProvider from '@/components/session/ExternalVideoProvider';
+import GoalProgressTracker, { Goal } from '@/components/session/GoalProgressTracker';
 
 const CoachingSession = () => {
   const { id } = useParams();
@@ -53,7 +56,10 @@ const CoachingSession = () => {
   const [documentUploadOpen, setDocumentUploadOpen] = useState(false);
   const [surveyCreationOpen, setSurveyCreationOpen] = useState(false);
   const [showSessionHistory, setShowSessionHistory] = useState(false);
+  const [showGoalTracker, setShowGoalTracker] = useState(false);
+  const [sessionEnding, setSessionEnding] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { toast } = useToast();
   
   const [videoProvider, setVideoProvider] = useState<VideoProvider>('embedded');
   const [externalMeetingUrl, setExternalMeetingUrl] = useState('');
@@ -81,14 +87,14 @@ const CoachingSession = () => {
   ]);
 
   // Client goals data
-  const [clientGoals] = useState([
+  const [clientGoals, setClientGoals] = useState<Goal[]>([
     { id: 1, text: "Improve leadership communication skills", progress: 65 },
     { id: 2, text: "Develop strategic planning capabilities", progress: 40 },
     { id: 3, text: "Enhance team management and delegation", progress: 25 },
   ]);
 
   // Previous session summaries
-  const [previousSessions] = useState([
+  const [previousSessions, setPreviousSessions] = useState([
     { 
       id: 1, 
       date: "October 25, 2023", 
@@ -135,7 +141,8 @@ const CoachingSession = () => {
   };
   
   const endCall = () => {
-    console.log('Call ended');
+    setSessionEnding(true);
+    setShowGoalTracker(true);
   };
   
   const sendMessage = () => {
@@ -191,6 +198,35 @@ const CoachingSession = () => {
     setSurveyCreationOpen(false);
   };
 
+  const handleSaveGoalProgress = (updatedGoals: Goal[], sessionNotes: string) => {
+    setClientGoals(updatedGoals);
+    
+    // Create a new session summary entry
+    const newSession = {
+      id: previousSessions.length + 1,
+      date: format(new Date(), 'MMMM d, yyyy'),
+      summary: sessionNotes,
+      keyTakeaways: ["Session notes recorded"] // In a real app, this would be parsed or entered separately
+    };
+    
+    setPreviousSessions([newSession, ...previousSessions]);
+    setShowGoalTracker(false);
+    
+    // In a real app, we would save this data to a backend
+    toast({
+      title: "Session completed",
+      description: "Goals updated and session notes saved.",
+    });
+    
+    if (sessionEnding) {
+      // Wait briefly to show the toast before ending the session
+      setTimeout(() => {
+        console.log('Call ended and progress saved');
+        // Here you would redirect to a post-session page or dashboard
+      }, 1500);
+    }
+  };
+
   const getProviderName = (provider: VideoProvider) => {
     switch (provider) {
       case 'zoom': return 'Zoom';
@@ -207,12 +243,22 @@ const CoachingSession = () => {
           <h1 className="text-2xl font-bold">
             Coaching Session with Mark Johnson
           </h1>
-          <VideoProviderSelector
-            selectedProvider={videoProvider}
-            onSelectProvider={setVideoProvider}
-            externalMeetingUrl={externalMeetingUrl}
-            onExternalMeetingUrlChange={setExternalMeetingUrl}
-          />
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowGoalTracker(true)}
+              className="gap-2"
+            >
+              <Target className="h-4 w-4" />
+              Track Progress
+            </Button>
+            <VideoProviderSelector
+              selectedProvider={videoProvider}
+              onSelectProvider={setVideoProvider}
+              externalMeetingUrl={externalMeetingUrl}
+              onExternalMeetingUrlChange={setExternalMeetingUrl}
+            />
+          </div>
         </div>
         
         {/* Client Goals Section */}
@@ -230,9 +276,17 @@ const CoachingSession = () => {
                   <div key={goal.id} className="space-y-2">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">{goal.text}</span>
-                      <span className="text-sm text-muted-foreground">{goal.progress}%</span>
                     </div>
-                    <Progress value={goal.progress} className="h-2" />
+                    <Progress 
+                      value={goal.progress} 
+                      className="h-2"
+                      showValue={true}
+                      indicatorColor={
+                        goal.progress >= 75 ? "bg-green-500" : 
+                        goal.progress >= 40 ? "bg-amber-500" : 
+                        "bg-blue-500"
+                      } 
+                    />
                   </div>
                 ))}
               </div>
@@ -280,6 +334,23 @@ const CoachingSession = () => {
                 ))}
               </CardContent>
             </Card>
+          </div>
+        )}
+        
+        {/* Goal Progress Tracker Modal */}
+        {showGoalTracker && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="max-w-2xl w-full">
+              <GoalProgressTracker 
+                isOpen={showGoalTracker}
+                onClose={() => {
+                  setShowGoalTracker(false);
+                  setSessionEnding(false);
+                }}
+                goals={clientGoals}
+                onSaveProgress={handleSaveGoalProgress}
+              />
+            </div>
           </div>
         )}
         
@@ -333,6 +404,19 @@ const CoachingSession = () => {
                     onClick={endCall}
                   >
                     <Phone className="h-5 w-5 rotate-135" />
+                  </Button>
+                </div>
+                
+                {/* Quick "Update Goals" button */}
+                <div className="absolute top-4 right-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="bg-background/80 hover:bg-background flex items-center gap-2"
+                    onClick={() => setShowGoalTracker(true)}
+                  >
+                    <Flag className="h-4 w-4" />
+                    Update Goals
                   </Button>
                 </div>
               </div>
@@ -405,6 +489,10 @@ const CoachingSession = () => {
                       <Button variant="outline" className="w-full justify-start" onClick={() => setSurveyCreationOpen(true)}>
                         <ClipboardList className="mr-2 h-4 w-4" />
                         Create Survey
+                      </Button>
+                      <Button variant="outline" className="w-full justify-start" onClick={() => setShowGoalTracker(true)}>
+                        <Target className="mr-2 h-4 w-4" />
+                        Update Goal Progress
                       </Button>
                     </div>
                   </PopoverContent>
