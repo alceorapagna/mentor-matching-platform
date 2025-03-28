@@ -29,7 +29,8 @@ import {
   Briefcase,
   Brain,
   Activity,
-  Heart
+  Heart,
+  Clock
 } from "lucide-react";
 
 // Mock coach data
@@ -44,7 +45,11 @@ const COACHES = [
     imageSrc: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
     availability: "high",
     category: "reneu",
-    pricingModel: "custom"
+    pricingModel: "custom",
+    nextSession: {
+      date: "Tomorrow",
+      time: "10:00 AM"
+    }
   },
   {
     id: "coach2",
@@ -61,6 +66,10 @@ const COACHES = [
       basic: "$249/month",
       standard: "$449/month",
       premium: "$849/month"
+    },
+    nextSession: {
+      date: "Friday",
+      time: "2:00 PM"
     }
   },
   {
@@ -78,6 +87,10 @@ const COACHES = [
       basic: "$199/month",
       standard: "$399/month",
       premium: "$699/month"
+    },
+    nextSession: {
+      date: "Next Monday",
+      time: "11:30 AM"
     }
   },
   {
@@ -95,6 +108,10 @@ const COACHES = [
       basic: "$149/month",
       standard: "$349/month",
       premium: "$599/month"
+    },
+    nextSession: {
+      date: "Wednesday",
+      time: "4:00 PM"
     }
   }
 ];
@@ -196,20 +213,6 @@ const ClientDashboard = () => {
     }
   };
   
-  // Mock upcoming sessions
-  const upcomingSessions = [
-    {
-      id: "session1",
-      date: "Tomorrow",
-      time: "10:00 AM",
-    },
-    {
-      id: "session2",
-      date: "Friday, Nov 18",
-      time: "2:00 PM",
-    }
-  ];
-  
   if (!user) return null;
   
   return (
@@ -300,45 +303,32 @@ const ClientDashboard = () => {
                               </Badge>
                             </div>
                           </div>
-                          <Button variant="outline" size="sm" className="w-full mt-4">
-                            Schedule Session
+                          
+                          {/* Upcoming Session Card */}
+                          {reneuCoach.nextSession && (
+                            <div className="mt-4 p-3 rounded-lg border border-border/60 bg-muted/30">
+                              <div className="flex items-center gap-2 mb-1">
+                                <Calendar className="h-4 w-4 text-primary" />
+                                <p className="text-sm font-medium">Upcoming Session</p>
+                              </div>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <Clock className="h-3.5 w-3.5" />
+                                <p>{reneuCoach.nextSession.date} at {reneuCoach.nextSession.time}</p>
+                              </div>
+                              <div className="flex justify-end mt-2">
+                                <Button size="sm" variant="outline">Join</Button>
+                              </div>
+                            </div>
+                          )}
+                          
+                          <Button className="w-full mt-4">
+                            Schedule New Session
                           </Button>
                         </CardContent>
                       </Card>
                     )}
                   </div>
                 </section>
-                
-                {/* Upcoming sessions summary - Moved after the main sections */}
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-xl flex items-center">
-                      <Calendar className="mr-2 h-5 w-5 text-primary" />
-                      Upcoming Sessions
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {upcomingSessions.length > 0 ? (
-                      <div className="space-y-3">
-                        {upcomingSessions.map(session => (
-                          <div key={session.id} className="flex items-center justify-between p-3 rounded-lg border">
-                            <div>
-                              <p className="text-sm text-muted-foreground">
-                                {session.date} at {session.time}
-                              </p>
-                            </div>
-                            <Button size="sm">Join</Button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-6">
-                        <p className="text-muted-foreground">No upcoming sessions</p>
-                        <Button variant="outline" className="mt-2">Schedule a Session</Button>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
                 
                 {/* Your Professional Goals and Coaches section */}
                 <section className="space-y-4">
@@ -385,26 +375,51 @@ const ClientDashboard = () => {
                         </CardHeader>
                         <CardContent>
                           {professionalCoaches.map(coach => (
-                            <div key={coach.id} className="flex items-center gap-3 mb-4">
-                              <div className="h-16 w-16 rounded-full overflow-hidden">
-                                <img 
-                                  src={coach.imageSrc} 
-                                  alt={coach.name} 
-                                  className="h-full w-full object-cover"
-                                />
+                            <div key={coach.id} className="mb-4">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="h-16 w-16 rounded-full overflow-hidden">
+                                  <img 
+                                    src={coach.imageSrc} 
+                                    alt={coach.name} 
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">{coach.name}</h4>
+                                  <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                  <Badge variant="outline" className="mt-1 bg-amber-500/10 text-amber-700 border-amber-200">
+                                    Business Coach
+                                  </Badge>
+                                </div>
                               </div>
-                              <div>
-                                <h4 className="font-medium">{coach.name}</h4>
-                                <p className="text-sm text-muted-foreground">{coach.title}</p>
-                                <Badge variant="outline" className="mt-1 bg-amber-500/10 text-amber-700 border-amber-200">
-                                  Business Coach
-                                </Badge>
-                              </div>
+                              
+                              {/* Upcoming Session Card */}
+                              {coach.nextSession && (
+                                <div className="mt-2 p-3 rounded-lg border border-border/60 bg-muted/30">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Calendar className="h-4 w-4 text-amber-600" />
+                                    <p className="text-sm font-medium">Upcoming Session</p>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Clock className="h-3.5 w-3.5" />
+                                    <p>{coach.nextSession.date} at {coach.nextSession.time}</p>
+                                  </div>
+                                  <div className="flex justify-end mt-2">
+                                    <Button size="sm" variant="outline">Join</Button>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <Button variant="outline" size="sm" className="w-full mt-3">
+                                Schedule New Session
+                              </Button>
+                              
+                              {/* Add separator between coaches */}
+                              {professionalCoaches.indexOf(coach) < professionalCoaches.length - 1 && (
+                                <Separator className="my-4" />
+                              )}
                             </div>
                           ))}
-                          <Button variant="outline" size="sm" className="w-full">
-                            Schedule Session
-                          </Button>
                         </CardContent>
                       </Card>
                     )}
@@ -456,26 +471,51 @@ const ClientDashboard = () => {
                         </CardHeader>
                         <CardContent>
                           {mentalCoaches.map(coach => (
-                            <div key={coach.id} className="flex items-center gap-3 mb-4">
-                              <div className="h-16 w-16 rounded-full overflow-hidden">
-                                <img 
-                                  src={coach.imageSrc} 
-                                  alt={coach.name} 
-                                  className="h-full w-full object-cover"
-                                />
+                            <div key={coach.id} className="mb-4">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="h-16 w-16 rounded-full overflow-hidden">
+                                  <img 
+                                    src={coach.imageSrc} 
+                                    alt={coach.name} 
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">{coach.name}</h4>
+                                  <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                  <Badge variant="outline" className="mt-1 bg-purple-500/10 text-purple-700 border-purple-200">
+                                    Mental Coach
+                                  </Badge>
+                                </div>
                               </div>
-                              <div>
-                                <h4 className="font-medium">{coach.name}</h4>
-                                <p className="text-sm text-muted-foreground">{coach.title}</p>
-                                <Badge variant="outline" className="mt-1 bg-purple-500/10 text-purple-700 border-purple-200">
-                                  Mental Coach
-                                </Badge>
-                              </div>
+                              
+                              {/* Upcoming Session Card */}
+                              {coach.nextSession && (
+                                <div className="mt-2 p-3 rounded-lg border border-border/60 bg-muted/30">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Calendar className="h-4 w-4 text-purple-600" />
+                                    <p className="text-sm font-medium">Upcoming Session</p>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Clock className="h-3.5 w-3.5" />
+                                    <p>{coach.nextSession.date} at {coach.nextSession.time}</p>
+                                  </div>
+                                  <div className="flex justify-end mt-2">
+                                    <Button size="sm" variant="outline">Join</Button>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <Button variant="outline" size="sm" className="w-full mt-3">
+                                Schedule New Session
+                              </Button>
+                              
+                              {/* Add separator between coaches */}
+                              {mentalCoaches.indexOf(coach) < mentalCoaches.length - 1 && (
+                                <Separator className="my-4" />
+                              )}
                             </div>
                           ))}
-                          <Button variant="outline" size="sm" className="w-full">
-                            Schedule Session
-                          </Button>
                         </CardContent>
                       </Card>
                     )}
@@ -527,26 +567,51 @@ const ClientDashboard = () => {
                         </CardHeader>
                         <CardContent>
                           {bodyCoaches.map(coach => (
-                            <div key={coach.id} className="flex items-center gap-3 mb-4">
-                              <div className="h-16 w-16 rounded-full overflow-hidden">
-                                <img 
-                                  src={coach.imageSrc} 
-                                  alt={coach.name} 
-                                  className="h-full w-full object-cover"
-                                />
+                            <div key={coach.id} className="mb-4">
+                              <div className="flex items-center gap-3 mb-2">
+                                <div className="h-16 w-16 rounded-full overflow-hidden">
+                                  <img 
+                                    src={coach.imageSrc} 
+                                    alt={coach.name} 
+                                    className="h-full w-full object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <h4 className="font-medium">{coach.name}</h4>
+                                  <p className="text-sm text-muted-foreground">{coach.title}</p>
+                                  <Badge variant="outline" className="mt-1 bg-green-500/10 text-green-700 border-green-200">
+                                    Body Coach
+                                  </Badge>
+                                </div>
                               </div>
-                              <div>
-                                <h4 className="font-medium">{coach.name}</h4>
-                                <p className="text-sm text-muted-foreground">{coach.title}</p>
-                                <Badge variant="outline" className="mt-1 bg-green-500/10 text-green-700 border-green-200">
-                                  Body Coach
-                                </Badge>
-                              </div>
+                              
+                              {/* Upcoming Session Card */}
+                              {coach.nextSession && (
+                                <div className="mt-2 p-3 rounded-lg border border-border/60 bg-muted/30">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Calendar className="h-4 w-4 text-green-600" />
+                                    <p className="text-sm font-medium">Upcoming Session</p>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                    <Clock className="h-3.5 w-3.5" />
+                                    <p>{coach.nextSession.date} at {coach.nextSession.time}</p>
+                                  </div>
+                                  <div className="flex justify-end mt-2">
+                                    <Button size="sm" variant="outline">Join</Button>
+                                  </div>
+                                </div>
+                              )}
+                              
+                              <Button variant="outline" size="sm" className="w-full mt-3">
+                                Schedule New Session
+                              </Button>
+                              
+                              {/* Add separator between coaches */}
+                              {bodyCoaches.indexOf(coach) < bodyCoaches.length - 1 && (
+                                <Separator className="my-4" />
+                              )}
                             </div>
                           ))}
-                          <Button variant="outline" size="sm" className="w-full">
-                            Schedule Session
-                          </Button>
                         </CardContent>
                       </Card>
                     )}

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star } from 'lucide-react';
+import { Star, Calendar, Clock } from 'lucide-react';
 
 export interface CoachCardProps {
   id: string;
@@ -21,6 +21,10 @@ export interface CoachCardProps {
     standard?: string;
     premium?: string;
   };
+  nextSession?: {
+    date: string;
+    time: string;
+  };
 }
 
 export function CoachCard({
@@ -34,7 +38,8 @@ export function CoachCard({
   availability = 'medium',
   category,
   pricingModel = 'custom',
-  packages
+  packages,
+  nextSession
 }: CoachCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -127,13 +132,32 @@ export function CoachCard({
           ))}
         </div>
         
-        <div className="flex items-center justify-end pt-4 border-t border-border/30">
-          <Link to={`/coaches/${id}`}>
+        {/* Next Session Info (if available) */}
+        {nextSession && (
+          <div className="mb-4 p-3 bg-muted/30 border border-border/50 rounded-md">
+            <div className="flex items-center gap-2 mb-1">
+              <Calendar className="h-4 w-4 text-primary" />
+              <p className="text-sm font-medium">Next Session</p>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Clock className="h-3.5 w-3.5" />
+              <p>{nextSession.date} at {nextSession.time}</p>
+            </div>
+          </div>
+        )}
+        
+        <div className="flex flex-col gap-2 pt-4 border-t border-border/30">
+          {nextSession && (
+            <Button variant="outline" size="sm" className="w-full">
+              Join Session
+            </Button>
+          )}
+          <Link to={`/coaches/${id}`} className="w-full">
             <Button 
               size="sm" 
-              className="relative overflow-hidden premium-button"
+              className="w-full relative overflow-hidden premium-button"
             >
-              View Profile
+              {nextSession ? "Schedule New Session" : "View Profile"}
             </Button>
           </Link>
         </div>
