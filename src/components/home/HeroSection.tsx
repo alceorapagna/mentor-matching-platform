@@ -58,15 +58,13 @@ const HeroSection = () => {
           
           {/* Right Image/Illustration */}
           <div className="lg:w-1/2 relative">
-            <div className="relative overflow-hidden rounded-2xl shadow-2xl animate-scale-in">
+            <div className="relative rounded-2xl shadow-2xl animate-scale-in overflow-hidden">
               <img 
                 src="/lovable-uploads/97dd8d6d-87eb-43df-b863-783cf2001c71.png" 
                 alt="Reneu Framework" 
                 className="w-full h-auto"
               />
             </div>
-            
-            {/* Removed the floating glass card that was overlapping with the image */}
           </div>
         </div>
       </div>
@@ -92,7 +90,5 @@ const Stat = ({ label, value, icon }: { label: string; value: string; icon: Reac
     <p className="text-xs text-muted-foreground">{label}</p>
   </div>
 );
-
-// DimensionPill component removed as it's no longer used
 
 export default HeroSection;
