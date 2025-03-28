@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -31,7 +32,11 @@ import {
   Download,
   Check,
   X,
-  Settings
+  Settings,
+  Target,
+  History,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import VideoProviderSelector, { VideoProvider } from '@/components/session/VideoProviderSelector';
 import ExternalVideoProvider from '@/components/session/ExternalVideoProvider';
@@ -47,6 +52,7 @@ const CoachingSession = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [documentUploadOpen, setDocumentUploadOpen] = useState(false);
   const [surveyCreationOpen, setSurveyCreationOpen] = useState(false);
+  const [showSessionHistory, setShowSessionHistory] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   
   const [videoProvider, setVideoProvider] = useState<VideoProvider>('embedded');
@@ -72,6 +78,35 @@ const CoachingSession = () => {
     { id: 2, name: 'Mid-program Evaluation', completed: false, date: '2023-11-15', progress: 0, questions: 8 },
     { id: 3, name: 'Leadership Skills Assessment', completed: false, date: '2023-11-05', progress: 60, questions: 15 },
     { id: 4, name: 'Communication Style Analysis', completed: true, date: '2023-10-18', progress: 100, questions: 10 },
+  ]);
+
+  // Client goals data
+  const [clientGoals] = useState([
+    { id: 1, text: "Improve leadership communication skills", progress: 65 },
+    { id: 2, text: "Develop strategic planning capabilities", progress: 40 },
+    { id: 3, text: "Enhance team management and delegation", progress: 25 },
+  ]);
+
+  // Previous session summaries
+  const [previousSessions] = useState([
+    { 
+      id: 1, 
+      date: "October 25, 2023", 
+      summary: "Discussed communication challenges with the marketing team. Identified key areas for improvement including active listening and providing clearer feedback.",
+      keyTakeaways: ["Practice active listening", "Document feedback before meetings", "Follow up with team members individually"]
+    },
+    { 
+      id: 2, 
+      date: "November 1, 2023", 
+      summary: "Reviewed progress on team communication. Explored strategic planning frameworks that can be applied to the upcoming quarterly planning session.",
+      keyTakeaways: ["Implement SWOT analysis", "Schedule individual prep meetings", "Create communication plan template"]
+    },
+    { 
+      id: 3, 
+      date: "November 8, 2023", 
+      summary: "Focused on delegation techniques. Identified tasks currently taking too much time that could be delegated to team members.",
+      keyTakeaways: ["Identify 3 tasks to delegate next week", "Schedule training session for team", "Create accountability framework"]
+    }
   ]);
 
   useEffect(() => {
@@ -179,6 +214,74 @@ const CoachingSession = () => {
             onExternalMeetingUrlChange={setExternalMeetingUrl}
           />
         </div>
+        
+        {/* Client Goals Section */}
+        <div className="mb-6">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-lg flex items-center">
+                <Target className="h-5 w-5 mr-2 text-primary" />
+                Client Goals & Progress
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {clientGoals.map(goal => (
+                  <div key={goal.id} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">{goal.text}</span>
+                      <span className="text-sm text-muted-foreground">{goal.progress}%</span>
+                    </div>
+                    <Progress value={goal.progress} className="h-2" />
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+            <CardFooter className="pt-0 border-t">
+              <div className="w-full">
+                <Button 
+                  variant="ghost" 
+                  className="w-full flex items-center justify-center gap-2" 
+                  onClick={() => setShowSessionHistory(!showSessionHistory)}
+                >
+                  <History className="h-4 w-4" />
+                  {showSessionHistory ? "Hide Previous Sessions" : "Show Previous Sessions"}
+                  {showSessionHistory ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
+        </div>
+
+        {/* Previous Session History - Collapsible */}
+        {showSessionHistory && (
+          <div className="mb-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg flex items-center">
+                  <History className="h-5 w-5 mr-2 text-primary" />
+                  Previous Session Summaries
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {previousSessions.map(session => (
+                  <div key={session.id} className="border-b pb-4 last:border-0 last:pb-0">
+                    <h4 className="font-medium">{session.date}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">{session.summary}</p>
+                    <div className="mt-2">
+                      <h5 className="text-sm font-medium">Key Takeaways:</h5>
+                      <ul className="list-disc pl-5 text-sm text-muted-foreground">
+                        {session.keyTakeaways.map((takeaway, index) => (
+                          <li key={index}>{takeaway}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[calc(100vh-16rem)]">
           <div className={`${showRightPanel ? 'lg:col-span-2' : 'lg:col-span-3'} h-full`}>
