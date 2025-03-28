@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   Card, 
@@ -21,6 +22,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const { login, isAuthenticated, isLoading, testAccess } = useAuth();
+  const navigate = useNavigate();
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" />;
@@ -45,14 +47,27 @@ const Login = () => {
     await login(demoEmail, demoPassword);
   };
 
+  // Updated quick access options with direct navigation for coaching session
   const quickAccessOptions = [
     { label: 'Client Dashboard', role: 'client', path: '/dashboard' },
     { label: 'Coach Dashboard', role: 'coach', path: '/coach-dashboard' },
     { label: 'Admin Dashboard', role: 'admin', path: '/admin' },
     { label: 'HR Dashboard', role: 'hr', path: '/hr-dashboard' },
-    { label: 'Coaching Session', role: 'client', path: '/session/test-session-1' },
+    { label: 'Coaching Session', role: 'client', path: '/session/test-session-1', directNav: true },
     { label: 'Reneu Compass', role: 'client', path: '/reneu-compass' },
   ];
+
+  // Updated handler for quick access that supports direct navigation
+  const handleQuickAccess = (option: any) => {
+    if (option.directNav) {
+      // For session page, first grant access then navigate
+      testAccess(option.role as any);
+      setTimeout(() => navigate(option.path), 100);
+    } else {
+      // For other pages, just use testAccess which does its own navigation
+      testAccess(option.role as any);
+    }
+  };
 
   return (
     <MainLayout>
@@ -207,7 +222,7 @@ const Login = () => {
                   variant="outline"
                   size="sm"
                   className="text-xs bg-amber-100 border-amber-200 text-amber-800 hover:bg-amber-200"
-                  onClick={() => testAccess(option.role as any)}
+                  onClick={() => handleQuickAccess(option)}
                 >
                   {option.label}
                 </Button>
