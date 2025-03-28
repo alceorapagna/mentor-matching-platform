@@ -62,7 +62,7 @@ const HeroSection = () => {
               <img 
                 src="/lovable-uploads/97dd8d6d-87eb-43df-b863-783cf2001c71.png" 
                 alt="Reneu Framework" 
-                className="w-full h-auto rounded-2xl shadow-[0_10px_40px_-5px_rgba(0,0,0,0.2)]"
+                className="w-full h-auto rounded-2xl"
               />
             </div>
           </div>
