@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Calendar, Clock, FileText, Filter, MessageSquare, Search, Users } from 'lucide-react';
+import { Calendar, Clock, FileText, Filter, MessageSquare, Search, Users, TrendingUp } from 'lucide-react';
 import MainLayout from '../components/layout/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -122,12 +121,11 @@ const HRDashboard = () => {
     { name: 'IT', score: 45 }
   ];
 
-  // Activity summary data
+  // Activity summary data - updated to include average impact
   const activitySummary = {
     totalSessions: 39,
     avgEngagement: 78,
-    avgDuration: 48,
-    activeUsers: 4
+    avgImpact: 67 // New metric for average impact (goal achievement percentage)
   };
 
   // Filter the employees based on search query and filters
@@ -180,8 +178,8 @@ const HRDashboard = () => {
           </div>
         </div>
 
-        {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Overview Cards - Updated to replace two cards with a new Average Impact card */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium">Total Sessions</CardTitle>
@@ -208,26 +206,14 @@ const HRDashboard = () => {
           </Card>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Average Duration</CardTitle>
+              <CardTitle className="text-sm font-medium">Average Impact</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center">
-                <Clock className="h-5 w-5 text-reneu-500 mr-2" />
-                <div className="text-2xl font-bold">{activitySummary.avgDuration} min</div>
+                <TrendingUp className="h-5 w-5 text-reneu-500 mr-2" />
+                <div className="text-2xl font-bold">{activitySummary.avgImpact}%</div>
               </div>
-              <p className="text-xs text-muted-foreground mt-1">Per coaching session</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center">
-                <Calendar className="h-5 w-5 text-reneu-500 mr-2" />
-                <div className="text-2xl font-bold">{activitySummary.activeUsers}/{employees.length}</div>
-              </div>
-              <p className="text-xs text-muted-foreground mt-1">Users active this month</p>
+              <p className="text-xs text-muted-foreground mt-1">Goal achievement progress</p>
             </CardContent>
           </Card>
         </div>
