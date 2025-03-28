@@ -66,18 +66,7 @@ const HeroSection = () => {
               />
             </div>
             
-            {/* Floating component showing the three dimensions */}
-            <div className="absolute -bottom-6 -left-6 glass-card rounded-lg p-4 shadow-lg backdrop-blur-xl animate-slide-up">
-              <div className="flex items-center space-x-2">
-                <Search className="h-5 w-5 text-primary" />
-                <span className="font-medium">Your Renewal Path</span>
-              </div>
-              <div className="mt-3 space-y-2">
-                <DimensionPill icon={<Briefcase className="h-4 w-4 text-reneu-500" />} label="Work Renewal" />
-                <DimensionPill icon={<Brain className="h-4 w-4 text-reneu-500" />} label="Mind Renewal" />
-                <DimensionPill icon={<Dumbbell className="h-4 w-4 text-reneu-500" />} label="Body Renewal" />
-              </div>
-            </div>
+            {/* Removed the floating glass card that was overlapping with the image */}
           </div>
         </div>
       </div>
@@ -104,11 +93,6 @@ const Stat = ({ label, value, icon }: { label: string; value: string; icon: Reac
   </div>
 );
 
-const DimensionPill = ({ icon, label }: { icon: React.ReactNode; label: string }) => (
-  <div className="flex items-center space-x-3">
-    <div className="flex-shrink-0">{icon}</div>
-    <span className="text-sm">{label}</span>
-  </div>
-);
+// DimensionPill component removed as it's no longer used
 
 export default HeroSection;
