@@ -1,11 +1,22 @@
 
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Plus, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 const CoachesTab = () => {
-  // This is a placeholder component that will redirect to the Coaches page
+  const navigate = useNavigate();
+  
+  // Redirect to the coach dashboard page when this tab is selected
+  useEffect(() => {
+    // Small timeout to ensure smooth transition
+    const redirectTimeout = setTimeout(() => {
+      navigate("/coach-dashboard");
+    }, 100);
+    
+    return () => clearTimeout(redirectTimeout);
+  }, [navigate]);
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -14,18 +25,12 @@ const CoachesTab = () => {
             <Users className="h-5 w-5 text-primary" />
             My Coaches
           </CardTitle>
-          <CardDescription>View and manage your coaching relationships</CardDescription>
+          <CardDescription>Redirecting to coaches dashboard...</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center py-8">
-          <p className="text-muted-foreground mb-4">
-            You don't have any coaches assigned yet. Find a coach to begin your renewal journey.
+          <p className="text-muted-foreground">
+            Loading your coaching relationships...
           </p>
-          <Button asChild>
-            <Link to="/coaches">
-              <Plus className="mr-2 h-4 w-4" />
-              Find a Coach
-            </Link>
-          </Button>
         </CardContent>
       </Card>
     </div>
