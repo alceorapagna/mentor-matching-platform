@@ -13,6 +13,7 @@ export type Database = {
         Row: {
           avatar: string | null
           compass_completed: boolean | null
+          compass_data: Json | null
           created_at: string
           email: string
           first_name: string
@@ -24,6 +25,7 @@ export type Database = {
         Insert: {
           avatar?: string | null
           compass_completed?: boolean | null
+          compass_data?: Json | null
           created_at?: string
           email: string
           first_name: string
@@ -35,6 +37,7 @@ export type Database = {
         Update: {
           avatar?: string | null
           compass_completed?: boolean | null
+          compass_data?: Json | null
           created_at?: string
           email?: string
           first_name?: string
