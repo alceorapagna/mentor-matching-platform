@@ -49,10 +49,11 @@ export const updateCompassData = async (
     console.log("Saving compass data to Supabase:", compassData);
     
     // Save compass data to the user profile in Supabase
+    // Cast to any to resolve the type incompatibility between CompassData and Json
     const { error } = await supabase
       .from('profiles')
       .update({
-        compass_data: compassData
+        compass_data: compassData as any
       })
       .eq('id', user.id);
       
