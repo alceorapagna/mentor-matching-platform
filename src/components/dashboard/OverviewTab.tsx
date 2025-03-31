@@ -54,19 +54,6 @@ const OverviewTab = ({ goals, compassData }: OverviewTabProps) => {
           ))}
         </CardContent>
       </Card>
-      
-      {/* Next Session Card below the compass */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Next Session</CardTitle>
-          <CardDescription>Your upcoming coaching session</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-center py-6 text-muted-foreground">
-            No sessions scheduled yet
-          </p>
-        </CardContent>
-      </Card>
     </div>
   );
 };

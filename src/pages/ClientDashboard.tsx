@@ -17,7 +17,7 @@ import CoachesTab from "@/components/dashboard/CoachesTab";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("compass-goals");
   const [generatedGoals, setGeneratedGoals] = useState<Goal[]>([]);
   const [journeyData, setJourneyData] = useState<{
     pastSessions: SessionSummary[];
@@ -73,16 +73,16 @@ const ClientDashboard = () => {
           }}
         />
         
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mt-8">
+        <Tabs defaultValue="compass-goals" value={activeTab} onValueChange={setActiveTab} className="mt-8">
           <TabsList className="mb-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="compass-goals">Compass & Goals</TabsTrigger>
             <TabsTrigger value="sessions">Upcoming Sessions</TabsTrigger>
             <TabsTrigger value="history">Session History</TabsTrigger>
             <TabsTrigger value="coaches">My Coaches</TabsTrigger>
             <TabsTrigger value="resources">Resources</TabsTrigger>
           </TabsList>
           
-          <TabsContent value="overview">
+          <TabsContent value="compass-goals">
             <OverviewTab 
               goals={journeyData.goals} 
               compassData={user.compassData} 
