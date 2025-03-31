@@ -112,12 +112,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           role: data.role as UserRole,
           avatar: data.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.first_name}`,
         });
+        
+        // Redirect based on user role after profile is fetched
+        redirectBasedOnRole(data.role as UserRole);
       }
     } catch (error) {
       console.error('Error in profile fetch:', error);
       setUser(null);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Helper function to redirect based on user role
+  const redirectBasedOnRole = (role: UserRole) => {
+    switch (role) {
+      case 'client':
+        navigate('/dashboard');
+        break;
+      case 'coach':
+        navigate('/coach-dashboard');
+        break;
+      case 'admin':
+        navigate('/admin');
+        break;
+      case 'hr':
+        navigate('/hr-dashboard');
+        break;
+      default:
+        navigate('/dashboard');
     }
   };
 
@@ -137,6 +160,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (data.user) {
         toast.success('Logged in successfully');
+        // Redirect will happen automatically via the onAuthStateChange handler
       }
       
     } catch (error: any) {
@@ -173,10 +197,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (data.user) {
         toast.success('Account created successfully');
         
-        // Redirect based on user role
+        // For coach applications, show a message but don't auto-redirect
         if (userData.role === 'coach') {
           toast.info('Your coach application is under review');
           setTimeout(() => navigate('/'), 3000);
+        } else {
+          // For all other roles, redirect happens via onAuthStateChange
+          // Note: This will trigger once the profile is created by the database trigger
+          toast.info('Redirecting to your dashboard...');
         }
       }
       
@@ -218,22 +246,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     toast.success(`Quick access as ${role} activated`);
     
     // Redirect to appropriate dashboard
-    switch (role) {
-      case 'client':
-        navigate('/dashboard');
-        break;
-      case 'coach':
-        navigate('/coach-dashboard');
-        break;
-      case 'admin':
-        navigate('/admin');
-        break;
-      case 'hr':
-        navigate('/hr-dashboard');
-        break;
-      default:
-        navigate('/dashboard');
-    }
+    redirectBasedOnRole(role);
   };
 
   return (

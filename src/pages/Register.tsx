@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { 
   Card, 
@@ -18,8 +18,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import MainLayout from '@/components/layout/MainLayout';
 import { useAuth, RegisterData } from '@/contexts/AuthContext';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [userType, setUserType] = useState('client');
   const { register, isAuthenticated, isLoading } = useAuth();
   
@@ -51,6 +53,7 @@ const Register = () => {
     e.preventDefault();
     
     if (!clientData.termsAccepted) {
+      toast.error('You must accept the terms to create an account');
       return;
     }
     
@@ -69,6 +72,12 @@ const Register = () => {
     e.preventDefault();
     
     if (!coachData.termsAccepted) {
+      toast.error('You must accept the terms to create an account');
+      return;
+    }
+    
+    if (!coachData.specialization) {
+      toast.error('Please select your specialization');
       return;
     }
     
