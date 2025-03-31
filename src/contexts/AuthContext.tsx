@@ -7,16 +7,6 @@ import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 // Define user types
 export type UserRole = 'client' | 'coach' | 'admin' | 'hr';
 
-export interface User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-  avatar?: string;
-  compassCompleted?: boolean; // Track if user has completed the Reneu Compass
-}
-
 // Add this type to the existing types
 export interface CompassData {
   purpose: string;
@@ -28,15 +18,15 @@ export interface CompassData {
   };
 }
 
-export interface AuthUser {
+export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
   role: UserRole;
   avatar?: string;
-  compassCompleted?: boolean;
-  compassData?: CompassData;
+  compassCompleted?: boolean; // Track if user has completed the Reneu Compass
+  compassData?: CompassData; // Add compass data to the User interface
 }
 
 // Auth context type
@@ -217,22 +207,33 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Function to update user's compass data
   const updateCompassData = async (compassData: CompassData) => {
-    if (user) {
-      try {
-        // Here you would typically make an API call to save the data
-        // For now we'll just update the local state
-        console.log("Saving compass data:", compassData);
+    if (!user) return;
+    
+    try {
+      // Save compass data to the user profile in Supabase
+      const { error } = await supabase
+        .from('profiles')
+        .update({ compass_data: compassData })
+        .eq('id', user.id);
         
-        // In a real implementation, save to Supabase or your backend
-        // await supabaseClient.from('profiles').update({ 
-        //   compass_data: compassData 
-        // }).eq('id', user.id);
-        
-        setUser(prev => prev ? { ...prev, compassData } : null);
-      } catch (error) {
-        console.error("Error updating compass data:", error);
+      if (error) {
+        console.error('Error updating compass data:', error);
+        toast.error('Failed to save your compass data');
         throw error;
       }
+      
+      // Update local user state
+      setUser({
+        ...user,
+        compassData
+      });
+      
+      console.log("Compass data saved successfully:", compassData);
+      toast.success('Your compass data has been saved');
+    } catch (error) {
+      console.error("Error updating compass data:", error);
+      toast.error('An error occurred while saving your compass data');
+      throw error;
     }
   };
 

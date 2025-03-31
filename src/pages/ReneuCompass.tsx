@@ -9,12 +9,7 @@ import CompassIntroduction from "@/components/compass/CompassIntroduction";
 import PurposeValuesForm from "@/components/compass/PurposeValuesForm";
 import DimensionAssessment, { DimensionData } from "@/components/compass/DimensionAssessment";
 import FutureStateForm from "@/components/compass/FutureStateForm";
-
-export interface CompassAssessmentData {
-  purpose: string;
-  coreValues: string[];
-  dimensions: DimensionData;
-}
+import { CompassData } from "@/contexts/AuthContext";
 
 const ReneuCompass = () => {
   const navigate = useNavigate();
@@ -22,8 +17,7 @@ const ReneuCompass = () => {
   const { user, updateCompassStatus, updateCompassData } = useAuth();
   const [step, setStep] = useState(1);
   
-  // Assessment data state
-  const [assessmentData, setAssessmentData] = useState<CompassAssessmentData>({
+  const [assessmentData, setAssessmentData] = useState<CompassData>({
     purpose: "",
     coreValues: [] as string[],
     dimensions: {
@@ -49,10 +43,8 @@ const ReneuCompass = () => {
 
   const handleCompleteAssessment = async () => {
     try {
-      // Save the complete compass data
       await updateCompassData(assessmentData);
       
-      // Mark the compass as completed in the user profile
       await updateCompassStatus(true);
       
       toast({
@@ -61,7 +53,6 @@ const ReneuCompass = () => {
         duration: 5000,
       });
       
-      // Redirect to dashboard
       setTimeout(() => {
         navigate("/dashboard");
       }, 2000);
@@ -102,7 +93,7 @@ const ReneuCompass = () => {
       }
     });
   };
-  
+
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8 max-w-5xl">
