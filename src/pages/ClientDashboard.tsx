@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ReneuCompassCard from "@/components/onboarding/ReneuCompassCard";
 import CompassRequiredForm from "@/components/onboarding/CompassRequiredForm";
+import WelcomeSection from "@/components/onboarding/WelcomeSection";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -29,14 +30,18 @@ const ClientDashboard = () => {
   return (
     <MainLayout>
       <div className="container mx-auto py-8 px-4">
-        <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold">Welcome, {user.firstName}</h1>
-            <p className="text-muted-foreground mt-1">Your renewal journey dashboard</p>
-          </div>
-        </div>
+        {/* Welcome section with onboarding steps or dashboard header */}
+        <WelcomeSection 
+          userName={user.firstName}
+          hasCompletedCompass={true}
+          compassProgress={{
+            hasStarted: true,
+            hasCompleted: true,
+            percentComplete: 100
+          }}
+        />
         
-        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="mt-8">
           <TabsList className="mb-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="sessions">Upcoming Sessions</TabsTrigger>
