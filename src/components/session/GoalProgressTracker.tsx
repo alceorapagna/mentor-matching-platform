@@ -6,12 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Check, Target } from 'lucide-react';
-
-export interface Goal {
-  id: number;
-  text: string;
-  progress: number;
-}
+import { Goal } from '@/types/session';
 
 interface GoalProgressTrackerProps {
   isOpen: boolean;

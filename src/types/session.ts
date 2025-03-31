@@ -29,3 +29,16 @@ export interface SessionSummary {
   summary: string;
   keyTakeaways: string[];
 }
+
+export interface Goal {
+  id: number;
+  text: string;
+  progress: number;
+  category: 'work' | 'mind' | 'body';
+}
+
+export interface CompassGoals {
+  work: Goal[];
+  mind: Goal[];
+  body: Goal[];
+}

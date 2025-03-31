@@ -1,13 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
-import { PanelRight } from 'lucide-react';
 import MainLayout from '@/components/layout/MainLayout';
 import { VideoProvider } from '@/components/session/VideoProviderSelector';
-import { Goal } from '@/components/session/GoalProgressTracker';
-import { Message, Document, Survey, SessionSummary } from '@/types/session';
+import { Message, Document, Survey, SessionSummary, Goal } from '@/types/session';
 
 // Extracted Components
 import SessionHeader from '@/components/session/SessionHeader';
@@ -62,9 +59,9 @@ const CoachingSession = () => {
 
   // Client goals data
   const [clientGoals, setClientGoals] = useState<Goal[]>([
-    { id: 1, text: "Improve leadership communication skills", progress: 65 },
-    { id: 2, text: "Develop strategic planning capabilities", progress: 40 },
-    { id: 3, text: "Enhance team management and delegation", progress: 25 },
+    { id: 1, text: "Improve leadership communication skills", progress: 65, category: 'work' },
+    { id: 2, text: "Develop strategic planning capabilities", progress: 40, category: 'mind' },
+    { id: 3, text: "Enhance team management and delegation", progress: 25, category: 'body' },
   ]);
 
   // Previous session summaries

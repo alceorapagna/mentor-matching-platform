@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,10 +9,72 @@ import CompassRequiredForm from "@/components/onboarding/CompassRequiredForm";
 import WelcomeSection from "@/components/onboarding/WelcomeSection";
 import { Progress } from "@/components/ui/progress";
 import { Target, History, BookOpen, Calendar, CheckCircle2 } from "lucide-react";
+import { Goal } from "@/types/session";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
+  const [generatedGoals, setGeneratedGoals] = useState<Goal[]>([]);
+  
+  // Generate goals based on compass data
+  useEffect(() => {
+    if (user?.compassData) {
+      const goals: Goal[] = [];
+      
+      // Generate Work goals
+      if (user.compassData.dimensions.work.notes) {
+        goals.push({
+          id: 1,
+          text: `Work: ${user.compassData.dimensions.work.notes.split('.')[0] || 'Improve professional fulfillment'}`,
+          progress: Math.round((user.compassData.dimensions.work.current / 10) * 100),
+          category: 'work'
+        });
+      } else {
+        goals.push({
+          id: 1,
+          text: "Improve leadership communication skills",
+          progress: 65,
+          category: 'work'
+        });
+      }
+
+      // Generate Mind goals
+      if (user.compassData.dimensions.mind.notes) {
+        goals.push({
+          id: 2,
+          text: `Mind: ${user.compassData.dimensions.mind.notes.split('.')[0] || 'Enhance mental wellbeing'}`,
+          progress: Math.round((user.compassData.dimensions.mind.current / 10) * 100),
+          category: 'mind'
+        });
+      } else {
+        goals.push({
+          id: 2,
+          text: "Develop strategic planning capabilities",
+          progress: 40,
+          category: 'mind'
+        });
+      }
+
+      // Generate Body goals
+      if (user.compassData.dimensions.body.notes) {
+        goals.push({
+          id: 3,
+          text: `Body: ${user.compassData.dimensions.body.notes.split('.')[0] || 'Improve physical health'}`,
+          progress: Math.round((user.compassData.dimensions.body.current / 10) * 100),
+          category: 'body'
+        });
+      } else {
+        goals.push({
+          id: 3,
+          text: "Enhance team management and delegation",
+          progress: 25,
+          category: 'body'
+        });
+      }
+      
+      setGeneratedGoals(goals);
+    }
+  }, [user?.compassData]);
   
   console.log("ClientDashboard user:", user); // Debug log to see the user object
   
@@ -51,10 +113,10 @@ const ClientDashboard = () => {
         keyTakeaways: ["Implement SWOT analysis", "Schedule individual prep meetings", "Create communication plan template"]
       },
     ],
-    goals: [
-      { id: 1, text: "Improve leadership communication skills", progress: 65 },
-      { id: 2, text: "Develop strategic planning capabilities", progress: 40 },
-      { id: 3, text: "Enhance team management and delegation", progress: 25 },
+    goals: generatedGoals.length > 0 ? generatedGoals : [
+      { id: 1, text: "Improve leadership communication skills", progress: 65, category: 'work' },
+      { id: 2, text: "Develop strategic planning capabilities", progress: 40, category: 'mind' },
+      { id: 3, text: "Enhance team management and delegation", progress: 25, category: 'body' },
     ],
     upcomingSessions: [
       {

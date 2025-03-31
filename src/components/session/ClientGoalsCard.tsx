@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Target, History, ChevronDown, ChevronUp } from 'lucide-react';
-import { Goal } from '@/components/session/GoalProgressTracker';
+import { Goal } from '@/types/session';
 
 interface ClientGoalsCardProps {
   clientGoals: Goal[];
@@ -37,6 +37,9 @@ const ClientGoalsCard = ({
                 className="h-2"
                 showValue={true}
                 indicatorColor={
+                  goal.category === 'work' ? "bg-amber-500" : 
+                  goal.category === 'mind' ? "bg-purple-500" : 
+                  goal.category === 'body' ? "bg-green-500" : 
                   goal.progress >= 75 ? "bg-green-500" : 
                   goal.progress >= 40 ? "bg-amber-500" : 
                   "bg-blue-500"
