@@ -267,7 +267,7 @@ export const useAuthProvider = (): AuthContextType => {
     toast.success(`Quick access as ${role} activated`);
     
     // Redirect to appropriate dashboard
-    redirectBasedOnRole(role, undefined, navigate);
+    redirectBasedOnRole(role, navigate, undefined);
   };
 
   return {
