@@ -150,7 +150,7 @@ export const useAuthProvider = (): AuthContextType => {
             toast.success('Logged in successfully (dev mode)');
             
             // Redirect the user based on their role
-            redirectBasedOnRole(userData.role as UserRole, undefined, navigate);
+            redirectBasedOnRole(userData.role as UserRole, navigate, undefined);
             return;
           } else {
             toast.error('Email not confirmed. Please check your inbox.');
@@ -218,7 +218,7 @@ export const useAuthProvider = (): AuthContextType => {
         if (userData.role === 'coach') {
           toast.info('Your coach application is under review');
           setTimeout(() => {
-            redirectBasedOnRole('coach', false, navigate);
+            redirectBasedOnRole('coach', navigate, false);
           }, 1000);
         } else {
           // For all other roles, redirect to Reneu Compass for new users
