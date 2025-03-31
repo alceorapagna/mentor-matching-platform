@@ -23,11 +23,9 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
   return (
     <Card className={`border-primary/20 ${className}`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <div className="flex items-center">
-          <div className="p-1 mr-2 bg-primary/10 rounded-full">
-            <Compass className="h-5 w-5 text-primary" />
-          </div>
-          <CardTitle className="text-xl">Reneu Compass</CardTitle>
+        <div className="flex items-center gap-2">
+          <Compass className="h-5 w-5 text-primary" />
+          <CardTitle>Reneu Compass</CardTitle>
         </div>
         {progress.hasCompleted && (
           <Button variant="ghost" size="sm" className="gap-1" asChild>

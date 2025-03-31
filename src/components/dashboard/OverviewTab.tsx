@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Target } from "lucide-react";
+import { Target, Compass } from "lucide-react";
 import { Goal } from "@/types/session";
 import ReneuCompassCard from "@/components/onboarding/ReneuCompassCard";
 import { CompassData } from "@/contexts/auth/types";
