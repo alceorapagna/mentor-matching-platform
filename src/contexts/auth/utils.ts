@@ -1,3 +1,4 @@
+
 import { UserRole } from './types';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
@@ -5,8 +6,8 @@ import { toast } from 'sonner';
 // Helper function to redirect based on user role and compass completion status
 export const redirectBasedOnRole = (
   role: UserRole,
-  compassCompleted?: boolean,
-  navigate: (path: string) => void
+  navigate: (path: string) => void,
+  compassCompleted?: boolean
 ) => {
   console.log("Redirecting based on role:", role, "Compass completed:", compassCompleted);
   
