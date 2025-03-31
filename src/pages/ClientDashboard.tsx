@@ -12,6 +12,8 @@ const ClientDashboard = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("overview");
   
+  console.log("ClientDashboard user:", user); // Debug log to see the user object
+  
   if (!user) {
     return null; // Protected route will handle redirection
   }

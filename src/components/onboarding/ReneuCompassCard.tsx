@@ -17,6 +17,8 @@ interface ReneuCompassCardProps {
 }
 
 const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompassCardProps) => {
+  console.log("ReneuCompassCard compassData:", compassData); // Debug log to see what data we have
+  
   return (
     <Card className={`border-primary/20 ${className}`}>
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">

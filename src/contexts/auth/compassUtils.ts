@@ -52,7 +52,7 @@ export const updateCompassData = async (
     const { error } = await supabase
       .from('profiles')
       .update({
-        compass_data: compassData as any
+        compass_data: compassData
       })
       .eq('id', user.id);
       

@@ -62,6 +62,12 @@ export const fetchUserProfile = async (userId: string, setUser: Function, setIsL
         compassCompleted: data.compass_completed || false,
         compassData: data.compass_data,
       });
+      
+      // Log the user object to debug
+      console.log("Created user object with compass data:", {
+        compassCompleted: data.compass_completed,
+        compassData: data.compass_data
+      });
     }
   } catch (error) {
     console.error('Error in profile fetch:', error);
