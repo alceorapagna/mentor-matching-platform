@@ -71,17 +71,26 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
             <div className="space-y-6">
               {/* Compass Visualization with Custom Image */}
               <div className="relative">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Purpose Column */}
-                  <div className="space-y-2">
+                <div className="flex justify-center mb-2">
+                  <img 
+                    src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
+                    alt="Reneu Compass" 
+                    className="w-full max-w-[280px] mx-auto opacity-80" 
+                  />
+                </div>
+                
+                {/* Purpose on left, Values on right of compass */}
+                <div className="grid grid-cols-2 gap-4 -mt-[140px] relative z-10">
+                  {/* Purpose Column - Left */}
+                  <div className="space-y-2 flex flex-col justify-center">
                     <h4 className="text-sm font-medium">Purpose</h4>
-                    <div className="bg-muted/30 p-3 rounded-md h-full">
+                    <div className="bg-muted/30 p-3 rounded-md">
                       <p className="text-sm text-muted-foreground italic">"{compassData.purpose}"</p>
                     </div>
                   </div>
                   
-                  {/* Values Column */}
-                  <div className="space-y-2">
+                  {/* Values Column - Right */}
+                  <div className="space-y-2 flex flex-col justify-center">
                     <h4 className="text-sm font-medium">Core Values</h4>
                     <div className="bg-muted/30 p-3 rounded-md flex flex-wrap gap-2">
                       {compassData.coreValues.map((value, index) => (
@@ -92,15 +101,6 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
                     </div>
                   </div>
                 </div>
-                
-                {/* Custom Compass Image Overlay */}
-                <div className="relative mt-6 mb-4">
-                  <img 
-                    src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
-                    alt="Reneu Compass" 
-                    className="w-full max-w-[280px] mx-auto opacity-80" 
-                  />
-                </div>
               </div>
               
               <Separator />
@@ -109,14 +109,14 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
               <div className="space-y-4">
                 <div className="flex items-center">
                   <Target className="h-4 w-4 text-primary mr-2" />
-                  <h4 className="text-sm font-medium">Dimension Goals</h4>
+                  <h4 className="text-sm font-medium">The goals and journey</h4>
                 </div>
                 
                 <div className="flex justify-center mb-4">
                   <img 
                     src="/lovable-uploads/2911f207-6d2a-4c23-8508-f23a8dfaf292.png" 
                     alt="Journey Compass" 
-                    className="w-full max-w-[200px] opacity-75" 
+                    className="w-full max-w-[260px] mx-auto opacity-75" 
                   />
                 </div>
                 
