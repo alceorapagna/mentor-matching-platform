@@ -10,10 +10,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import { LogOut, User, Settings, LayoutDashboard, UserCog, Building } from 'lucide-react';
+import { LogOut, User, Settings, LayoutDashboard, UserCog, Building, RefreshCcw } from 'lucide-react';
 
 const UserMenu = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, resetCompassData } = useAuth();
   
   if (!user) return null;
   
@@ -31,6 +31,12 @@ const UserMenu = () => {
         return '/hr-dashboard';
       default:
         return '/dashboard';
+    }
+  };
+  
+  const handleResetOnboarding = () => {
+    if (confirm('Are you sure you want to reset your onboarding data? This will clear your Reneu Compass assessment.')) {
+      resetCompassData();
     }
   };
   
@@ -85,6 +91,14 @@ const UserMenu = () => {
               <Building className="mr-2 h-4 w-4" />
               HR Portal
             </Link>
+          </DropdownMenuItem>
+        )}
+        
+        {/* Reset onboarding option (for testing purposes) */}
+        {user.role === 'client' && (
+          <DropdownMenuItem onClick={handleResetOnboarding} className="flex items-center cursor-pointer">
+            <RefreshCcw className="mr-2 h-4 w-4" />
+            Reset Onboarding
           </DropdownMenuItem>
         )}
         

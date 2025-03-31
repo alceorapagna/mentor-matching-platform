@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -112,6 +111,45 @@ export const useAuthProvider = (): AuthContextType => {
       console.error("Error updating compass data:", error);
       toast.error('An error occurred while saving your compass data');
       throw error;
+    }
+  };
+
+  // Function to reset user's compass data (for testing purposes)
+  const resetCompassData = async () => {
+    if (!user) return;
+    
+    try {
+      setIsLoading(true);
+      console.log("Resetting compass data for user:", user.id);
+      
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          compass_completed: false,
+          compass_data: null
+        })
+        .eq('id', user.id);
+        
+      if (error) {
+        console.error('Error resetting compass data:', error);
+        toast.error('Failed to reset your onboarding data');
+        return;
+      }
+      
+      // Update local user state
+      setUser({
+        ...user,
+        compassCompleted: false,
+        compassData: undefined
+      });
+      
+      toast.success('Onboarding data reset successfully');
+      navigate('/reneu-compass');
+    } catch (error) {
+      console.error('Error in resetCompassData:', error);
+      toast.error('An error occurred while resetting your data');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -279,7 +317,8 @@ export const useAuthProvider = (): AuthContextType => {
     logout,
     testAccess,
     updateCompassStatus,
-    updateCompassData
+    updateCompassData,
+    resetCompassData
   };
 };
 

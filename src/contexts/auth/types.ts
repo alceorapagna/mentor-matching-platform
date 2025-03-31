@@ -47,4 +47,5 @@ export interface AuthContextType {
   testAccess: (role: UserRole) => void;
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
+  resetCompassData: () => Promise<void>;
 }
