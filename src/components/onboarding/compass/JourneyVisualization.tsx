@@ -28,18 +28,21 @@ const JourneyVisualization = ({ dimensions }: JourneyVisualizationProps) => {
           name="Work" 
           current={dimensions.work.current} 
           desired={dimensions.work.desired} 
+          notes={dimensions.work.notes}
         />
         
         <DimensionProgressBar 
           name="Mind" 
           current={dimensions.mind.current} 
           desired={dimensions.mind.desired} 
+          notes={dimensions.mind.notes}
         />
         
         <DimensionProgressBar 
           name="Body" 
           current={dimensions.body.current} 
           desired={dimensions.body.desired} 
+          notes={dimensions.body.notes}
         />
       </div>
     </div>

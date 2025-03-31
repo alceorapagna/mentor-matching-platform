@@ -5,9 +5,10 @@ interface DimensionProgressBarProps {
   name: string;
   current: number;
   desired: number;
+  notes?: string;
 }
 
-const DimensionProgressBar = ({ name, current, desired }: DimensionProgressBarProps) => {
+const DimensionProgressBar = ({ name, current, desired, notes }: DimensionProgressBarProps) => {
   // Calculate the percentage for the progress bar (current value out of 10)
   const currentPercentage = (current / 10) * 100;
   
@@ -39,6 +40,11 @@ const DimensionProgressBar = ({ name, current, desired }: DimensionProgressBarPr
           }}
         ></div>
       </div>
+      {notes && (
+        <p className="text-xs text-muted-foreground mt-1 italic">
+          "{notes}"
+        </p>
+      )}
     </div>
   );
 };
