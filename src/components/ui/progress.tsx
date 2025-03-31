@@ -39,7 +39,9 @@ const Progress = React.forwardRef<
         <span className="text-sm font-medium">{formattedValue}</span>
       )}
     </div>
-  ))
+  );
+});
+
 Progress.displayName = ProgressPrimitive.Root.displayName
 
 export { Progress }
