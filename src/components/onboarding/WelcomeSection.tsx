@@ -37,12 +37,6 @@ const WelcomeSection = ({
               : "Let's start your renewal journey with a few simple steps"}
           </p>
         </div>
-        
-        {hasCompletedCompass && (
-          <div className="mt-4 md:mt-0">
-            <Button className="premium-button">Find a New Coach</Button>
-          </div>
-        )}
       </div>
       
       {/* Onboarding steps for new users */}

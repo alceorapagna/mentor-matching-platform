@@ -13,6 +13,7 @@ import OverviewTab from "@/components/dashboard/OverviewTab";
 import SessionsTab from "@/components/dashboard/SessionsTab";
 import SessionHistoryTab from "@/components/dashboard/SessionHistoryTab";
 import ResourcesTab from "@/components/dashboard/ResourcesTab";
+import CoachesTab from "@/components/dashboard/CoachesTab";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -77,6 +78,7 @@ const ClientDashboard = () => {
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="sessions">Upcoming Sessions</TabsTrigger>
             <TabsTrigger value="history">Session History</TabsTrigger>
+            <TabsTrigger value="coaches">My Coaches</TabsTrigger>
             <TabsTrigger value="resources">Resources</TabsTrigger>
           </TabsList>
           
@@ -93,6 +95,10 @@ const ClientDashboard = () => {
           
           <TabsContent value="history">
             <SessionHistoryTab pastSessions={journeyData.pastSessions} />
+          </TabsContent>
+          
+          <TabsContent value="coaches">
+            <CoachesTab />
           </TabsContent>
           
           <TabsContent value="resources">
