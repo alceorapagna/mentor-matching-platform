@@ -1,4 +1,6 @@
 
+import { Progress } from "@/components/ui/progress";
+
 interface DimensionProgressBarProps {
   name: string;
   current: number;
@@ -6,6 +8,12 @@ interface DimensionProgressBarProps {
 }
 
 const DimensionProgressBar = ({ name, current, desired }: DimensionProgressBarProps) => {
+  // Calculate the percentage for the progress bar (current value out of 10)
+  const currentPercentage = (current / 10) * 100;
+  
+  // Get the appropriate color based on dimension name
+  const colorClass = getColorForDimension(name);
+  
   return (
     <div className="space-y-1">
       <div className="flex justify-between items-center">
@@ -17,18 +25,19 @@ const DimensionProgressBar = ({ name, current, desired }: DimensionProgressBarPr
         </div>
       </div>
       <div className="relative pt-1">
-        <div className="flex mb-2 items-center justify-between">
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className={`${getColorForDimension(name)} h-2 rounded-full`}
-              style={{ width: `${(current / 10) * 100}%` }}
-            ></div>
-          </div>
-          <div
-            className={`absolute h-4 w-4 rounded-full ${getColorForDimension(name)} border-2 border-white`}
-            style={{ left: `${(desired / 10) * 100}%`, top: '0px' }}
-          ></div>
-        </div>
+        <Progress 
+          value={currentPercentage} 
+          className="h-2" 
+          indicatorColor={colorClass}
+        />
+        <div
+          className={`absolute h-4 w-4 rounded-full ${colorClass} border-2 border-white`}
+          style={{ 
+            left: `${(desired / 10) * 100}%`, 
+            top: '0px',
+            transform: 'translateX(-50%)' 
+          }}
+        ></div>
       </div>
     </div>
   );
