@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,7 +10,7 @@ import PurposeValuesForm from "@/components/compass/PurposeValuesForm";
 import DimensionAssessment, { DimensionData } from "@/components/compass/DimensionAssessment";
 import FutureStateForm from "@/components/compass/FutureStateForm";
 
-interface CompassAssessmentData {
+export interface CompassAssessmentData {
   purpose: string;
   coreValues: string[];
   dimensions: DimensionData;
@@ -20,7 +19,7 @@ interface CompassAssessmentData {
 const ReneuCompass = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, updateCompassStatus } = useAuth();
+  const { user, updateCompassStatus, updateCompassData } = useAuth();
   const [step, setStep] = useState(1);
   
   // Assessment data state
@@ -50,12 +49,15 @@ const ReneuCompass = () => {
 
   const handleCompleteAssessment = async () => {
     try {
+      // Save the complete compass data
+      await updateCompassData(assessmentData);
+      
       // Mark the compass as completed in the user profile
       await updateCompassStatus(true);
       
       toast({
         title: "Reneu Compass Completed",
-        description: "Your renewal journey has been mapped. You'll be redirected to schedule your discovery session.",
+        description: "Your renewal journey has been mapped. You'll be redirected to your dashboard.",
         duration: 5000,
       });
       

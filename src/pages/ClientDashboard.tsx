@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,6 +56,7 @@ const ClientDashboard = () => {
                   hasCompleted: true,
                   percentComplete: 100
                 }}
+                compassData={user.compassData}
                 className="md:col-span-2"
               />
               

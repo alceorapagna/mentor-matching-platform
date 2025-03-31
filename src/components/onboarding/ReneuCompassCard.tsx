@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Slider } from "@/components/ui/slider";
 import { Compass, ArrowRight, Briefcase, Brain, Activity } from "lucide-react";
+import { CompassData } from "@/contexts/AuthContext";
 
 type CompassProgress = {
   hasStarted: boolean;
@@ -12,47 +12,28 @@ type CompassProgress = {
   percentComplete: number;
 };
 
-interface UserCompassData {
-  purpose: string;
-  coreValues: string[];
-  currentState: {
-    work: number;
-    mind: number;
-    body: number;
-  };
-  desiredState: {
-    work: number;
-    mind: number;
-    body: number;
-  };
-}
-
 interface ReneuCompassCardProps {
   progress?: CompassProgress;
-  userData?: UserCompassData;
+  compassData?: CompassData;
   className?: string;
 }
 
-const defaultUserData: UserCompassData = {
-  purpose: "To inspire growth and create positive change",
-  coreValues: ["Authenticity", "Growth", "Balance", "Impact"],
-  currentState: {
-    work: 5,
-    mind: 4,
-    body: 3
-  },
-  desiredState: {
-    work: 8,
-    mind: 7,
-    body: 8
-  }
-};
-
 const ReneuCompassCard = ({ 
   progress = { hasStarted: false, hasCompleted: false, percentComplete: 0 },
-  userData = defaultUserData,
+  compassData,
   className 
 }: ReneuCompassCardProps) => {
+  // Use provided compass data if available, otherwise use default values
+  const displayData = compassData || {
+    purpose: "To inspire growth and create positive change",
+    coreValues: ["Authenticity", "Growth", "Balance", "Impact"],
+    dimensions: {
+      work: { current: 5, desired: 8, notes: "" },
+      mind: { current: 4, desired: 7, notes: "" },
+      body: { current: 3, desired: 8, notes: "" }
+    }
+  };
+
   return (
     <Card className={`border-primary/20 overflow-hidden ${className}`}>
       <div className="h-1.5 bg-primary" />
@@ -84,7 +65,7 @@ const ReneuCompassCard = ({
             {/* Purpose on left */}
             <div className="bg-background rounded-md p-4 shadow-sm border">
               <h4 className="text-sm font-semibold text-primary mb-1">My Purpose</h4>
-              <p className="text-sm">{userData.purpose}</p>
+              <p className="text-sm">{displayData.purpose}</p>
             </div>
             
             {/* Compass in center */}
@@ -100,7 +81,7 @@ const ReneuCompassCard = ({
             <div className="bg-background rounded-md p-4 shadow-sm border">
               <h4 className="text-sm font-semibold text-primary mb-1">My Values</h4>
               <div className="flex flex-wrap gap-2">
-                {userData.coreValues.map(value => (
+                {displayData.coreValues.map(value => (
                   <span key={value} className="inline-flex items-center bg-primary/10 text-xs px-2 py-1 rounded">
                     {value}
                   </span>
@@ -135,31 +116,31 @@ const ReneuCompassCard = ({
                 <div className="space-y-3 mb-3">
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Current: {userData.currentState.work}/10</span>
+                      <span>Current: {displayData.dimensions.work.current}/10</span>
                     </div>
                     <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-amber-500 rounded-full" 
-                        style={{ width: `${userData.currentState.work * 10}%` }}
+                        style={{ width: `${displayData.dimensions.work.current * 10}%` }}
                       ></div>
                     </div>
                   </div>
                   
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Goal: {userData.desiredState.work}/10</span>
+                      <span>Goal: {displayData.dimensions.work.desired}/10</span>
                     </div>
                     <div className="h-2 bg-amber-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-amber-600 rounded-full" 
-                        style={{ width: `${userData.desiredState.work * 10}%` }}
+                        style={{ width: `${displayData.dimensions.work.desired * 10}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
                 <p className="text-xs text-muted-foreground mt-auto">
-                  Achieve greater career fulfillment and work-life harmony.
+                  {displayData.dimensions.work.notes || "Achieve greater career fulfillment and work-life harmony."}
                 </p>
               </div>
               
@@ -173,31 +154,31 @@ const ReneuCompassCard = ({
                 <div className="space-y-3 mb-3">
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Current: {userData.currentState.mind}/10</span>
+                      <span>Current: {displayData.dimensions.mind.current}/10</span>
                     </div>
                     <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-purple-500 rounded-full" 
-                        style={{ width: `${userData.currentState.mind * 10}%` }}
+                        style={{ width: `${displayData.dimensions.mind.current * 10}%` }}
                       ></div>
                     </div>
                   </div>
                   
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Goal: {userData.desiredState.mind}/10</span>
+                      <span>Goal: {displayData.dimensions.mind.desired}/10</span>
                     </div>
                     <div className="h-2 bg-purple-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-purple-600 rounded-full" 
-                        style={{ width: `${userData.desiredState.mind * 10}%` }}
+                        style={{ width: `${displayData.dimensions.mind.desired * 10}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
                 <p className="text-xs text-muted-foreground mt-auto">
-                  Develop mental clarity and emotional resilience.
+                  {displayData.dimensions.mind.notes || "Develop mental clarity and emotional resilience."}
                 </p>
               </div>
               
@@ -211,31 +192,31 @@ const ReneuCompassCard = ({
                 <div className="space-y-3 mb-3">
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Current: {userData.currentState.body}/10</span>
+                      <span>Current: {displayData.dimensions.body.current}/10</span>
                     </div>
                     <div className="h-2 bg-green-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-green-500 rounded-full" 
-                        style={{ width: `${userData.currentState.body * 10}%` }}
+                        style={{ width: `${displayData.dimensions.body.current * 10}%` }}
                       ></div>
                     </div>
                   </div>
                   
                   <div className="space-y-1">
                     <div className="flex justify-between text-xs">
-                      <span>Goal: {userData.desiredState.body}/10</span>
+                      <span>Goal: {displayData.dimensions.body.desired}/10</span>
                     </div>
                     <div className="h-2 bg-green-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-green-600 rounded-full" 
-                        style={{ width: `${userData.desiredState.body * 10}%` }}
+                        style={{ width: `${displayData.dimensions.body.desired * 10}%` }}
                       ></div>
                     </div>
                   </div>
                 </div>
                 
                 <p className="text-xs text-muted-foreground mt-auto">
-                  Build sustainable health habits and increase energy levels.
+                  {displayData.dimensions.body.notes || "Build sustainable health habits and increase energy levels."}
                 </p>
               </div>
             </div>
@@ -264,4 +245,3 @@ const ReneuCompassCard = ({
 };
 
 export default ReneuCompassCard;
-

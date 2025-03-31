@@ -17,6 +17,28 @@ export interface User {
   compassCompleted?: boolean; // Track if user has completed the Reneu Compass
 }
 
+// Add this type to the existing types
+export interface CompassData {
+  purpose: string;
+  coreValues: string[];
+  dimensions: {
+    work: { current: number; desired: number; notes: string };
+    mind: { current: number; desired: number; notes: string };
+    body: { current: number; desired: number; notes: string };
+  };
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
+  avatar?: string;
+  compassCompleted?: boolean;
+  compassData?: CompassData;
+}
+
 // Auth context type
 interface AuthContextType {
   user: User | null;
@@ -27,6 +49,7 @@ interface AuthContextType {
   logout: () => void;
   testAccess: (role: UserRole) => void;
   updateCompassStatus: (completed: boolean) => Promise<void>;
+  updateCompassData: (data: CompassData) => Promise<void>;
 }
 
 // Registration data type
@@ -49,9 +72,10 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
   testAccess: () => {},
   updateCompassStatus: async () => {},
+  updateCompassData: async () => {},
 });
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -119,6 +143,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           role: data.role as UserRole,
           avatar: data.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.first_name}`,
           compassCompleted: data.compass_completed || false,
+          compassData: data.compass_data,
         });
         
         // Redirect based on user role after profile is fetched
@@ -187,6 +212,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       console.error('Error in updateCompassStatus:', error);
       toast.error('An error occurred while saving your progress');
+    }
+  };
+
+  // Function to update user's compass data
+  const updateCompassData = async (compassData: CompassData) => {
+    if (user) {
+      try {
+        // Here you would typically make an API call to save the data
+        // For now we'll just update the local state
+        console.log("Saving compass data:", compassData);
+        
+        // In a real implementation, save to Supabase or your backend
+        // await supabaseClient.from('profiles').update({ 
+        //   compass_data: compassData 
+        // }).eq('id', user.id);
+        
+        setUser(prev => prev ? { ...prev, compassData } : null);
+      } catch (error) {
+        console.error("Error updating compass data:", error);
+        throw error;
+      }
     }
   };
 
@@ -345,17 +391,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     redirectBasedOnRole(role);
   };
 
+  const contextValue = {
+    user, 
+    isAuthenticated: !!user, 
+    isLoading,
+    login, 
+    register, 
+    logout,
+    testAccess,
+    updateCompassStatus,
+    updateCompassData
+  };
+
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      isAuthenticated: !!user, 
-      isLoading,
-      login, 
-      register, 
-      logout,
-      testAccess,
-      updateCompassStatus
-    }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
