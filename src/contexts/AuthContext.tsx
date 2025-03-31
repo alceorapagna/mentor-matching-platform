@@ -133,7 +133,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           role: data.role as UserRole,
           avatar: data.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.first_name}`,
           compassCompleted: data.compass_completed || false,
-          compassData: data.compass_data,
+          compassData: data.compass_data as CompassData | undefined,
         });
         
         // Redirect based on user role after profile is fetched
@@ -210,10 +210,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (!user) return;
     
     try {
+      console.log("Saving compass data to Supabase:", compassData);
+      
       // Save compass data to the user profile in Supabase
       const { error } = await supabase
         .from('profiles')
-        .update({ compass_data: compassData })
+        .update({
+          compass_data: compassData
+        })
         .eq('id', user.id);
         
       if (error) {
