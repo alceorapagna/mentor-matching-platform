@@ -92,6 +92,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Fetch the user profile from the profiles table
   const fetchUserProfile = async (userId: string) => {
     try {
+      // Use explicit type casting for the query result
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -102,6 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.error('Error fetching user profile:', error);
         setUser(null);
       } else if (data) {
+        // Type assert the data to have the expected properties
         setUser({
           id: data.id,
           email: data.email,
