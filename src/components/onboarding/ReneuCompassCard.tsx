@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Compass, ChevronRight } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { CompassData } from "@/contexts/AuthContext";
+import { CompassData } from "@/contexts/auth/types";
 
 interface ReneuCompassCardProps {
   progress: {
