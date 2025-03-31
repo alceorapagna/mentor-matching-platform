@@ -1,6 +1,9 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
 // Define user types
 export type UserRole = 'client' | 'coach' | 'admin' | 'hr';
@@ -46,104 +49,96 @@ const AuthContext = createContext<AuthContextType>({
   testAccess: () => {},
 });
 
-// Mock user data - in a real app, this would come from an API/database
-const MOCK_USERS = [
-  {
-    id: '1',
-    email: 'client@example.com',
-    password: 'password123',
-    firstName: 'John',
-    lastName: 'Doe',
-    role: 'client' as UserRole,
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
-  },
-  {
-    id: '2',
-    email: 'coach@example.com',
-    password: 'password123',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    role: 'coach' as UserRole,
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Jane',
-  },
-  {
-    id: '3',
-    email: 'admin@example.com',
-    password: 'password123',
-    firstName: 'Admin',
-    lastName: 'User',
-    role: 'admin' as UserRole,
-  },
-  {
-    id: '4',
-    email: 'hr@example.com',
-    password: 'password123',
-    firstName: 'HR',
-    lastName: 'Manager',
-    role: 'hr' as UserRole,
-  },
-];
-
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   
-  // Check if the user is already logged in (from localStorage)
+  // Initialize auth state and listen for changes
   useEffect(() => {
-    const storedUser = localStorage.getItem('reneu_user');
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error('Failed to parse stored user:', error);
-        localStorage.removeItem('reneu_user');
+    // Set up the auth state listener first
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        
+        if (session?.user) {
+          // Fetch user profile data after a short delay to avoid deadlocks
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        } else {
+          setUser(null);
+        }
       }
-    }
-    setIsLoading(false);
+    );
+    
+    // Check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+      }
+    });
+    
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
+  
+  // Fetch the user profile from the profiles table
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+      
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        setUser(null);
+      } else if (data) {
+        setUser({
+          id: data.id,
+          email: data.email,
+          firstName: data.first_name,
+          lastName: data.last_name,
+          role: data.role as UserRole,
+          avatar: data.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.first_name}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error in profile fetch:', error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Login function
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
       
-      // In a real app, this would be an API call
-      // Mock login for demo purposes
-      const mockUser = MOCK_USERS.find(u => u.email === email);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
       
-      if (!mockUser || mockUser.password !== password) {
-        throw new Error('Invalid email or password');
+      if (error) {
+        throw error;
       }
       
-      // Extract user data (excluding password)
-      const { password: _, ...userData } = mockUser;
-      
-      // Store user in state and localStorage
-      setUser(userData);
-      localStorage.setItem('reneu_user', JSON.stringify(userData));
-      
-      toast.success('Logged in successfully');
-      
-      // Redirect based on user role
-      switch (userData.role) {
-        case 'client':
-          navigate('/dashboard');
-          break;
-        case 'coach':
-          navigate('/coach-dashboard');
-          break;
-        case 'admin':
-          navigate('/admin');
-          break;
-        case 'hr':
-          navigate('/hr-dashboard');
-          break;
-        default:
-          navigate('/dashboard');
+      if (data.user) {
+        toast.success('Logged in successfully');
       }
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Login failed');
+      
+    } catch (error: any) {
+      toast.error(error.message || 'Login failed');
       console.error('Login error:', error);
     } finally {
       setIsLoading(false);
@@ -155,39 +150,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true);
       
-      // Check if email already exists
-      if (MOCK_USERS.some(u => u.email === userData.email)) {
-        throw new Error('Email already in use');
-      }
-      
-      // In a real app, this would be an API call to create a user
-      // For now, just simulate a successful registration
-      
-      // Create a new user object (excluding password for the state)
-      const newUser: User = {
-        id: `user_${Date.now()}`,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
+      // Register the user with Supabase
+      const { data, error } = await supabase.auth.signUp({
         email: userData.email,
-        role: userData.role,
-        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.firstName}`,
-      };
+        password: userData.password,
+        options: {
+          data: {
+            first_name: userData.firstName,
+            last_name: userData.lastName,
+            role: userData.role,
+            specialization: userData.specialization,
+          }
+        }
+      });
       
-      // Store user in state and localStorage
-      setUser(newUser);
-      localStorage.setItem('reneu_user', JSON.stringify(newUser));
-      
-      toast.success('Account created successfully');
-      
-      // Redirect based on user role
-      if (userData.role === 'client') {
-        navigate('/dashboard');
-      } else if (userData.role === 'coach') {
-        toast.info('Your coach application is under review');
-        setTimeout(() => navigate('/'), 3000);
+      if (error) {
+        throw error;
       }
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Registration failed');
+      
+      if (data.user) {
+        toast.success('Account created successfully');
+        
+        // Redirect based on user role
+        if (userData.role === 'coach') {
+          toast.info('Your coach application is under review');
+          setTimeout(() => navigate('/'), 3000);
+        }
+      }
+      
+    } catch (error: any) {
+      toast.error(error.message || 'Registration failed');
       console.error('Registration error:', error);
     } finally {
       setIsLoading(false);
@@ -195,14 +187,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Logout function
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('reneu_user');
-    toast.info('Logged out successfully');
-    navigate('/');
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      toast.info('Logged out successfully');
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
-  // Function for quick test access
+  // Function for quick test access (for development purposes)
   const testAccess = (role: UserRole) => {
     // Create a test user based on the requested role
     const testUser: User = {
