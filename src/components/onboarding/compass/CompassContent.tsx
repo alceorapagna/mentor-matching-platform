@@ -27,7 +27,7 @@ const CompassContent = ({ compassData }: CompassContentProps) => {
         <div className="space-y-2">
           <h4 className="text-sm font-medium">Values</h4>
           <div className="flex flex-wrap gap-2">
-            {compassData.values.map((value, index) => (
+            {compassData.coreValues.map((value, index) => (
               <span 
                 key={index} 
                 className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary"
