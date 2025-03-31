@@ -11,15 +11,20 @@ import PurposeValuesForm from "@/components/compass/PurposeValuesForm";
 import DimensionAssessment, { DimensionData } from "@/components/compass/DimensionAssessment";
 import FutureStateForm from "@/components/compass/FutureStateForm";
 
+interface CompassAssessmentData {
+  purpose: string;
+  coreValues: string[];
+  dimensions: DimensionData;
+}
+
 const ReneuCompass = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, updateCompassStatus } = useAuth();
   const [step, setStep] = useState(1);
-  const [compassProgress, setCompassProgress] = useState(0);
   
   // Assessment data state
-  const [assessmentData, setAssessmentData] = useState({
+  const [assessmentData, setAssessmentData] = useState<CompassAssessmentData>({
     purpose: "",
     coreValues: [] as string[],
     dimensions: {
@@ -34,14 +39,12 @@ const ReneuCompass = () => {
   const handleNextStep = () => {
     if (step < totalSteps) {
       setStep(step + 1);
-      setCompassProgress((step / totalSteps) * 100);
     }
   };
 
   const handlePreviousStep = () => {
     if (step > 1) {
       setStep(step - 1);
-      setCompassProgress(((step - 2) / totalSteps) * 100);
     }
   };
 
@@ -111,7 +114,11 @@ const ReneuCompass = () => {
           </p>
         </div>
 
-        <ProgressIndicator currentStep={step} totalSteps={totalSteps} />
+        <ProgressIndicator 
+          currentStep={step} 
+          totalSteps={totalSteps} 
+          showStepIndicators={true}
+        />
 
         {step === 1 && (
           <CompassIntroduction onNext={handleNextStep} />
