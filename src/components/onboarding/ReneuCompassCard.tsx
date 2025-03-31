@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -70,35 +69,33 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
           {compassData ? (
             <div className="space-y-6">
               {/* Compass Visualization with Custom Image */}
-              <div className="relative">
-                <div className="flex">
-                  {/* Purpose Column - Left */}
-                  <div className="flex-1 pr-2 space-y-2 self-center">
-                    <h4 className="text-sm font-medium">Purpose</h4>
-                    <div className="bg-muted/30 p-3 rounded-md">
-                      <p className="text-sm text-muted-foreground italic">"{compassData.purpose}"</p>
-                    </div>
+              <div className="flex flex-col md:flex-row gap-6 items-center">
+                {/* Purpose Column - Left */}
+                <div className="w-full md:w-1/3 space-y-2">
+                  <h4 className="text-sm font-medium">Purpose</h4>
+                  <div className="bg-muted/30 p-3 rounded-md">
+                    <p className="text-sm text-muted-foreground italic">"{compassData.purpose}"</p>
                   </div>
-                  
-                  {/* Compass Image - Center */}
-                  <div className="flex-shrink-0 mx-2">
-                    <img 
-                      src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
-                      alt="Reneu Compass" 
-                      className="w-[120px] opacity-80" 
-                    />
-                  </div>
-                  
-                  {/* Values Column - Right */}
-                  <div className="flex-1 pl-2 space-y-2 self-center">
-                    <h4 className="text-sm font-medium">Core Values</h4>
-                    <div className="bg-muted/30 p-3 rounded-md flex flex-wrap gap-2">
-                      {compassData.coreValues.map((value, index) => (
-                        <div key={index} className="px-2.5 py-1 bg-primary/10 text-primary rounded-full text-xs">
-                          {value}
-                        </div>
-                      ))}
-                    </div>
+                </div>
+                
+                {/* Compass Image - Center */}
+                <div className="flex-shrink-0">
+                  <img 
+                    src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
+                    alt="Reneu Compass" 
+                    className="w-[180px] opacity-80" 
+                  />
+                </div>
+                
+                {/* Values Column - Right */}
+                <div className="w-full md:w-1/3 space-y-2">
+                  <h4 className="text-sm font-medium">Core Values</h4>
+                  <div className="bg-muted/30 p-3 rounded-md flex flex-col gap-2">
+                    {compassData.coreValues.map((value, index) => (
+                      <div key={index} className="px-3 py-1.5 bg-primary/10 text-primary rounded-md text-sm">
+                        {value}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -116,7 +113,7 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
                   <img 
                     src="/lovable-uploads/2911f207-6d2a-4c23-8508-f23a8dfaf292.png" 
                     alt="Journey Compass" 
-                    className="w-full max-w-[260px] mx-auto opacity-75" 
+                    className="w-full max-w-[350px] mx-auto opacity-75" 
                   />
                 </div>
                 

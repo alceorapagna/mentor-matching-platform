@@ -51,29 +51,29 @@ const ClientDashboard = () => {
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <ReneuCompassCard 
-                progress={{
-                  hasStarted: true,
-                  hasCompleted: true,
-                  percentComplete: 100
-                }}
-                compassData={user.compassData}
-                className="md:col-span-2"
-              />
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Next Session</CardTitle>
-                  <CardDescription>Your upcoming coaching session</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center py-6 text-muted-foreground">
-                    No sessions scheduled yet
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+            {/* Full-width Reneu Compass Card */}
+            <ReneuCompassCard 
+              progress={{
+                hasStarted: true,
+                hasCompleted: true,
+                percentComplete: 100
+              }}
+              compassData={user.compassData}
+              className="w-full"
+            />
+            
+            {/* Next Session Card below the compass */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Next Session</CardTitle>
+                <CardDescription>Your upcoming coaching session</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-center py-6 text-muted-foreground">
+                  No sessions scheduled yet
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
           
           <TabsContent value="sessions">
