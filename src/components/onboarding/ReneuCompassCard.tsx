@@ -71,26 +71,26 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
             <div className="space-y-6">
               {/* Compass Visualization with Custom Image */}
               <div className="relative">
-                <div className="flex justify-center mb-2">
-                  <img 
-                    src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
-                    alt="Reneu Compass" 
-                    className="w-full max-w-[280px] mx-auto opacity-80" 
-                  />
-                </div>
-                
-                {/* Purpose on left, Values on right of compass */}
-                <div className="grid grid-cols-2 gap-4 -mt-[140px] relative z-10">
+                <div className="flex">
                   {/* Purpose Column - Left */}
-                  <div className="space-y-2 flex flex-col justify-center">
+                  <div className="flex-1 pr-2 space-y-2 self-center">
                     <h4 className="text-sm font-medium">Purpose</h4>
                     <div className="bg-muted/30 p-3 rounded-md">
                       <p className="text-sm text-muted-foreground italic">"{compassData.purpose}"</p>
                     </div>
                   </div>
                   
+                  {/* Compass Image - Center */}
+                  <div className="flex-shrink-0 mx-2">
+                    <img 
+                      src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
+                      alt="Reneu Compass" 
+                      className="w-[120px] opacity-80" 
+                    />
+                  </div>
+                  
                   {/* Values Column - Right */}
-                  <div className="space-y-2 flex flex-col justify-center">
+                  <div className="flex-1 pl-2 space-y-2 self-center">
                     <h4 className="text-sm font-medium">Core Values</h4>
                     <div className="bg-muted/30 p-3 rounded-md flex flex-wrap gap-2">
                       {compassData.coreValues.map((value, index) => (
