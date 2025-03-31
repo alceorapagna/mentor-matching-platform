@@ -14,6 +14,7 @@ const AuthContext = createContext<AuthContextType>({
   testAccess: () => {},
   updateCompassStatus: async () => {},
   updateCompassData: async () => {},
+  resetCompassData: async () => {},
 });
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
