@@ -22,7 +22,7 @@ const DimensionProgressBar = ({ name, current, desired, notes }: DimensionProgre
         <div className="flex items-center space-x-1">
           <span className="text-xs">{current}</span>
           <span className="text-xs text-muted-foreground">/</span>
-          <span className="text-xs font-medium">{desired}</span>
+          <span className="text-xs font-medium">10</span>
         </div>
       </div>
       <div className="relative pt-1">
