@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,12 +79,12 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
                   </div>
                 </div>
                 
-                {/* Compass Image - Center */}
+                {/* Compass Image - Center - NOW 20% LARGER */}
                 <div className="flex-shrink-0">
                   <img 
                     src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
                     alt="Reneu Compass" 
-                    className="w-[180px] opacity-80" 
+                    className="w-[216px] opacity-80" 
                   />
                 </div>
                 
