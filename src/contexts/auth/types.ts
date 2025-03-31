@@ -24,6 +24,11 @@ export interface User {
   avatar?: string;
   compassCompleted?: boolean;
   compassData?: CompassData;
+  // Coach relationships
+  hasReneuCoach?: boolean;
+  hasBusinessCoach?: boolean;
+  hasMindCoach?: boolean;
+  hasBodyCoach?: boolean;
 }
 
 // Registration data type
