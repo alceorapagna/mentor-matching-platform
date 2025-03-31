@@ -46,6 +46,7 @@ const Register = () => {
 
   // If already authenticated, redirect to dashboard
   if (isAuthenticated) {
+    console.log("User is authenticated, redirecting to dashboard");
     return <Navigate to="/dashboard" />;
   }
 
@@ -65,6 +66,7 @@ const Register = () => {
       role: 'client'
     };
     
+    console.log("Submitting client registration:", userData.email);
     await register(userData);
   };
   
@@ -90,6 +92,7 @@ const Register = () => {
       specialization: coachData.specialization
     };
     
+    console.log("Submitting coach registration:", userData.email);
     await register(userData);
   };
   

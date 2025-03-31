@@ -60,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up the auth state listener first
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.id);
         setSession(session);
         
         if (session?.user) {
@@ -69,12 +70,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }, 0);
         } else {
           setUser(null);
+          setIsLoading(false);
         }
       }
     );
     
     // Check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Initial session check:", session?.user?.id);
       setSession(session);
       
       if (session?.user) {
@@ -92,6 +95,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Fetch the user profile from the profiles table
   const fetchUserProfile = async (userId: string) => {
     try {
+      console.log("Fetching profile for user:", userId);
       // Use explicit type casting for the query result
       const { data, error } = await supabase
         .from('profiles')
@@ -103,6 +107,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.error('Error fetching user profile:', error);
         setUser(null);
       } else if (data) {
+        console.log("Profile data received:", data);
         // Type assert the data to have the expected properties
         setUser({
           id: data.id,
@@ -126,6 +131,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   // Helper function to redirect based on user role
   const redirectBasedOnRole = (role: UserRole) => {
+    console.log("Redirecting based on role:", role);
     switch (role) {
       case 'client':
         navigate('/dashboard');
@@ -197,14 +203,32 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (data.user) {
         toast.success('Account created successfully');
         
-        // For coach applications, show a message but don't auto-redirect
+        // Create a temporary user for immediate access during development
+        // This works around the email confirmation requirement
+        const tempUser: User = {
+          id: data.user.id,
+          email: userData.email,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          role: userData.role,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.firstName}`,
+        };
+        
+        // Set the user immediately for development purposes
+        setUser(tempUser);
+        
+        // For coach applications, show a message and redirect differently
         if (userData.role === 'coach') {
           toast.info('Your coach application is under review');
-          setTimeout(() => navigate('/'), 3000);
+          setTimeout(() => {
+            redirectBasedOnRole('coach');
+          }, 1000);
         } else {
-          // For all other roles, redirect happens via onAuthStateChange
-          // Note: This will trigger once the profile is created by the database trigger
+          // For all other roles, redirect immediately
           toast.info('Redirecting to your dashboard...');
+          setTimeout(() => {
+            redirectBasedOnRole(userData.role);
+          }, 1000);
         }
       }
       
