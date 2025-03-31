@@ -69,7 +69,7 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
         <CardContent className="pt-2">
           {compassData ? (
             <div className="space-y-6">
-              {/* Compass Visualization */}
+              {/* Compass Visualization with Custom Image */}
               <div className="relative">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Purpose Column */}
@@ -93,19 +93,31 @@ const ReneuCompassCard = ({ progress, compassData, className = "" }: ReneuCompas
                   </div>
                 </div>
                 
-                {/* Compass Image Overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
-                  <Compass className="w-32 h-32 text-primary" />
+                {/* Custom Compass Image Overlay */}
+                <div className="relative mt-6 mb-4">
+                  <img 
+                    src="/lovable-uploads/893c28cc-1f46-4edd-84ef-f383a76b0ab1.png" 
+                    alt="Reneu Compass" 
+                    className="w-full max-w-[280px] mx-auto opacity-80" 
+                  />
                 </div>
               </div>
               
               <Separator />
               
-              {/* Journey Visualization */}
+              {/* Journey Visualization with Custom Image */}
               <div className="space-y-4">
                 <div className="flex items-center">
                   <Target className="h-4 w-4 text-primary mr-2" />
                   <h4 className="text-sm font-medium">Dimension Goals</h4>
+                </div>
+                
+                <div className="flex justify-center mb-4">
+                  <img 
+                    src="/lovable-uploads/2911f207-6d2a-4c23-8508-f23a8dfaf292.png" 
+                    alt="Journey Compass" 
+                    className="w-full max-w-[200px] opacity-75" 
+                  />
                 </div>
                 
                 <div className="space-y-4">
