@@ -147,7 +147,8 @@ const ClientDashboard = () => {
           <TabsList className="mb-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="sessions">Upcoming Sessions</TabsTrigger>
-            <TabsTrigger value="journey">My Journey</TabsTrigger>
+            <TabsTrigger value="history">Session History</TabsTrigger>
+            <TabsTrigger value="resources">Resources</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="space-y-6">
@@ -161,6 +162,36 @@ const ClientDashboard = () => {
               compassData={user.compassData}
               className="w-full"
             />
+            
+            {/* Goals Progress Card */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-primary" />
+                  My Goals & Progress
+                </CardTitle>
+                <CardDescription>Track your coaching journey and progress towards your goals</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {journeyData.goals.map(goal => (
+                  <div key={goal.id} className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">{goal.text}</span>
+                      <span className="text-sm text-muted-foreground">{goal.progress}%</span>
+                    </div>
+                    <Progress 
+                      value={goal.progress} 
+                      className="h-2"
+                      indicatorColor={
+                        goal.progress >= 75 ? "bg-green-500" : 
+                        goal.progress >= 40 ? "bg-amber-500" : 
+                        "bg-blue-500"
+                      } 
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
             
             {/* Next Session Card below the compass */}
             <Card>
@@ -190,38 +221,8 @@ const ClientDashboard = () => {
             </Card>
           </TabsContent>
           
-          <TabsContent value="journey">
+          <TabsContent value="history">
             <div className="space-y-6">
-              {/* Goals Progress Card */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-primary" />
-                    My Goals & Progress
-                  </CardTitle>
-                  <CardDescription>Track your coaching journey and progress towards your goals</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {journeyData.goals.map(goal => (
-                    <div key={goal.id} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="font-medium">{goal.text}</span>
-                        <span className="text-sm text-muted-foreground">{goal.progress}%</span>
-                      </div>
-                      <Progress 
-                        value={goal.progress} 
-                        className="h-2"
-                        indicatorColor={
-                          goal.progress >= 75 ? "bg-green-500" : 
-                          goal.progress >= 40 ? "bg-amber-500" : 
-                          "bg-blue-500"
-                        } 
-                      />
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-              
               {/* Session History Card */}
               <Card>
                 <CardHeader className="pb-3">
@@ -272,23 +273,24 @@ const ClientDashboard = () => {
                   )}
                 </CardContent>
               </Card>
-              
-              {/* Learning Resources Card */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-primary" />
-                    Learning Resources
-                  </CardTitle>
-                  <CardDescription>Resources shared by your coach to support your development</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-center py-6 text-muted-foreground">
-                    No learning resources added yet
-                  </p>
-                </CardContent>
-              </Card>
             </div>
+          </TabsContent>
+          
+          <TabsContent value="resources">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  Learning Resources
+                </CardTitle>
+                <CardDescription>Resources shared by your coach to support your development</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-center py-6 text-muted-foreground">
+                  No learning resources added yet
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>
