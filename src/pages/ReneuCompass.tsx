@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import MainLayout from "@/components/layout/MainLayout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,40 +23,67 @@ import {
 const ReneuCompass = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, updateCompassStatus } = useAuth();
   const [step, setStep] = useState(1);
   const [compassProgress, setCompassProgress] = useState(0);
   const [selectedStep, setSelectedStep] = useState("purpose");
   
-  // Mock data for the assessment
+  // Assessment data state
   const [assessmentData, setAssessmentData] = useState({
     purpose: "",
-    coreValues: [],
+    coreValues: [] as string[],
     dimensions: {
-      work: { current: 5, desired: 8 },
-      mind: { current: 4, desired: 7 },
-      body: { current: 3, desired: 8 }
+      work: { current: 5, desired: 8, notes: "" },
+      mind: { current: 4, desired: 7, notes: "" },
+      body: { current: 3, desired: 8, notes: "" }
     }
   });
 
   const totalSteps = 4;
   
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     if (step < totalSteps) {
       setStep(step + 1);
       setCompassProgress((step / totalSteps) * 100);
     } else {
-      // Complete the onboarding process
-      toast({
-        title: "Reneu Compass Completed",
-        description: "Your renewal journey has been mapped. You'll be redirected to schedule your discovery session.",
-        duration: 5000,
-      });
-      
-      // Redirect to dashboard or next step
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+      // Complete the assessment process
+      try {
+        // Mark the compass as completed in the user profile
+        await updateCompassStatus(true);
+        
+        toast({
+          title: "Reneu Compass Completed",
+          description: "Your renewal journey has been mapped. You'll be redirected to schedule your discovery session.",
+          duration: 5000,
+        });
+        
+        // Redirect to dashboard
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
+      } catch (error) {
+        console.error("Error completing Reneu Compass:", error);
+        toast({
+          title: "Error",
+          description: "There was a problem saving your assessment. Please try again.",
+          variant: "destructive",
+          duration: 5000,
+        });
+      }
     }
+  };
+
+  const updateDimensionNotes = (dimension: "work" | "mind" | "body", notes: string) => {
+    setAssessmentData({
+      ...assessmentData,
+      dimensions: {
+        ...assessmentData.dimensions,
+        [dimension]: {
+          ...assessmentData.dimensions[dimension],
+          notes
+        }
+      }
+    });
   };
   
   return (
@@ -232,7 +260,10 @@ const ReneuCompass = () => {
               <Button variant="outline" onClick={() => setStep(1)}>
                 Back
               </Button>
-              <Button onClick={handleNextStep}>
+              <Button 
+                onClick={handleNextStep}
+                disabled={!assessmentData.purpose || assessmentData.coreValues.length === 0}
+              >
                 Continue
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
@@ -307,6 +338,8 @@ const ReneuCompass = () => {
                   <textarea 
                     className="w-full min-h-[100px] p-3 rounded-md border mt-4" 
                     placeholder="What specifically about your work would you like to change or improve?"
+                    value={assessmentData.dimensions.work.notes}
+                    onChange={(e) => updateDimensionNotes("work", e.target.value)}
                   />
                 </TabsContent>
                 
@@ -351,6 +384,8 @@ const ReneuCompass = () => {
                   <textarea 
                     className="w-full min-h-[100px] p-3 rounded-md border mt-4" 
                     placeholder="What aspects of your mental wellbeing would you like to focus on improving?"
+                    value={assessmentData.dimensions.mind.notes}
+                    onChange={(e) => updateDimensionNotes("mind", e.target.value)}
                   />
                 </TabsContent>
                 
@@ -395,6 +430,8 @@ const ReneuCompass = () => {
                   <textarea 
                     className="w-full min-h-[100px] p-3 rounded-md border mt-4" 
                     placeholder="What aspects of your physical health would you like to prioritize?"
+                    value={assessmentData.dimensions.body.notes}
+                    onChange={(e) => updateDimensionNotes("body", e.target.value)}
                   />
                 </TabsContent>
               </Tabs>

@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -15,6 +14,7 @@ export interface User {
   lastName: string;
   role: UserRole;
   avatar?: string;
+  compassCompleted?: boolean; // Track if user has completed the Reneu Compass
 }
 
 // Auth context type
@@ -26,6 +26,7 @@ interface AuthContextType {
   register: (userData: RegisterData) => Promise<void>;
   logout: () => void;
   testAccess: (role: UserRole) => void;
+  updateCompassStatus: (completed: boolean) => Promise<void>;
 }
 
 // Registration data type
@@ -47,6 +48,7 @@ const AuthContext = createContext<AuthContextType>({
   register: async () => {},
   logout: () => {},
   testAccess: () => {},
+  updateCompassStatus: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -116,10 +118,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           lastName: data.last_name,
           role: data.role as UserRole,
           avatar: data.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${data.first_name}`,
+          compassCompleted: data.compass_completed || false,
         });
         
         // Redirect based on user role after profile is fetched
-        redirectBasedOnRole(data.role as UserRole);
+        redirectBasedOnRole(data.role as UserRole, data.compass_completed);
       }
     } catch (error) {
       console.error('Error in profile fetch:', error);
@@ -129,9 +132,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  // Helper function to redirect based on user role
-  const redirectBasedOnRole = (role: UserRole) => {
-    console.log("Redirecting based on role:", role);
+  // Helper function to redirect based on user role and compass completion status
+  const redirectBasedOnRole = (role: UserRole, compassCompleted?: boolean) => {
+    console.log("Redirecting based on role:", role, "Compass completed:", compassCompleted);
+    
+    // For new users who haven't completed their compass assessment
+    if (role === 'client' && compassCompleted === false) {
+      navigate('/reneu-compass');
+      return;
+    }
+    
+    // Otherwise proceed with regular role-based routing
     switch (role) {
       case 'client':
         navigate('/dashboard');
@@ -147,6 +158,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         break;
       default:
         navigate('/dashboard');
+    }
+  };
+
+  // Function to update user's compass completion status
+  const updateCompassStatus = async (completed: boolean) => {
+    if (!user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ compass_completed: completed })
+        .eq('id', user.id);
+        
+      if (error) {
+        console.error('Error updating compass status:', error);
+        toast.error('Failed to update your progress');
+        return;
+      }
+      
+      // Update local user state
+      setUser({
+        ...user,
+        compassCompleted: completed
+      });
+      
+      toast.success('Progress saved successfully');
+    } catch (error) {
+      console.error('Error in updateCompassStatus:', error);
+      toast.error('An error occurred while saving your progress');
     }
   };
 
@@ -243,6 +283,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           lastName: userData.lastName,
           role: userData.role,
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.firstName}`,
+          compassCompleted: false,
         };
         
         // Set the user immediately for development purposes
@@ -252,13 +293,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (userData.role === 'coach') {
           toast.info('Your coach application is under review');
           setTimeout(() => {
-            redirectBasedOnRole('coach');
+            redirectBasedOnRole('coach', false);
           }, 1000);
         } else {
-          // For all other roles, redirect immediately
-          toast.info('Redirecting to your dashboard...');
+          // For all other roles, redirect to Reneu Compass for new users
+          toast.info('Please complete your Reneu Compass assessment to continue');
           setTimeout(() => {
-            redirectBasedOnRole(userData.role);
+            navigate('/reneu-compass');
           }, 1000);
         }
       }
@@ -312,7 +353,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       login, 
       register, 
       logout,
-      testAccess
+      testAccess,
+      updateCompassStatus
     }}>
       {children}
     </AuthContext.Provider>
