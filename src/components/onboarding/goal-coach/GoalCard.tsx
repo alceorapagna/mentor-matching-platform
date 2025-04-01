@@ -19,7 +19,9 @@ const GoalCard = ({ goal, coaches, category }: GoalCardProps) => {
       <div className="flex items-center gap-2 ml-10">
         <div>
           <h4 className="font-semibold">{goal.text}</h4>
-          <p className="text-sm text-muted-foreground">{goal.description}</p>
+          {goal.description && (
+            <p className="text-sm text-muted-foreground">{goal.description}</p>
+          )}
         </div>
         <Badge className="ml-auto">{badgeLabels[category]}</Badge>
       </div>
