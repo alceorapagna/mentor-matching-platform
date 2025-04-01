@@ -21,10 +21,10 @@ const Login = () => {
     await login(demoEmail, demoPassword);
   };
 
-  // Handle quick access - THIS IS THE PROBLEM
+  // Handle quick access
   const handleQuickAccess = (option: any) => {
-    // Call testAccess with the role
-    testAccess(option.role);
+    // Call testAccess with the role and navigate function
+    testAccess(option.role, navigate);
     
     // If direct navigation is needed, navigate immediately after
     if (option.directNav) {
