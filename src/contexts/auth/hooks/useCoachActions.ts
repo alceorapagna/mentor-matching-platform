@@ -33,6 +33,16 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       const updateField = coachTypeMapping[coachType];
       const camelCaseField = updateField.replace(/^has/, 'has').replace(/coach$/, 'Coach');
       
+      // Check if trying to add a Reneu coach when one already exists
+      if (coachType === 'reneu' && (user.hasreneucoach || user.hasReneuCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Reneu coach on your team.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
       // For demo or test users, just update the local state
       const isTestOrDemoUser = isDemoAccount(user.email) || user.id.startsWith('test_') || user.id.startsWith('demo_');
       

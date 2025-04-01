@@ -60,6 +60,17 @@ export const useCoachProfileState = (coach: Coach) => {
         return;
       }
       
+      // Check if trying to add a Reneu coach when one already exists
+      if (coach.category === 'reneu' && (user.hasreneucoach || user.hasReneuCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Reneu coach on your team. Please remove your current Reneu coach before adding a new one.",
+          variant: "destructive"
+        });
+        setShowConfirmDialog(false);
+        return;
+      }
+      
       // Determine which coach flag to update based on the coach category
       const coachTypeMapping: { [key: string]: string } = {
         'reneu': 'reneu',

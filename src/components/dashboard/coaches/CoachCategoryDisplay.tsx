@@ -18,6 +18,7 @@ interface CoachCategoryDisplayProps {
   findCoachDescription?: string;
   isHRAssigned?: boolean;
   isHRManagedCategory?: boolean;
+  singleCoachOnly?: boolean;
 }
 
 const CoachCategoryDisplay = ({
@@ -32,7 +33,8 @@ const CoachCategoryDisplay = ({
   findCoachTitle = "Find Your Coach",
   findCoachDescription = "Connect with a coach",
   isHRAssigned = false,
-  isHRManagedCategory = false
+  isHRManagedCategory = false,
+  singleCoachOnly = false
 }: CoachCategoryDisplayProps) => {
   const navigate = useNavigate();
   
@@ -58,7 +60,7 @@ const CoachCategoryDisplay = ({
       </p>
       
       {hasCoach ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {coaches.map((coach) => (
             <CoachCategorySection
               key={coach.id}
@@ -72,7 +74,7 @@ const CoachCategoryDisplay = ({
           ))}
           
           {/* Add More Coaches Button for multiple coach categories */}
-          {allowMultiple && !isHRManagedCategory && (
+          {allowMultiple && !isHRManagedCategory && !singleCoachOnly && (
             <div className="border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10 h-full">
               <div className="text-center space-y-4">
                 <Button variant="outline" onClick={handleFindCoach}>

@@ -113,6 +113,17 @@ export const useCoachesPage = () => {
     }
     
     try {
+      // Check if trying to add a Reneu coach when one already exists
+      if (selectedCoach.category === 'reneu' && (user.hasreneucoach || user.hasReneuCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Reneu coach on your team. Please remove your current Reneu coach before adding a new one.",
+          variant: "destructive"
+        });
+        setShowConfirmDialog(false);
+        return;
+      }
+      
       const categoryMapping: { [key: string]: string } = {
         'reneu': 'reneu',
         'business': 'business',
