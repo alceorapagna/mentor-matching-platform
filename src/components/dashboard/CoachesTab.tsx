@@ -10,7 +10,7 @@ const CoachesTab = () => {
   const { user } = useAuth();
   
   // Get the coach status from the user object - check both camelCase and lowercase versions
-  // Use Boolean() to ensure we get true/false values rather than undefined/null
+  // Force conversion to boolean to avoid issues with null/undefined/falsiness
   const hasReneuCoach = Boolean(user?.hasreneucoach || user?.hasReneuCoach);
   const hasBusinessCoach = Boolean(user?.hasbusinesscoach || user?.hasBusinessCoach);
   const hasMindCoach = Boolean(user?.hasmindcoach || user?.hasMindCoach);
@@ -18,6 +18,7 @@ const CoachesTab = () => {
   
   // Log all coach flags for debugging
   useEffect(() => {
+    console.log("==== COACHES TAB RENDER ====");
     console.log("Coach flags in CoachesTab:", { 
       userObject: user, 
       hasReneuCoach, 
@@ -25,6 +26,7 @@ const CoachesTab = () => {
       hasMindCoach, 
       hasBodyCoach,
       // Add detailed logging for each flag
+      raw_user: user,
       hasReneuCoachRaw: user?.hasreneucoach,
       hasReneuCoachCamel: user?.hasReneuCoach,
       hasBusinessCoachRaw: user?.hasbusinesscoach,
@@ -55,7 +57,7 @@ const CoachesTab = () => {
   
   // Log filtered coaches
   useEffect(() => {
-    console.log("Filtered coaches:", {
+    console.log("Filtered coaches for display:", {
       reneuCoaches,
       businessCoaches,
       mindCoaches,

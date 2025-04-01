@@ -87,7 +87,7 @@ export const useCoachSelection = () => {
           description: `${selectedCoach?.name} is now part of your coaching team.`,
         });
         
-        console.log('[useCoachSelection] Successfully added coach, forcing a full page refresh');
+        console.log('[useCoachSelection] Successfully added coach, redirecting to dashboard');
         
         // Force a FULL browser refresh to ensure all state is properly reset and reloaded
         window.location.href = '/dashboard?tab=coaches';
