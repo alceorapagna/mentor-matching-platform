@@ -89,12 +89,8 @@ export const useCoachSelection = () => {
         
         console.log('Successfully added coach, preparing to navigate...');
         
-        // Use a timeout to ensure the toast is visible before navigation
-        setTimeout(() => {
-          console.log('Navigating to dashboard coaches tab...');
-          // Use navigate with replace option to force a navigation
-          navigate('/dashboard?tab=coaches', { replace: true });
-        }, 800);
+        // Navigate immediately to force a refresh of the dashboard
+        navigate('/dashboard?tab=coaches', { replace: true });
         
         return true;
       }

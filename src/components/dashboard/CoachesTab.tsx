@@ -8,11 +8,11 @@ import CoachCategoryDisplay from "./coaches/CoachCategoryDisplay";
 const CoachesTab = () => {
   const { user } = useAuth();
   
-  // Get the coach status from the user object
-  const hasReneuCoach = user?.hasreneucoach || user?.hasReneuCoach || false;
-  const hasBusinessCoach = user?.hasbusinesscoach || user?.hasBusinessCoach || false;
-  const hasMindCoach = user?.hasmindcoach || user?.hasMindCoach || false;
-  const hasBodyCoach = user?.hasbodycoach || user?.hasBodyCoach || false;
+  // Get the coach status from the user object - check both camelCase and lowercase versions
+  const hasReneuCoach = Boolean(user?.hasreneucoach || user?.hasReneuCoach);
+  const hasBusinessCoach = Boolean(user?.hasbusinesscoach || user?.hasBusinessCoach);
+  const hasMindCoach = Boolean(user?.hasmindcoach || user?.hasMindCoach);
+  const hasBodyCoach = Boolean(user?.hasbodycoach || user?.hasBodyCoach);
   
   console.log("Coach flags in CoachesTab:", { 
     user, 

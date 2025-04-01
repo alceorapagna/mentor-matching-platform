@@ -25,10 +25,9 @@ export const useCoachActions = (
       
       console.log(`Updating coach status for category: ${coachCategory}, field: ${dbFieldName}`);
       
-      // Set the coach flag in the user object (handle both formats for backward compatibility)
+      // Set the coach flag in the user object (handle both formats)
       if (coachCategory === 'reneu') {
         updatedUser.hasreneucoach = true;
-        // Also update camelCase version if it exists in the user object
         updatedUser.hasReneuCoach = true;
       } else if (coachCategory === 'business') {
         updatedUser.hasbusinesscoach = true;
