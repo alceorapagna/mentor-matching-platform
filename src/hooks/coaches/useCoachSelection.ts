@@ -44,6 +44,34 @@ export const useCoachSelection = () => {
         return false;
       }
       
+      // Same check for other coach categories (only allowing one coach per category)
+      if (selectedCoach.category === 'business' && (user.hasbusinesscoach || user.hasBusinessCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Business coach on your team. Please remove your current Business coach before adding a new one.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
+      if (selectedCoach.category === 'mind' && (user.hasmindcoach || user.hasMindCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Mind coach on your team. Please remove your current Mind coach before adding a new one.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
+      if (selectedCoach.category === 'body' && (user.hasbodycoach || user.hasBodyCoach)) {
+        toast({
+          title: "Coach Already Added",
+          description: "You already have a Body coach on your team. Please remove your current Body coach before adding a new one.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
       console.log('Confirming selection of coach:', { 
         coachId: selectedCoach.id,
         coachName: selectedCoach.name,
