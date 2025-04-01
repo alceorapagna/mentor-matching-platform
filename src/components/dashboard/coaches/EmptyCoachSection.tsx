@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface EmptyCoachSectionProps {
@@ -10,11 +10,11 @@ interface EmptyCoachSectionProps {
   isHRAssigned?: boolean;
 }
 
-const EmptyCoachSection = ({ 
-  title, 
-  description, 
-  category, 
-  isHRAssigned = false 
+const EmptyCoachSection = ({
+  title,
+  description,
+  category,
+  isHRAssigned = false
 }: EmptyCoachSectionProps) => {
   const navigate = useNavigate();
   
@@ -23,21 +23,21 @@ const EmptyCoachSection = ({
   };
 
   return (
-    <div className="border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10">
+    <div className="border border-dashed border-border rounded-xl p-10">
       <div className="text-center space-y-4">
         <div className="bg-muted/50 w-16 h-16 rounded-full flex items-center justify-center mx-auto">
-          <Search className="h-8 w-8 text-muted-foreground" />
+          <PlusCircle className="h-8 w-8 text-muted-foreground" />
         </div>
         <h3 className="font-medium">{title}</h3>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-sm text-muted-foreground max-w-md mx-auto">
+          {description}
+        </p>
         {isHRAssigned ? (
-          <div className="text-sm bg-amber-100 text-amber-800 px-3 py-2 rounded-md">
-            Your company's HR will assign a coach for you soon
+          <div className="bg-violet-100 text-violet-800 text-sm p-3 rounded-md">
+            Your HR team will assign you a coach. No action needed.
           </div>
         ) : (
-          <Button onClick={handleFindCoach}>
-            Find Your Coach
-          </Button>
+          <Button onClick={handleFindCoach}>Find a Coach</Button>
         )}
       </div>
     </div>

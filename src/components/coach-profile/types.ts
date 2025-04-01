@@ -38,4 +38,5 @@ export interface Coach {
     rating: number;
     date: string;
   }[];
+  category?: 'reneu' | 'business' | 'mind' | 'body';
 }

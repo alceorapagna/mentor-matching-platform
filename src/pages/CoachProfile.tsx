@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/contexts/AuthContext';
 
 // Components
 import ProfileHeader from '@/components/coach-profile/ProfileHeader';
@@ -19,6 +20,8 @@ const CoachProfile = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, updateUserCoach } = useAuth();
+  
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
@@ -126,7 +129,9 @@ const CoachProfile = () => {
         rating: 4,
         date: '3 months ago'
       }
-    ]
+    ],
+    // Add the category for coach type
+    category: 'business' as const
   };
   
   const handleSubmitContact = () => {
@@ -145,7 +150,7 @@ const CoachProfile = () => {
     setShowScheduleDialog(false);
   };
   
-  const handleConfirmSelection = () => {
+  const handleConfirmSelection = async () => {
     if (selectedPackage === '' && coach.packages.length > 0) {
       toast({
         title: "Please select a package",
@@ -155,16 +160,43 @@ const CoachProfile = () => {
       return;
     }
     
-    toast({
-      title: "Coach Added to Your Team",
-      description: `${coach.name} is now part of your coaching team. You can view them in your dashboard.`,
-    });
-    
-    setShowConfirmDialog(false);
-    
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 1500);
+    try {
+      // Determine which coach flag to update based on the coach category
+      const coachTypeMapping: { [key: string]: string } = {
+        'reneu': 'hasReneuCoach',
+        'business': 'hasBusinessCoach',
+        'mind': 'hasMindCoach',
+        'body': 'hasBodyCoach'
+      };
+      
+      const coachTypeKey = coachTypeMapping[coach.category];
+      
+      if (coachTypeKey) {
+        // Use the updateUserCoach function to update the user's coach data
+        await updateUserCoach(coach.category);
+        
+        toast({
+          title: "Coach Added to Your Team",
+          description: `${coach.name} is now part of your coaching team. You can view them in your dashboard.`,
+        });
+        
+        setShowConfirmDialog(false);
+        
+        // Navigate to the dashboard with a slight delay to allow toast to be seen
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1500);
+      } else {
+        throw new Error("Invalid coach category");
+      }
+    } catch (error) {
+      console.error("Error confirming coach:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem adding this coach to your team.",
+        variant: "destructive"
+      });
+    }
   };
   
   const handleContactClick = () => {

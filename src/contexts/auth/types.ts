@@ -56,4 +56,5 @@ export interface AuthContextType {
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
   resetCompassData: () => Promise<void>;
+  updateUserCoach: (coachType: string) => Promise<void>;
 }

@@ -8,8 +8,7 @@ import CoachCategoryDisplay from "./coaches/CoachCategoryDisplay";
 const CoachesTab = () => {
   const { user } = useAuth();
   
-  // We'll assume the user has no coaches initially
-  // In a real app, this would come from the user's profile in the database
+  // Get the coach status from the user object
   const hasReneuCoach = user?.hasReneuCoach || false;
   const hasBusinessCoach = user?.hasBusinessCoach || false;
   const hasMindCoach = user?.hasMindCoach || false;
