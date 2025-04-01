@@ -31,13 +31,16 @@ const CoachesTab = () => {
     });
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
-  // Filter coaches by category - for Reneu, only get one. For others, allow multiple
-  const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
+  // For demo purposes, we're simulating the user's selected coaches
+  // In a real application, we would fetch the user's actual selected coaches from the database
+  // For now, we'll just use the first coach of each category when a coach is selected
   
-  // For other coaches, we're going to allow multiple selections (not limiting to slice(0, 1))
-  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business') : [];
-  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind') : [];
-  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body') : [];
+  // Filter coaches by category - for Reneu, only get one. For others, get one per category for now.
+  // This simulates the actual coaches the user has selected
+  const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
+  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
+  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
+  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 1) : [];
   
   // Log filtered coaches
   useEffect(() => {
