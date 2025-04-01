@@ -5,6 +5,9 @@ export interface CompassDimension {
   currentState: number;
   desiredState: number;
   goals: string[];
+  current: number;  // Adding for compatibility
+  desired: number;  // Adding for compatibility
+  notes: string;    // Adding for compatibility
 }
 
 export interface CompassData {
@@ -46,7 +49,7 @@ export interface RegisterData {
   firstName: string;
   lastName: string;
   role: UserRole;
-  specialization?: string; // Add this field to fix the error
+  specialization?: string;
 }
 
 export interface AuthContextType {
@@ -56,7 +59,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<User | null>;
   register: (data: RegisterData) => Promise<User | null>;
   logout: () => Promise<void>;
-  testAccess: (role?: UserRole) => Promise<boolean>;  // Make role parameter optional
+  testAccess: (role?: UserRole) => Promise<boolean>;
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
   resetCompassData: () => Promise<void>;

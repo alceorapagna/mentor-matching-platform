@@ -1,4 +1,3 @@
-
 import { Goal } from "@/types/session";
 import { CompassData } from "@/contexts/auth/types";
 

@@ -10,7 +10,7 @@ import CompassIntroduction from "@/components/compass/CompassIntroduction";
 import PurposeValuesForm from "@/components/compass/PurposeValuesForm";
 import DimensionAssessment, { DimensionData } from "@/components/compass/DimensionAssessment";
 import FutureStateForm from "@/components/compass/FutureStateForm";
-import { CompassData } from "@/contexts/AuthContext";
+import { CompassData } from "@/contexts/auth/types";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -25,9 +25,30 @@ const ReneuCompass = () => {
     purpose: "",
     coreValues: [] as string[],
     dimensions: {
-      work: { current: 5, desired: 8, notes: "" },
-      mind: { current: 4, desired: 7, notes: "" },
-      body: { current: 3, desired: 8, notes: "" }
+      work: { 
+        currentState: 5, 
+        desiredState: 8, 
+        goals: [],
+        current: 5,  // For compatibility
+        desired: 8,  // For compatibility
+        notes: ""
+      },
+      mind: { 
+        currentState: 4, 
+        desiredState: 7, 
+        goals: [],
+        current: 4,  // For compatibility
+        desired: 7,  // For compatibility
+        notes: ""
+      },
+      body: { 
+        currentState: 3, 
+        desiredState: 8, 
+        goals: [],
+        current: 3,  // For compatibility
+        desired: 8,  // For compatibility
+        notes: ""
+      }
     }
   });
 
@@ -93,7 +114,11 @@ const ReneuCompass = () => {
         ...assessmentData.dimensions,
         [dimension]: {
           ...assessmentData.dimensions[dimension],
-          [field]: value
+          [field]: value,
+          // Also update the canonical property names
+          ...(field === 'current' ? { currentState: value } : {}),
+          ...(field === 'desired' ? { desiredState: value } : {}),
+          // For notes, we don't have a direct mapping in the CompassDimension interface
         }
       }
     });

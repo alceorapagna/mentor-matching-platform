@@ -7,18 +7,27 @@ export const sampleCompassData: CompassData = {
   coreValues: ["Wellbeing", "Growth", "Balance", "Authenticity", "Connection"],
   dimensions: {
     work: { 
-      current: 6, 
-      desired: 9, 
+      currentState: 6, 
+      desiredState: 9, 
+      goals: ["Advance career while maintaining balance"],
+      current: 6,           // For compatibility
+      desired: 9,           // For compatibility
       notes: "Looking to advance my career while maintaining balance."
     },
     mind: { 
-      current: 5, 
-      desired: 8, 
+      currentState: 5, 
+      desiredState: 8, 
+      goals: ["Reduce stress", "Improve mental clarity"],
+      current: 5,           // For compatibility
+      desired: 8,           // For compatibility
       notes: "Working on reducing stress and improving mental clarity."
     },
     body: { 
-      current: 4, 
-      desired: 7, 
+      currentState: 4, 
+      desiredState: 7, 
+      goals: ["Establish exercise routine", "Improve sleep habits"],
+      current: 4,           // For compatibility
+      desired: 7,           // For compatibility
       notes: "Need to establish consistent exercise routines and better sleep habits."
     }
   }
