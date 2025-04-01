@@ -11,7 +11,7 @@ type CoachActionsProps = {
 export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
   // Coach update function
   const updateUserCoach = async (coachType: string) => {
-    if (!user) return;
+    if (!user) return false;
     
     try {
       const coachTypeMapping: { [key: string]: string } = {
@@ -28,10 +28,12 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       const updateField = coachTypeMapping[coachType];
       
       // For demo, just update the local state
-      setUser({
+      const updatedUser = {
         ...user,
         [updateField]: true
-      });
+      };
+      
+      setUser(updatedUser);
       
       // For real users, also update in Supabase
       if (!isDemoAccount(user.email)) {
@@ -43,7 +45,7 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
         if (error) throw error;
       }
       
-      console.log(`Coach updated for ${updateField}:`, user);
+      console.log(`Coach updated for ${updateField}:`, updatedUser);
       return true;
     } catch (error) {
       console.error('Error updating user coach:', error);

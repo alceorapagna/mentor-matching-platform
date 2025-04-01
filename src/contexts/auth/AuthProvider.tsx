@@ -10,8 +10,8 @@ const AuthContext = createContext<AuthContextType>({
   isLoading: true,
   login: async () => {},
   register: async () => {},
-  logout: () => {},
-  testAccess: () => {},
+  logout: async () => Promise.resolve(),
+  testAccess: () => Promise.resolve(),
   updateCompassStatus: async () => {},
   updateCompassData: async () => {},
   resetCompassData: async () => {},
@@ -30,3 +30,4 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
 // Custom hook to use the auth context
 export const useAuth = () => useContext(AuthContext);
+

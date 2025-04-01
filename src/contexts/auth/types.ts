@@ -48,6 +48,7 @@ export interface RegisterData {
   email: string;
   password: string;
   role?: UserRole;
+  specialization?: string;
 }
 
 // Auth context type
@@ -58,7 +59,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
-  testAccess: (requiredRole: UserRole) => void;
+  testAccess: (requiredRole: UserRole) => Promise<void>;
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
   resetCompassData: () => Promise<void>;

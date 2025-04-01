@@ -60,6 +60,7 @@ export const login = async (
             lastName: userData.last_name,
             role: userData.role as UserRole,
             avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
+            compassCompleted: userData.compass_completed || false,
           };
           
           setUser(tempUser);
@@ -95,13 +96,15 @@ export const logout = async (navigate: NavigateFunction) => {
     await supabase.auth.signOut();
     toast.info('Logged out successfully');
     navigate('/');
+    return Promise.resolve();
   } catch (error) {
     console.error('Logout error:', error);
+    return Promise.resolve();
   }
 };
 
 // Function for quick test access (for development purposes)
-export const testAccess = (
+export const testAccess = async (
   role: UserRole, 
   navigate: NavigateFunction,
   setUser: React.Dispatch<React.SetStateAction<User | null>>
@@ -116,4 +119,5 @@ export const testAccess = (
   
   // Redirect to appropriate dashboard
   redirectBasedOnRole(role, navigate, true);
+  return Promise.resolve();
 };

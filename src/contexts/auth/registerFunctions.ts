@@ -43,7 +43,7 @@ export const register = async (
         email: userData.email,
         firstName: userData.firstName,
         lastName: userData.lastName,
-        role: userData.role,
+        role: userData.role || 'client',
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.firstName}`,
         compassCompleted: false,
       };

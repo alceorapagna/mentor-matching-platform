@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { User, UserRole, CompassData } from '../types';
 import { isDemoAccount, createDemoUser, createTestUser } from '../demoAccounts';
@@ -137,20 +138,22 @@ export const useAuthActions = ({
       if (user && isDemoAccount(user.email)) {
         setUser(null);
         navigate('/login');
-        return;
+        return Promise.resolve();
       }
       
       // For real users, sign out from Supabase
       await supabase.auth.signOut();
       setUser(null);
       navigate('/login');
+      return Promise.resolve();
     } catch (error) {
       console.error('Logout error:', error);
+      return Promise.resolve();
     }
   };
 
   // Testing access function
-  const testAccess = (requiredRole: UserRole) => {
+  const testAccess = async (requiredRole: UserRole) => {
     if (!user) {
       // If no user is logged in, create a test user with the required role
       const testUser = createTestUser(requiredRole);
@@ -171,7 +174,7 @@ export const useAuthActions = ({
       } else if (requiredRole === 'hr') {
         navigate('/hr-dashboard');
       }
-      return;
+      return Promise.resolve();
     }
     
     // If a user is already logged in but with the wrong role
@@ -196,6 +199,7 @@ export const useAuthActions = ({
         navigate('/hr-dashboard');
       }
     }
+    return Promise.resolve();
   };
 
   return {
