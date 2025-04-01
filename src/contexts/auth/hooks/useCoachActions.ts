@@ -1,116 +1,60 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import { User } from '../types';
-import { isDemoAccount } from '../demoAccounts';
-import { useNavigate } from 'react-router-dom';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { User } from '@/contexts/auth/types';
+import { updateDoc } from '@/contexts/auth/loginFunctions';
 
-type CoachActionsProps = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-};
+// This hook centralizes the coach-related functions
+export const useCoachActions = (
+  user: User | null,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
+) => {
+  const [isUpdatingCoach, setIsUpdatingCoach] = useState(false);
 
-export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
-  
-  // Coach update function
-  const updateUserCoach = async (coachType: string) => {
-    if (!user) return false;
+  // Update the user's coach selection
+  const updateUserCoach = async (coachCategory: string): Promise<boolean> => {
+    if (!user || !user.id) return false;
     
     try {
-      const coachTypeMapping: { [key: string]: string } = {
-        'reneu': 'hasreneucoach',
-        'business': 'hasbusinesscoach',
-        'mind': 'hasmindcoach',
-        'body': 'hasbodycoach'
-      };
+      setIsUpdatingCoach(true);
       
-      if (!coachTypeMapping[coachType]) {
-        throw new Error("Invalid coach type");
+      // Create an updated user object with the new coach status
+      const updatedUser = { ...user };
+      
+      // Set the appropriate coach flag based on the category
+      if (coachCategory === 'reneu') {
+        updatedUser.hasreneucoach = true;
+        updatedUser.hasReneuCoach = true;
+      } else if (coachCategory === 'business') {
+        updatedUser.hasbusinesscoach = true;
+        updatedUser.hasBusinessCoach = true;
+      } else if (coachCategory === 'mind') {
+        updatedUser.hasmindcoach = true;
+        updatedUser.hasMindCoach = true;
+      } else if (coachCategory === 'body') {
+        updatedUser.hasbodycoach = true;
+        updatedUser.hasBodyCoach = true;
       }
       
-      const updateField = coachTypeMapping[coachType];
-      const camelCaseField = updateField.replace(/^has/, 'has').replace(/coach$/, 'Coach');
-      
-      // Check if trying to add a Reneu coach when one already exists
-      if (coachType === 'reneu' && (user.hasreneucoach || user.hasReneuCoach)) {
-        toast({
-          title: "Coach Already Added",
-          description: "You already have a Reneu coach on your team.",
-          variant: "destructive"
-        });
-        return false;
-      }
-      
-      // For demo or test users, just update the local state
-      const isTestOrDemoUser = isDemoAccount(user.email) || user.id.startsWith('test_') || user.id.startsWith('demo_');
-      
-      // Create an updated user object with both snake_case and camelCase properties
-      const updatedUser = {
-        ...user,
-        [updateField]: true,
-        [camelCaseField]: true
-      };
-      
-      console.log("Updating user with coach:", {
-        originalUser: user,
-        updateField,
-        camelCaseField,
-        isTestOrDemoUser,
-        updatedUser
+      // Update the user document
+      await updateDoc('users', user.id, {
+        [`has${coachCategory}coach`]: true,
+        [`has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`]: true
       });
       
-      // Update user state locally
+      // Update the local user state
       setUser(updatedUser);
-      
-      // For real users with valid UUIDs, also update in Supabase
-      if (!isTestOrDemoUser) {
-        const isValidUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
-        
-        if (isValidUuid) {
-          console.log(`Updating Supabase field '${updateField}' for user ${user.id}`);
-          
-          const { error } = await supabase
-            .from('profiles')
-            .update({ [updateField]: true })
-            .eq('id', user.id);
-            
-          if (error) {
-            console.error('Error updating profile in Supabase:', error);
-            // We don't throw here - just log the error but continue with local state update
-          }
-        } else {
-          console.warn('User ID is not a valid UUID format, skipping Supabase update:', user.id);
-        }
-      }
-      
-      console.log(`Coach updated for ${updateField}:`, updatedUser);
-      
-      // Show success toast
-      toast({
-        title: "Coach Added",
-        description: "Your coach has been added to your team.",
-      });
-      
-      // Use a timeout to ensure the toast is visible before navigation
-      setTimeout(() => {
-        navigate('/dashboard?tab=coaches');
-      }, 1000);
       
       return true;
     } catch (error) {
-      console.error('Error updating user coach:', error);
-      toast({
-        title: "Error",
-        description: "There was a problem adding this coach to your team.",
-        variant: "destructive"
-      });
-      return false; // Return false instead of throwing to prevent UI disruption
+      console.error('Error updating coach:', error);
+      return false;
+    } finally {
+      setIsUpdatingCoach(false);
     }
   };
 
   return {
-    updateUserCoach
+    updateUserCoach,
+    isUpdatingCoach
   };
 };

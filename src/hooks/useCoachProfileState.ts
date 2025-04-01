@@ -71,8 +71,8 @@ export const useCoachProfileState = (coach: Coach) => {
         return;
       }
       
-      // Add specifically this coach's category
-      const success = await updateUserCoach(coach.category, coach.id);
+      // Add coach
+      const success = await updateUserCoach(coach.category);
       
       if (success) {
         toast({
