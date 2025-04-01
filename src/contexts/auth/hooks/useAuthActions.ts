@@ -1,16 +1,15 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { User, UserRole, CompassData } from '../types';
 import { isDemoAccount, createDemoUser, createTestUser } from '../demoAccounts';
 import { NavigateFunction } from 'react-router-dom';
-import { ToastApi } from '@/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 type AuthActionsProps = {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   navigate: NavigateFunction;
-  toast: ToastApi;
+  toast: any;
 };
 
 export const useAuthActions = ({ 

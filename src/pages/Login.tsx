@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -23,8 +22,8 @@ const Login = () => {
 
   // Handle quick access
   const handleQuickAccess = (option: any) => {
-    // Call testAccess with the role and navigate function
-    testAccess(option.role, navigate);
+    // Call testAccess with the role
+    testAccess(option.role);
     
     // If direct navigation is needed, navigate immediately after
     if (option.directNav) {
