@@ -65,7 +65,7 @@ const CoachProfile = () => {
           'Basic goal setting',
           'Email support'
         ],
-        type: 'team-member'
+        type: 'team-member' as const
       },
       { 
         id: 2, 
@@ -78,7 +78,7 @@ const CoachProfile = () => {
           'Email and chat support',
           'Monthly progress reports'
         ],
-        type: 'team-member'
+        type: 'team-member' as const
       },
       { 
         id: 3, 
@@ -92,7 +92,7 @@ const CoachProfile = () => {
           'Unlimited support',
           'Detailed analytics and ROI reporting'
         ],
-        type: 'team'
+        type: 'team' as const
       }
     ],
     customSolutions: [
