@@ -2,9 +2,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { User, AuthContextType, CompassData } from '../auth/types';
+import { User, AuthContextType, CompassData } from './types';
 import { useToast } from '@/hooks/use-toast';
-import { demoAccounts } from './demoAccounts';
+import { isDemoAccount, createDemoUser } from './demoAccounts';
 
 export const useAuthProvider = (): AuthContextType => {
   const [user, setUser] = useState<User | null>(null);
@@ -25,7 +25,7 @@ export const useAuthProvider = (): AuthContextType => {
         } else if (data.session) {
           // Get the user profile from the database
           const { data: userData, error: userError } = await supabase
-            .from('user_profiles')
+            .from('profiles')
             .select('*')
             .eq('id', data.session.user.id)
             .single();
@@ -34,7 +34,17 @@ export const useAuthProvider = (): AuthContextType => {
             console.error('Error fetching user profile:', userError);
             setUser(null);
           } else if (userData) {
-            setUser(userData as User);
+            // Convert table column names to our User type property names
+            setUser({
+              id: userData.id,
+              email: userData.email,
+              firstName: userData.first_name,
+              lastName: userData.last_name,
+              role: userData.role,
+              avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
+              compassCompleted: userData.compass_completed || false,
+              compassData: userData.compass_data,
+            } as User);
           }
         }
       } catch (error) {
@@ -52,7 +62,7 @@ export const useAuthProvider = (): AuthContextType => {
       if (event === 'SIGNED_IN' && session) {
         // Get the user profile from the database
         const { data: userData, error: userError } = await supabase
-          .from('user_profiles')
+          .from('profiles')
           .select('*')
           .eq('id', session.user.id)
           .single();
@@ -61,7 +71,16 @@ export const useAuthProvider = (): AuthContextType => {
           console.error('Error fetching user profile:', userError);
           setUser(null);
         } else if (userData) {
-          setUser(userData as User);
+          setUser({
+            id: userData.id,
+            email: userData.email,
+            firstName: userData.first_name,
+            lastName: userData.last_name,
+            role: userData.role,
+            avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
+            compassCompleted: userData.compass_completed || false,
+            compassData: userData.compass_data,
+          } as User);
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
@@ -80,26 +99,28 @@ export const useAuthProvider = (): AuthContextType => {
     
     try {
       // Handle demo accounts
-      const demoAccount = demoAccounts.find(account => account.email === email);
-      
-      if (demoAccount && password === 'demo') {
-        setUser(demoAccount);
+      if (isDemoAccount(email) && password === 'password123') {
+        const demoRole = email.split('@')[0] as any;
+        const demoUser = createDemoUser(email, demoRole);
+        
+        setUser(demoUser);
         toast({
           title: "Demo Login Successful",
-          description: `Welcome to the ${demoAccount.role} demo account!`,
+          description: `Welcome to the ${demoRole} demo account!`,
         });
         
         // Redirect based on role
-        if (demoAccount.role === 'client') {
+        if (demoRole === 'client') {
           navigate('/dashboard');
-        } else if (demoAccount.role === 'coach') {
+        } else if (demoRole === 'coach') {
           navigate('/coach-dashboard');
-        } else if (demoAccount.role === 'admin') {
+        } else if (demoRole === 'admin') {
           navigate('/admin-dashboard');
-        } else if (demoAccount.role === 'hr') {
+        } else if (demoRole === 'hr') {
           navigate('/hr-dashboard');
         }
         
+        setIsLoading(false);
         return;
       }
       
@@ -113,14 +134,23 @@ export const useAuthProvider = (): AuthContextType => {
       
       // Fetch user profile
       const { data: userData, error: userError } = await supabase
-        .from('user_profiles')
+        .from('profiles')
         .select('*')
         .eq('id', data.user.id)
         .single();
       
       if (userError) throw userError;
       
-      setUser(userData as User);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        firstName: userData.first_name,
+        lastName: userData.last_name,
+        role: userData.role,
+        avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
+        compassCompleted: userData.compass_completed || false,
+        compassData: userData.compass_data,
+      } as User);
       
       toast({
         title: "Login Successful",
@@ -177,7 +207,7 @@ export const useAuthProvider = (): AuthContextType => {
   const logout = async () => {
     try {
       // For demo accounts, just reset the user state
-      if (user && demoAccounts.some(account => account.email === user.email)) {
+      if (user && isDemoAccount(user.email)) {
         setUser(null);
         navigate('/login');
         return;
@@ -231,10 +261,10 @@ export const useAuthProvider = (): AuthContextType => {
       });
       
       // For real users, also update in Supabase
-      if (!demoAccounts.some(account => account.email === user.email)) {
+      if (!isDemoAccount(user.email)) {
         const { error } = await supabase
-          .from('user_profiles')
-          .update({ compassCompleted: completed })
+          .from('profiles')
+          .update({ compass_completed: completed })
           .eq('id', user.id);
           
         if (error) throw error;
@@ -255,10 +285,10 @@ export const useAuthProvider = (): AuthContextType => {
       });
       
       // For real users, also update in Supabase
-      if (!demoAccounts.some(account => account.email === user.email)) {
+      if (!isDemoAccount(user.email)) {
         const { error } = await supabase
-          .from('user_profiles')
-          .update({ compassData })
+          .from('profiles')
+          .update({ compass_data: compassData })
           .eq('id', user.id);
           
         if (error) throw error;
@@ -280,12 +310,12 @@ export const useAuthProvider = (): AuthContextType => {
       });
       
       // For real users, also update in Supabase
-      if (!demoAccounts.some(account => account.email === user.email)) {
+      if (!isDemoAccount(user.email)) {
         const { error } = await supabase
-          .from('user_profiles')
+          .from('profiles')
           .update({ 
-            compassData: null,
-            compassCompleted: false
+            compass_data: null,
+            compass_completed: false
           })
           .eq('id', user.id);
           
@@ -321,10 +351,10 @@ export const useAuthProvider = (): AuthContextType => {
       });
       
       // For real users, also update in Supabase
-      if (!demoAccounts.some(account => account.email === user.email)) {
+      if (!isDemoAccount(user.email)) {
         const { error } = await supabase
-          .from('user_profiles')
-          .update({ [updateField]: true })
+          .from('profiles')
+          .update({ [updateField.toLowerCase()]: true })
           .eq('id', user.id);
           
         if (error) throw error;

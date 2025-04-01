@@ -1,7 +1,7 @@
 
 import { createContext, useContext, ReactNode } from 'react';
 import { AuthContextType } from './types';
-import useAuthProvider from './useAuthProvider';
+import { useAuthProvider } from './useAuthProvider';
 
 // Create the context with default values
 const AuthContext = createContext<AuthContextType>({
@@ -15,6 +15,7 @@ const AuthContext = createContext<AuthContextType>({
   updateCompassStatus: async () => {},
   updateCompassData: async () => {},
   resetCompassData: async () => {},
+  updateUserCoach: async () => {},
 });
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
