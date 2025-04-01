@@ -7,9 +7,15 @@ interface EmptyCoachSectionProps {
   title: string;
   description: string;
   category: string;
+  isHRAssigned?: boolean;
 }
 
-const EmptyCoachSection = ({ title, description, category }: EmptyCoachSectionProps) => {
+const EmptyCoachSection = ({ 
+  title, 
+  description, 
+  category, 
+  isHRAssigned = false 
+}: EmptyCoachSectionProps) => {
   const navigate = useNavigate();
   
   const handleFindCoach = () => {
@@ -24,9 +30,15 @@ const EmptyCoachSection = ({ title, description, category }: EmptyCoachSectionPr
         </div>
         <h3 className="font-medium">{title}</h3>
         <p className="text-sm text-muted-foreground">{description}</p>
-        <Button onClick={handleFindCoach}>
-          Find Your Coach
-        </Button>
+        {isHRAssigned ? (
+          <div className="text-sm bg-amber-100 text-amber-800 px-3 py-2 rounded-md">
+            Your company's HR will assign a coach for you soon
+          </div>
+        ) : (
+          <Button onClick={handleFindCoach}>
+            Find Your Coach
+          </Button>
+        )}
       </div>
     </div>
   );

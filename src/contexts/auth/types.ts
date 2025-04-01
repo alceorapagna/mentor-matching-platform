@@ -29,6 +29,9 @@ export interface User {
   hasBusinessCoach?: boolean;
   hasMindCoach?: boolean;
   hasBodyCoach?: boolean;
+  // HR assigned coaching flags
+  isHRManaged?: boolean;
+  hrAssignedCoachTypes?: string[];
 }
 
 // Registration data type

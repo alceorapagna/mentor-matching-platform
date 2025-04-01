@@ -16,6 +16,8 @@ interface CoachCategoryDisplayProps {
   allowMultiple?: boolean;
   findCoachTitle?: string;
   findCoachDescription?: string;
+  isHRAssigned?: boolean;
+  isHRManagedCategory?: boolean;
 }
 
 const CoachCategoryDisplay = ({
@@ -28,7 +30,9 @@ const CoachCategoryDisplay = ({
   category,
   allowMultiple = false,
   findCoachTitle = "Find Your Coach",
-  findCoachDescription = "Connect with a coach"
+  findCoachDescription = "Connect with a coach",
+  isHRAssigned = false,
+  isHRManagedCategory = false
 }: CoachCategoryDisplayProps) => {
   const navigate = useNavigate();
   
@@ -43,6 +47,11 @@ const CoachCategoryDisplay = ({
         <div className={`text-xs font-medium rounded-full px-2.5 py-0.5 border ${badgeClassName}`}>
           {badgeText}
         </div>
+        {isHRManagedCategory && (
+          <div className="text-xs font-medium rounded-full px-2.5 py-0.5 bg-violet-100 text-violet-800 border border-violet-200">
+            HR Managed
+          </div>
+        )}
       </div>
       <p className="text-muted-foreground mb-6">
         {description}
@@ -63,7 +72,7 @@ const CoachCategoryDisplay = ({
           ))}
           
           {/* Add More Coaches Button for multiple coach categories */}
-          {allowMultiple && (
+          {allowMultiple && !isHRManagedCategory && (
             <div className="border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10 h-full">
               <div className="text-center space-y-4">
                 <Button variant="outline" onClick={handleFindCoach}>
@@ -78,6 +87,7 @@ const CoachCategoryDisplay = ({
           title={findCoachTitle}
           description={findCoachDescription}
           category={category}
+          isHRAssigned={isHRAssigned}
         />
       )}
     </div>
