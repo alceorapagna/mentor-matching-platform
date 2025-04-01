@@ -24,6 +24,7 @@ export const useCoachActions = (
       const dbFieldName = `has${coachCategory}coach`;
       
       console.log(`Updating coach status for category: ${coachCategory}, field: ${dbFieldName}`);
+      console.log('Current user before update:', user);
       
       // Set the coach flag in the user object (handle both formats)
       if (coachCategory === 'reneu') {
@@ -38,10 +39,10 @@ export const useCoachActions = (
       } else if (coachCategory === 'body') {
         updatedUser.hasbodycoach = true;
         updatedUser.hasBodyCoach = true;
+        console.log('Setting body coach to true');
       }
       
-      console.log(`Attempting to update coach status for user ${user.id}`);
-      console.log('Updated user object:', updatedUser);
+      console.log('Updated user object after modification:', updatedUser);
       
       // Skip database update for demo/test users with non-UUID IDs
       if (user.id.includes('test_') || !user.id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {

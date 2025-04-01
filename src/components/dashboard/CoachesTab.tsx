@@ -4,6 +4,7 @@ import { Users } from "lucide-react";
 import { coachesData } from "@/data/coachesData";
 import { useAuth } from "@/contexts/AuthContext";
 import CoachCategoryDisplay from "./coaches/CoachCategoryDisplay";
+import { useEffect } from "react";
 
 const CoachesTab = () => {
   const { user } = useAuth();
@@ -14,13 +15,18 @@ const CoachesTab = () => {
   const hasMindCoach = Boolean(user?.hasmindcoach || user?.hasMindCoach);
   const hasBodyCoach = Boolean(user?.hasbodycoach || user?.hasBodyCoach);
   
-  console.log("Coach flags in CoachesTab:", { 
-    user, 
-    hasReneuCoach, 
-    hasBusinessCoach, 
-    hasMindCoach, 
-    hasBodyCoach 
-  });
+  // Log all coach flags for debugging
+  useEffect(() => {
+    console.log("Coach flags in CoachesTab:", { 
+      user, 
+      hasReneuCoach, 
+      hasBusinessCoach, 
+      hasMindCoach, 
+      hasBodyCoach,
+      rawBodyFlag: user?.hasbodycoach,
+      rawBodyFlagCamel: user?.hasBodyCoach
+    });
+  }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
   // Filter coaches by category - for all categories, only get the first coach
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
