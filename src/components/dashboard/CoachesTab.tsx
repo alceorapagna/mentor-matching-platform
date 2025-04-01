@@ -31,11 +31,6 @@ const CoachesTab = () => {
     });
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
-  // Note: In a real application, we would:
-  // 1. Store the specific coach IDs that a user has selected in the database
-  // 2. Fetch only those specific coaches to display
-  // 3. This demo only simulates the selection by showing the first coach of each category
-  
   // For demo purposes only - get the first coach of each category
   // In a real app, we'd fetch the exact coaches by ID from the database
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
@@ -50,9 +45,11 @@ const CoachesTab = () => {
       businessCoaches,
       mindCoaches,
       bodyCoaches,
-      bodyCoachFlag: hasBodyCoach
+      bodyCoachFlag: hasBodyCoach,
+      userBodyCoachFlag: user?.hasbodycoach,
+      userBodyCoachFlagCamel: user?.hasBodyCoach
     });
-  }, [reneuCoaches, businessCoaches, mindCoaches, bodyCoaches, hasBodyCoach]);
+  }, [reneuCoaches, businessCoaches, mindCoaches, bodyCoaches, hasBodyCoach, user]);
 
   return (
     <div className="space-y-10">

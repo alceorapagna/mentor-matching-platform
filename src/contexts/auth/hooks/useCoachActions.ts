@@ -24,7 +24,7 @@ export const useCoachActions = (
       const dbFieldName = `has${coachCategory}coach`;
       
       console.log(`[useCoachActions] Updating coach status for category: ${coachCategory}, field: ${dbFieldName}`);
-      console.log('[useCoachActions] Current user before update:', user);
+      console.log('[useCoachActions] Current user before update:', updatedUser);
       
       // Set the coach flag in the user object (handle both formats)
       if (coachCategory === 'reneu') {
@@ -40,18 +40,20 @@ export const useCoachActions = (
         updatedUser.hasMindCoach = true;
         console.log('[useCoachActions] Setting mind coach to true');
       } else if (coachCategory === 'body') {
-        // Extra debugging for body coach
+        // Add extra logging for body coach
         console.log('[useCoachActions] Setting body coach to true (BEFORE):', {
-          hasbodycoach: updatedUser.hasbodycoach,
-          hasBodyCoach: updatedUser.hasBodyCoach
+          current_hasbodycoach: updatedUser.hasbodycoach,
+          current_hasBodyCoach: updatedUser.hasBodyCoach,
+          user_hasbodycoach: user.hasbodycoach,
+          user_hasBodyCoach: user.hasBodyCoach
         });
         
         updatedUser.hasbodycoach = true;
         updatedUser.hasBodyCoach = true;
         
         console.log('[useCoachActions] Setting body coach to true (AFTER):', {
-          hasbodycoach: updatedUser.hasbodycoach,
-          hasBodyCoach: updatedUser.hasBodyCoach
+          updated_hasbodycoach: updatedUser.hasbodycoach,
+          updated_hasBodyCoach: updatedUser.hasBodyCoach
         });
       }
       

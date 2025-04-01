@@ -43,7 +43,7 @@ export const useCoachSelection = () => {
       setIsProcessing(true);
       
       console.log('[useCoachSelection] Selected coach category:', selectedCoach.category);
-      console.log('[useCoachSelection] Current user state:', {
+      console.log('[useCoachSelection] Current user coach flags:', {
         hasreneucoach: user.hasreneucoach,
         hasReneuCoach: user.hasReneuCoach,
         hasbusinesscoach: user.hasbusinesscoach,
@@ -54,16 +54,13 @@ export const useCoachSelection = () => {
         hasBodyCoach: user.hasBodyCoach
       });
       
-      // In a real app, we would store the specific coach ID for the user
-      // This is a simplified implementation for demonstration purposes
-      
       console.log('[useCoachSelection] Confirming selection of coach:', { 
         coachId: selectedCoach.id,
         coachName: selectedCoach.name,
         coachCategory: selectedCoach.category
       });
       
-      // Add coach - with added logging
+      // Call updateUserCoach with detailed logging
       console.log(`[useCoachSelection] Calling updateUserCoach for category: ${selectedCoach.category}`);
       const success = await updateUserCoach(selectedCoach.category);
       
@@ -77,8 +74,7 @@ export const useCoachSelection = () => {
         
         console.log('[useCoachSelection] Successfully added coach, forcing a full page refresh');
         
-        // Force a FULL browser refresh (not just React router navigation)
-        // This ensures all state is completely reset and reloaded from the server
+        // Force a FULL browser refresh to ensure all state is properly reset and reloaded
         window.location.href = '/dashboard?tab=coaches';
         
         return true;
