@@ -72,23 +72,8 @@ export const useCoachProfileState = (coach: Coach) => {
       
       if (coachTypeKey) {
         // Use the updateUserCoach function to update the user's coach data
-        const result = await updateUserCoach(coachTypeKey);
-        
-        if (result) {
-          toast({
-            title: "Coach Added to Your Team",
-            description: `${coach.name} is now part of your coaching team. You can view them in your dashboard.`,
-          });
-          
-          setShowConfirmDialog(false);
-          
-          // Navigate to the dashboard with a slight delay to allow toast to be seen
-          setTimeout(() => {
-            navigate('/dashboard?tab=coaches');
-          }, 1500);
-        } else {
-          throw new Error("Failed to update coach");
-        }
+        await updateUserCoach(coachTypeKey);
+        setShowConfirmDialog(false);
       } else {
         throw new Error("Invalid coach category");
       }

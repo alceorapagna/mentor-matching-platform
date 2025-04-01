@@ -2,6 +2,8 @@
 import { supabase } from '@/integrations/supabase/client';
 import { User } from '../types';
 import { isDemoAccount } from '../demoAccounts';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 type CoachActionsProps = {
   user: User | null;
@@ -9,6 +11,9 @@ type CoachActionsProps = {
 };
 
 export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
   // Coach update function
   const updateUserCoach = async (coachType: string) => {
     if (!user) return false;
@@ -37,18 +42,43 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       
       // For real users, also update in Supabase
       if (!isDemoAccount(user.email)) {
+        // Convert camelCase field name to lowercase for Supabase
+        const dbFieldName = updateField.toLowerCase();
+        
+        console.log(`Updating Supabase field '${dbFieldName}' for user ${user.id}`);
+        
         const { error } = await supabase
           .from('profiles')
-          .update({ [updateField.toLowerCase()]: true })
+          .update({ [dbFieldName]: true })
           .eq('id', user.id);
           
-        if (error) throw error;
+        if (error) {
+          console.error('Error updating profile in Supabase:', error);
+          throw error;
+        }
       }
       
       console.log(`Coach updated for ${updateField}:`, updatedUser);
+      
+      // Redirect to the dashboard coaches tab
+      toast({
+        title: "Coach Added",
+        description: "Your coach has been added to your team.",
+      });
+      
+      // Use a timeout to ensure the toast is visible before navigation
+      setTimeout(() => {
+        navigate('/dashboard?tab=coaches');
+      }, 1000);
+      
       return true;
     } catch (error) {
       console.error('Error updating user coach:', error);
+      toast({
+        title: "Error",
+        description: "There was a problem adding this coach to your team.",
+        variant: "destructive"
+      });
       throw error;
     }
   };

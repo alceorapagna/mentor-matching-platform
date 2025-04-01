@@ -45,6 +45,10 @@ export const useAuthentication = () => {
               avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
               compassCompleted: userData.compass_completed || false,
               compassData: userData.compass_data as any,
+              hasReneuCoach: userData.hasreneucoach || false,
+              hasBusinessCoach: userData.hasbusinesscoach || false,
+              hasMindCoach: userData.hasmindcoach || false,
+              hasBodyCoach: userData.hasbodycoach || false
             });
           }
         }
@@ -81,6 +85,10 @@ export const useAuthentication = () => {
             avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
             compassCompleted: userData.compass_completed || false,
             compassData: userData.compass_data as any,
+            hasReneuCoach: userData.hasreneucoach || false,
+            hasBusinessCoach: userData.hasbusinesscoach || false,
+            hasMindCoach: userData.hasmindcoach || false,
+            hasBodyCoach: userData.hasbodycoach || false
           });
         }
       } else if (event === 'SIGNED_OUT') {

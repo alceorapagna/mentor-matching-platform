@@ -17,6 +17,10 @@ export type Database = {
           created_at: string
           email: string
           first_name: string
+          hasbodycoach: boolean | null
+          hasbusinesscoach: boolean | null
+          hasmindcoach: boolean | null
+          hasreneucoach: boolean | null
           id: string
           last_name: string
           role: string
@@ -29,6 +33,10 @@ export type Database = {
           created_at?: string
           email: string
           first_name: string
+          hasbodycoach?: boolean | null
+          hasbusinesscoach?: boolean | null
+          hasmindcoach?: boolean | null
+          hasreneucoach?: boolean | null
           id: string
           last_name: string
           role: string
@@ -41,6 +49,10 @@ export type Database = {
           created_at?: string
           email?: string
           first_name?: string
+          hasbodycoach?: boolean | null
+          hasbusinesscoach?: boolean | null
+          hasmindcoach?: boolean | null
+          hasreneucoach?: boolean | null
           id?: string
           last_name?: string
           role?: string
