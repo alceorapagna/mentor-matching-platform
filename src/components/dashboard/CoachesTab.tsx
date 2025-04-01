@@ -31,12 +31,13 @@ const CoachesTab = () => {
     });
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
-  // For demo purposes, we're simulating the user's selected coaches
-  // In a real application, we would fetch the user's actual selected coaches from the database
-  // For now, we'll just use the first coach of each category when a coach is selected
+  // Note: In a real application, we would:
+  // 1. Store the specific coach IDs that a user has selected in the database
+  // 2. Fetch only those specific coaches to display
+  // 3. This demo only simulates the selection by showing the first coach of each category
   
-  // Filter coaches by category - for demonstration, showing only one coach per category
-  // In a real app, we would fetch the exact coaches the user has selected by ID
+  // For demo purposes only - get the first coach of each category
+  // In a real app, we'd fetch the exact coaches by ID from the database
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
   const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
   const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];

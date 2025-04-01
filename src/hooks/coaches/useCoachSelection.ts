@@ -54,8 +54,8 @@ export const useCoachSelection = () => {
         hasBodyCoach: user.hasBodyCoach
       });
       
-      // For testing purposes, let's log and simulate adding only a single coach selection
-      // In the real application, this would store the specific coach ID for the user
+      // In a real app, we would store the specific coach ID for the user
+      // This is a simplified implementation for demonstration purposes
       
       console.log('[useCoachSelection] Confirming selection of coach:', { 
         coachId: selectedCoach.id,
