@@ -17,7 +17,7 @@ export const useCoachActions = (
     try {
       setIsUpdatingCoach(true);
       
-      // Create an updated user object with the new coach status
+      // Create a deep copy of the user object
       const updatedUser = { ...user };
       
       // Field name for the database update (lowercase only)

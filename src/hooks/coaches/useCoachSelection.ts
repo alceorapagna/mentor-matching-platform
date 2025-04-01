@@ -44,14 +44,14 @@ export const useCoachSelection = () => {
       
       console.log('[useCoachSelection] Selected coach category:', selectedCoach.category);
       console.log('[useCoachSelection] Current user coach flags:', {
-        hasreneucoach: user.hasreneucoach,
-        hasReneuCoach: user.hasReneuCoach,
-        hasbusinesscoach: user.hasbusinesscoach,
-        hasBusinessCoach: user.hasBusinessCoach,
-        hasmindcoach: user.hasmindcoach,
-        hasMindCoach: user.hasMindCoach,
-        hasbodycoach: user.hasbodycoach,
-        hasBodyCoach: user.hasBodyCoach
+        hasreneucoach: Boolean(user.hasreneucoach),
+        hasReneuCoach: Boolean(user.hasReneuCoach),
+        hasbusinesscoach: Boolean(user.hasbusinesscoach),
+        hasBusinessCoach: Boolean(user.hasBusinessCoach),
+        hasmindcoach: Boolean(user.hasmindcoach),
+        hasMindCoach: Boolean(user.hasMindCoach),
+        hasbodycoach: Boolean(user.hasbodycoach),
+        hasBodyCoach: Boolean(user.hasBodyCoach)
       });
       
       console.log('[useCoachSelection] Confirming selection of coach:', { 
