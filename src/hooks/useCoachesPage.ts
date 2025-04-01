@@ -135,19 +135,21 @@ export const useCoachesPage = () => {
       });
       
       // Call the updateUserCoach function from AuthContext
-      await updateUserCoach(category);
+      const success = await updateUserCoach(category);
       
-      toast({
-        title: "Coach Added to Your Team",
-        description: `${selectedCoach?.name} is now part of your coaching team.`,
-      });
-      
-      setShowConfirmDialog(false);
-      
-      // Use a timeout to ensure the toast is visible before navigation
-      setTimeout(() => {
-        navigate('/dashboard?tab=coaches');
-      }, 1500);
+      if (success) {
+        toast({
+          title: "Coach Added to Your Team",
+          description: `${selectedCoach?.name} is now part of your coaching team.`,
+        });
+        
+        setShowConfirmDialog(false);
+        
+        // Use a timeout to ensure the toast is visible before navigation
+        setTimeout(() => {
+          navigate('/dashboard?tab=coaches');
+        }, 1500);
+      }
     } catch (error) {
       console.error("Error confirming coach:", error);
       toast({

@@ -31,35 +31,47 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       }
       
       const updateField = coachTypeMapping[coachType];
+      const camelCaseField = updateField.replace(/^has/, 'has').replace(/coach$/, 'Coach');
       
-      // For demo, just update the local state
+      // For demo or test users, just update the local state
+      const isTestOrDemoUser = isDemoAccount(user.email) || user.id.startsWith('test_') || user.id.startsWith('demo_');
+      
+      // Create an updated user object with both snake_case and camelCase properties
       const updatedUser = {
         ...user,
         [updateField]: true,
-        // Also set the camelCase version for component display
-        [updateField.replace(/^has/, 'has').replace(/coach$/, 'Coach')]: true
+        [camelCaseField]: true
       };
       
       console.log("Updating user with coach:", {
         originalUser: user,
         updateField,
+        camelCaseField,
+        isTestOrDemoUser,
         updatedUser
       });
       
+      // Update user state locally
       setUser(updatedUser);
       
-      // For real users, also update in Supabase
-      if (!isDemoAccount(user.email)) {
-        console.log(`Updating Supabase field '${updateField}' for user ${user.id}`);
+      // For real users with valid UUIDs, also update in Supabase
+      if (!isTestOrDemoUser) {
+        const isValidUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user.id);
         
-        const { error } = await supabase
-          .from('profiles')
-          .update({ [updateField]: true })
-          .eq('id', user.id);
+        if (isValidUuid) {
+          console.log(`Updating Supabase field '${updateField}' for user ${user.id}`);
           
-        if (error) {
-          console.error('Error updating profile in Supabase:', error);
-          throw error;
+          const { error } = await supabase
+            .from('profiles')
+            .update({ [updateField]: true })
+            .eq('id', user.id);
+            
+          if (error) {
+            console.error('Error updating profile in Supabase:', error);
+            // We don't throw here - just log the error but continue with local state update
+          }
+        } else {
+          console.warn('User ID is not a valid UUID format, skipping Supabase update:', user.id);
         }
       }
       
@@ -84,7 +96,7 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
         description: "There was a problem adding this coach to your team.",
         variant: "destructive"
       });
-      throw error;
+      return false; // Return false instead of throwing to prevent UI disruption
     }
   };
 

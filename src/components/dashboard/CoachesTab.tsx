@@ -23,10 +23,10 @@ const CoachesTab = () => {
   });
   
   // Filter coaches by category
-  const reneuCoaches = coachesData.filter(coach => coach.category === 'reneu');
-  const businessCoaches = coachesData.filter(coach => coach.category === 'business');
-  const mindCoaches = coachesData.filter(coach => coach.category === 'mind');
-  const bodyCoaches = coachesData.filter(coach => coach.category === 'body');
+  const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
+  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
+  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
+  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 1) : [];
 
   return (
     <div className="space-y-6">
@@ -54,7 +54,7 @@ const CoachesTab = () => {
                 badgeText="Holistic Support"
                 badgeClassName="bg-primary/10 border-primary/40"
                 description="Your dedicated Reneu coach is a certified professional guiding you through your overall renewal journey, encompassing all aspects of work, mind, and body."
-                coaches={reneuCoaches.slice(0, 1)}
+                coaches={reneuCoaches}
                 hasCoach={hasReneuCoach}
                 category="reneu"
                 findCoachTitle="Find Your Reneu Coach"
