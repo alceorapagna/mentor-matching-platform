@@ -54,8 +54,8 @@ export const useCoachSelection = () => {
         hasBodyCoach: user.hasBodyCoach
       });
       
-      // We're allowing multiple coaches per category now, so we don't need to check if the user
-      // already has this type of coach
+      // For testing purposes, let's log and simulate adding only a single coach selection
+      // In the real application, this would store the specific coach ID for the user
       
       console.log('[useCoachSelection] Confirming selection of coach:', { 
         coachId: selectedCoach.id,

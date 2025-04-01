@@ -35,8 +35,8 @@ const CoachesTab = () => {
   // In a real application, we would fetch the user's actual selected coaches from the database
   // For now, we'll just use the first coach of each category when a coach is selected
   
-  // Filter coaches by category - for Reneu, only get one. For others, get one per category for now.
-  // This simulates the actual coaches the user has selected
+  // Filter coaches by category - for demonstration, showing only one coach per category
+  // In a real app, we would fetch the exact coaches the user has selected by ID
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
   const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
   const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
