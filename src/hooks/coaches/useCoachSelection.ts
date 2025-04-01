@@ -15,7 +15,10 @@ export const useCoachSelection = () => {
   
   const handleConfirmSelection = async (selectedCoach: Coach | null, selectedPackage: string) => {
     if (!selectedCoach) return false;
-    if (isProcessing) return false;
+    if (isProcessing) {
+      console.log('[useCoachSelection] Already processing, preventing duplicate submission');
+      return false;
+    }
     
     if (!selectedPackage && selectedCoach?.pricingModel === 'packages') {
       toast({
@@ -77,14 +80,17 @@ export const useCoachSelection = () => {
         return false;
       }
       
-      console.log('Confirming selection of coach:', { 
+      console.log('[useCoachSelection] Confirming selection of coach:', { 
         coachId: selectedCoach.id,
         coachName: selectedCoach.name,
         coachCategory: selectedCoach.category
       });
       
-      // Add coach
+      // Add coach - with added logging
+      console.log(`[useCoachSelection] Calling updateUserCoach for category: ${selectedCoach.category}`);
       const success = await updateUserCoach(selectedCoach.category);
+      
+      console.log(`[useCoachSelection] Update result: ${success ? 'SUCCESS' : 'FAILED'}`);
       
       if (success) {
         toast({
@@ -92,9 +98,10 @@ export const useCoachSelection = () => {
           description: `${selectedCoach?.name} is now part of your coaching team.`,
         });
         
-        console.log('Successfully added coach, preparing to navigate...');
+        console.log('[useCoachSelection] Successfully added coach, forcing a full page refresh');
         
-        // Force a hard refresh to ensure all state is updated correctly
+        // Force a FULL browser refresh (not just React router navigation)
+        // This ensures all state is completely reset and reloaded from the server
         window.location.href = '/dashboard?tab=coaches';
         
         return true;
@@ -102,7 +109,7 @@ export const useCoachSelection = () => {
       
       return false;
     } catch (error) {
-      console.error("Error confirming coach:", error);
+      console.error("[useCoachSelection] Error confirming coach:", error);
       toast({
         title: "Error",
         description: "There was a problem adding this coach to your team.",

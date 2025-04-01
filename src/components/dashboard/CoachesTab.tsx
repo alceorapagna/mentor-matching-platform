@@ -10,6 +10,7 @@ const CoachesTab = () => {
   const { user } = useAuth();
   
   // Get the coach status from the user object - check both camelCase and lowercase versions
+  // Use Boolean() to ensure we get true/false values rather than undefined/null
   const hasReneuCoach = Boolean(user?.hasreneucoach || user?.hasReneuCoach);
   const hasBusinessCoach = Boolean(user?.hasbusinesscoach || user?.hasBusinessCoach);
   const hasMindCoach = Boolean(user?.hasmindcoach || user?.hasMindCoach);
@@ -18,14 +19,28 @@ const CoachesTab = () => {
   // Log all coach flags for debugging
   useEffect(() => {
     console.log("Coach flags in CoachesTab:", { 
-      user, 
+      userObject: user, 
       hasReneuCoach, 
       hasBusinessCoach, 
       hasMindCoach, 
       hasBodyCoach,
       rawBodyFlag: user?.hasbodycoach,
-      rawBodyFlagCamel: user?.hasBodyCoach
+      rawBodyFlagCamel: user?.hasBodyCoach,
+      rawBodyFlagTypeCheck: typeof user?.hasbodycoach,
+      rawBodyFlagCamelTypeCheck: typeof user?.hasBodyCoach
     });
+    
+    // Deep debug for body coach flag specifically
+    if (user) {
+      console.log("Body coach deep debug:", {
+        "user?.hasBodyCoach": user.hasBodyCoach,
+        "Boolean(user?.hasBodyCoach)": Boolean(user.hasBodyCoach),
+        "user?.hasbodycoach": user.hasbodycoach,
+        "Boolean(user?.hasbodycoach)": Boolean(user.hasbodycoach),
+        "user?.hasBodyCoach === true": user.hasBodyCoach === true,
+        "user?.hasbodycoach === true": user.hasbodycoach === true
+      });
+    }
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
   // Filter coaches by category - for all categories, only get the first coach
@@ -33,6 +48,17 @@ const CoachesTab = () => {
   const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
   const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
   const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 1) : [];
+  
+  // Log filtered coaches
+  useEffect(() => {
+    console.log("Filtered coaches:", {
+      reneuCoaches,
+      businessCoaches,
+      mindCoaches,
+      bodyCoaches,
+      bodyCoachFlag: hasBodyCoach
+    });
+  }, [reneuCoaches, businessCoaches, mindCoaches, bodyCoaches, hasBodyCoach]);
 
   return (
     <div className="space-y-10">
