@@ -2,8 +2,31 @@
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { NavigateFunction } from 'react-router-dom';
-import { RegisterData, User, UserRole } from './types';
+import { RegisterData, User, UserRole, CompassData } from './types';
 import { fetchUserProfile, redirectBasedOnRole } from './utils';
+
+// Sample compass data for demo accounts
+const sampleCompassData: CompassData = {
+  purpose: "To achieve balance and growth in my professional and personal life.",
+  coreValues: ["Wellbeing", "Growth", "Balance", "Authenticity", "Connection"],
+  dimensions: {
+    work: { 
+      current: 6, 
+      desired: 9, 
+      notes: "Looking to advance my career while maintaining balance."
+    },
+    mind: { 
+      current: 5, 
+      desired: 8, 
+      notes: "Working on reducing stress and improving mental clarity."
+    },
+    body: { 
+      current: 4, 
+      desired: 7, 
+      notes: "Need to establish consistent exercise routines and better sleep habits."
+    }
+  }
+};
 
 // Login function
 export const login = async (
@@ -33,6 +56,7 @@ export const login = async (
         role: role,
         avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Demo${role}`,
         compassCompleted: true, // Demo accounts have completed the compass
+        compassData: role === 'client' ? sampleCompassData : undefined, // Add compass data for client users
       };
       
       // Set the demo user in the auth context
@@ -192,6 +216,8 @@ export const testAccess = (
     lastName: role.charAt(0).toUpperCase() + role.slice(1),
     role: role,
     avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Test${role}`,
+    compassCompleted: true, // Test users have completed the compass
+    compassData: role === 'client' ? sampleCompassData : undefined, // Add compass data for client test users
   };
   
   // Set the user in state and localStorage
