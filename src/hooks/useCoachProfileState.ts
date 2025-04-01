@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -40,7 +39,7 @@ export const useCoachProfileState = (coach: Coach) => {
   };
   
   const handleConfirmSelection = async () => {
-    if (selectedPackage === '' && coach.packages && Object.keys(coach.packages).length > 0) {
+    if (!selectedPackage && coach.packages && Object.keys(coach.packages).length > 0) {
       toast({
         title: "Please select a package",
         description: "You need to select a coaching package to continue.",

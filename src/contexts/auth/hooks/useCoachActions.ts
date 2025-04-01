@@ -20,27 +20,38 @@ export const useCoachActions = (
       // Create an updated user object with the new coach status
       const updatedUser = { ...user };
       
-      // Set the appropriate coach flag based on the category
+      // Field name for the database update (lowercase only)
+      const dbFieldName = `has${coachCategory}coach`;
+      
+      // Set the coach flag in the user object (handle both formats for backward compatibility)
       if (coachCategory === 'reneu') {
         updatedUser.hasreneucoach = true;
-        updatedUser.hasReneuCoach = true;
+        // Also update camelCase version if it exists in the user object
+        if ('hasReneuCoach' in updatedUser) {
+          updatedUser.hasReneuCoach = true;
+        }
       } else if (coachCategory === 'business') {
         updatedUser.hasbusinesscoach = true;
-        updatedUser.hasBusinessCoach = true;
+        if ('hasBusinessCoach' in updatedUser) {
+          updatedUser.hasBusinessCoach = true;
+        }
       } else if (coachCategory === 'mind') {
         updatedUser.hasmindcoach = true;
-        updatedUser.hasMindCoach = true;
+        if ('hasMindCoach' in updatedUser) {
+          updatedUser.hasMindCoach = true;
+        }
       } else if (coachCategory === 'body') {
         updatedUser.hasbodycoach = true;
-        updatedUser.hasBodyCoach = true;
+        if ('hasBodyCoach' in updatedUser) {
+          updatedUser.hasBodyCoach = true;
+        }
       }
       
-      // Update the user document
+      // Update the user document - only use the lowercase field names as they exist in the database
       const { error } = await supabase
         .from('profiles')
         .update({
-          [`has${coachCategory}coach`]: true,
-          [`has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`]: true
+          [dbFieldName]: true
         })
         .eq('id', user.id);
       

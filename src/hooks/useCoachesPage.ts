@@ -1,4 +1,3 @@
-
 import { useCoachFilter } from './coaches/useCoachFilter';
 import { useCoachPagination } from './coaches/useCoachPagination';
 import { useCoachDialogs } from './coaches/useCoachDialogs';
@@ -51,8 +50,6 @@ export const useCoachesPage = () => {
     handleConfirmSelection
   } = useCoachSelection();
   
-  // Combine the hooks together and return a unified API
-  
   const paginatedCoaches = getPaginatedCoaches();
   
   const getReneuCoaches = () => getFilteredReneuCoaches(paginatedCoaches);
@@ -61,7 +58,7 @@ export const useCoachesPage = () => {
   const getBodyCoaches = () => getFilteredBodyCoaches(paginatedCoaches);
   
   const handleConfirmSelectionWrapper = async () => {
-    return await handleConfirmSelection(selectedCoach, selectedPackage, navigate);
+    return await handleConfirmSelection(selectedCoach, selectedPackage);
   };
 
   return {
@@ -74,7 +71,7 @@ export const useCoachesPage = () => {
     selectedCategory,
     setSelectedCategory,
     currentPage,
-    itemsPerPage: 6, // Hard-coded to match useCoachPagination
+    itemsPerPage: 6,
     totalPages,
     hasCompletedCompass,
     selectedCoach,

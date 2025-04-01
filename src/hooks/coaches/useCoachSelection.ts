@@ -2,15 +2,17 @@
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
 import { Coach } from '@/types/coach';
+import { useNavigate } from 'react-router-dom';
 
 export const useCoachSelection = () => {
   const { toast } = useToast();
   const { user, updateUserCoach } = useAuth();
+  const navigate = useNavigate();
   
   const hasCompletedCompass = user?.compassCompleted || false;
   
-  const handleConfirmSelection = async (selectedCoach: Coach | null, selectedPackage: string, navigate: (path: string) => void) => {
-    if (!selectedCoach) return;
+  const handleConfirmSelection = async (selectedCoach: Coach | null, selectedPackage: string) => {
+    if (!selectedCoach) return false;
     
     if (!selectedPackage && selectedCoach?.pricingModel === 'packages') {
       toast({
@@ -18,7 +20,7 @@ export const useCoachSelection = () => {
         description: "You need to select a coaching package to continue.",
         variant: "destructive"
       });
-      return;
+      return false;
     }
     
     if (!user) {
@@ -28,7 +30,7 @@ export const useCoachSelection = () => {
         variant: "destructive"
       });
       navigate('/login');
-      return;
+      return false;
     }
     
     try {
