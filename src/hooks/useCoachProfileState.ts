@@ -40,7 +40,7 @@ export const useCoachProfileState = (coach: Coach) => {
   };
   
   const handleConfirmSelection = async () => {
-    if (selectedPackage === '' && coach.packages.length > 0) {
+    if (selectedPackage === '' && coach.packages && Object.keys(coach.packages).length > 0) {
       toast({
         title: "Please select a package",
         description: "You need to select a coaching package to continue.",
@@ -71,24 +71,20 @@ export const useCoachProfileState = (coach: Coach) => {
         return;
       }
       
-      // Determine which coach flag to update based on the coach category
-      const coachTypeMapping: { [key: string]: string } = {
-        'reneu': 'reneu',
-        'business': 'business',
-        'mind': 'mind',
-        'body': 'body'
-      };
+      // Add specifically this coach's category
+      const success = await updateUserCoach(coach.category, coach.id);
       
-      const coachTypeKey = coachTypeMapping[coach.category];
-      
-      if (coachTypeKey) {
-        // Use the updateUserCoach function to update the user's coach data
-        const success = await updateUserCoach(coachTypeKey);
-        if (success) {
-          setShowConfirmDialog(false);
-        }
-      } else {
-        throw new Error("Invalid coach category");
+      if (success) {
+        toast({
+          title: "Coach Added",
+          description: `${coach.name} has been added to your team.`,
+        });
+        setShowConfirmDialog(false);
+        
+        // Redirect to dashboard after a short delay
+        setTimeout(() => {
+          navigate('/dashboard?tab=coaches');
+        }, 1500);
       }
     } catch (error) {
       console.error("Error confirming coach:", error);

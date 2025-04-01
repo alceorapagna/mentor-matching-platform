@@ -41,14 +41,14 @@ const CoachesTab = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col">
-            <div className="mb-12 text-center">
+            <div className="mb-16 text-center">
               <h2 className="text-2xl font-bold mb-2">Your Coaching Team</h2>
               <p className="text-muted-foreground max-w-3xl mx-auto">
                 Meet your personal coaches dedicated to supporting your wellness journey across all dimensions.
               </p>
             </div>
             
-            <div className="space-y-8">
+            <div className="space-y-20">
               {/* Reneu Coach Section */}
               <CoachCategoryDisplay
                 title="Your Reneu Coach"

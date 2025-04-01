@@ -124,29 +124,14 @@ export const useCoachesPage = () => {
         return;
       }
       
-      const categoryMapping: { [key: string]: string } = {
-        'reneu': 'reneu',
-        'business': 'business',
-        'mind': 'mind',
-        'body': 'body'
-      };
-      
-      const category = categoryMapping[selectedCoach.category];
-      
-      console.log('Before updating coach:', { 
-        category,
+      console.log('Confirming selection of coach:', { 
+        coachId: selectedCoach.id,
         coachName: selectedCoach.name,
-        userId: user.id,
-        currentCoachStatus: {
-          reneu: user.hasReneuCoach || user.hasreneucoach,
-          business: user.hasBusinessCoach || user.hasbusinesscoach,
-          mind: user.hasMindCoach || user.hasmindcoach,
-          body: user.hasBodyCoach || user.hasbodycoach
-        }
+        coachCategory: selectedCoach.category
       });
       
-      // Call the updateUserCoach function from AuthContext
-      const success = await updateUserCoach(category);
+      // Add specifically this coach by passing both category and coach ID
+      const success = await updateUserCoach(selectedCoach.category, selectedCoach.id);
       
       if (success) {
         toast({
