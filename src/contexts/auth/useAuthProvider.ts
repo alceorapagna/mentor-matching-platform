@@ -1,8 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { User, AuthContextType, CompassData } from './types';
+import { User, UserRole, AuthContextType, CompassData } from './types';
 import { useToast } from '@/hooks/use-toast';
 import { isDemoAccount, createDemoUser } from './demoAccounts';
 
@@ -35,16 +34,17 @@ export const useAuthProvider = (): AuthContextType => {
             setUser(null);
           } else if (userData) {
             // Convert table column names to our User type property names
+            // Convert the JSON compass data to our CompassData type
             setUser({
               id: userData.id,
               email: userData.email,
               firstName: userData.first_name,
               lastName: userData.last_name,
-              role: userData.role,
+              role: userData.role as UserRole,
               avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
               compassCompleted: userData.compass_completed || false,
-              compassData: userData.compass_data,
-            } as User);
+              compassData: userData.compass_data as unknown as CompassData | undefined,
+            });
           }
         }
       } catch (error) {
@@ -76,11 +76,11 @@ export const useAuthProvider = (): AuthContextType => {
             email: userData.email,
             firstName: userData.first_name,
             lastName: userData.last_name,
-            role: userData.role,
+            role: userData.role as UserRole,
             avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
             compassCompleted: userData.compass_completed || false,
-            compassData: userData.compass_data,
-          } as User);
+            compassData: userData.compass_data as unknown as CompassData | undefined,
+          });
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
@@ -146,10 +146,10 @@ export const useAuthProvider = (): AuthContextType => {
         email: userData.email,
         firstName: userData.first_name,
         lastName: userData.last_name,
-        role: userData.role,
+        role: userData.role as UserRole,
         avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
         compassCompleted: userData.compass_completed || false,
-        compassData: userData.compass_data,
+        compassData: userData.compass_data as unknown as CompassData | undefined,
       } as User);
       
       toast({
@@ -288,7 +288,9 @@ export const useAuthProvider = (): AuthContextType => {
       if (!isDemoAccount(user.email)) {
         const { error } = await supabase
           .from('profiles')
-          .update({ compass_data: compassData })
+          .update({ 
+            compass_data: compassData as unknown as JSON 
+          })
           .eq('id', user.id);
           
         if (error) throw error;
