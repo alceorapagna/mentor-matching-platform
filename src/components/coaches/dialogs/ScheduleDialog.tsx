@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { 
   Dialog, 
   DialogContent, 
@@ -9,8 +10,12 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Calendar, CalendarClock } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { format } from 'date-fns';
+import { CalendarIcon, CalendarClock, ChevronDown } from 'lucide-react';
 import { Coach } from '@/types/coach';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useToast } from '@/hooks/use-toast';
 
 interface ScheduleDialogProps {
   open: boolean;
@@ -25,6 +30,28 @@ export const ScheduleDialog = ({
   selectedCoach, 
   onSubmit 
 }: ScheduleDialogProps) => {
+  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [time, setTime] = useState<string | null>(null);
+  const { toast } = useToast();
+  
+  const availableTimes = [
+    '09:00 AM', '10:00 AM', '11:00 AM', '01:00 PM', 
+    '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM'
+  ];
+  
+  const handleSubmit = () => {
+    if (!date || !time) {
+      toast({
+        title: "Missing Information",
+        description: "Please select both a date and time for your session.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    onSubmit();
+  };
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
@@ -53,14 +80,55 @@ export const ScheduleDialog = ({
           <div className="grid gap-2">
             <Label>Preferred Date & Time</Label>
             <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-2 p-4 border rounded-lg">
-                <Calendar className="h-5 w-5 text-primary" />
-                <div className="text-sm font-medium">Select Date</div>
-              </div>
-              <div className="flex items-center gap-2 p-4 border rounded-lg">
-                <CalendarClock className="h-5 w-5 text-primary" />
-                <div className="text-sm font-medium">Select Time</div>
-              </div>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal flex items-center gap-2"
+                  >
+                    <CalendarIcon className="h-5 w-5 text-primary" />
+                    {date ? format(date, 'PPP') : <span>Select date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                    disabled={(date) => date < new Date()}
+                  />
+                </PopoverContent>
+              </Popover>
+              
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start text-left font-normal flex items-center gap-2"
+                  >
+                    <CalendarClock className="h-5 w-5 text-primary" />
+                    {time || <span>Select time</span>}
+                    <ChevronDown className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <div className="grid grid-cols-1 gap-1 p-2 max-h-[300px] overflow-y-auto">
+                    {availableTimes.map((t) => (
+                      <Button
+                        key={t}
+                        variant="ghost"
+                        className={`justify-start ${time === t ? 'bg-secondary' : ''}`}
+                        onClick={() => {
+                          setTime(t);
+                        }}
+                      >
+                        {t}
+                      </Button>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
@@ -69,8 +137,8 @@ export const ScheduleDialog = ({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button type="button" onClick={onSubmit} className="gap-2">
-            <Calendar className="h-4 w-4" />
+          <Button type="button" onClick={handleSubmit} className="gap-2">
+            <CalendarIcon className="h-4 w-4" />
             Schedule Session
           </Button>
         </DialogFooter>

@@ -121,6 +121,13 @@ export const useCoachesPage = () => {
       };
       
       const category = categoryMapping[selectedCoach.category];
+      
+      console.log('Before updating coach:', { 
+        category,
+        coachName: selectedCoach.name,
+        userId: user.id
+      });
+      
       await updateUserCoach(category);
       
       toast({
@@ -130,6 +137,7 @@ export const useCoachesPage = () => {
       
       setShowConfirmDialog(false);
       
+      // Use a timeout to ensure the toast is visible before navigation
       setTimeout(() => {
         navigate('/dashboard?tab=coaches');
       }, 1500);

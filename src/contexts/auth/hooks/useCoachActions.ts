@@ -20,10 +20,10 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
     
     try {
       const coachTypeMapping: { [key: string]: string } = {
-        'reneu': 'hasReneuCoach',
-        'business': 'hasBusinessCoach',
-        'mind': 'hasMindCoach',
-        'body': 'hasBodyCoach'
+        'reneu': 'hasreneucoach',
+        'business': 'hasbusinesscoach',
+        'mind': 'hasmindcoach',
+        'body': 'hasbodycoach'
       };
       
       if (!coachTypeMapping[coachType]) {
@@ -42,14 +42,11 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       
       // For real users, also update in Supabase
       if (!isDemoAccount(user.email)) {
-        // Convert camelCase field name to lowercase for Supabase
-        const dbFieldName = updateField.toLowerCase();
-        
-        console.log(`Updating Supabase field '${dbFieldName}' for user ${user.id}`);
+        console.log(`Updating Supabase field '${updateField}' for user ${user.id}`);
         
         const { error } = await supabase
           .from('profiles')
-          .update({ [dbFieldName]: true })
+          .update({ [updateField]: true })
           .eq('id', user.id);
           
         if (error) {
