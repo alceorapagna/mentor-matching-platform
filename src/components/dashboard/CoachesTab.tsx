@@ -22,11 +22,12 @@ const CoachesTab = () => {
     hasBodyCoach 
   });
   
-  // Filter coaches by category - get all matching coaches for specialized categories
+  // Filter coaches by category - for Reneu coach, only get one
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
-  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business') : [];
-  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind') : [];
-  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body') : [];
+  // For other categories, get all matching coaches
+  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 3) : [];
+  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 3) : [];
+  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 3) : [];
 
   return (
     <div className="space-y-10">
@@ -40,14 +41,14 @@ const CoachesTab = () => {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col">
-            <div className="mb-8 text-center">
+            <div className="mb-12 text-center">
               <h2 className="text-2xl font-bold mb-2">Your Coaching Team</h2>
               <p className="text-muted-foreground max-w-3xl mx-auto">
                 Meet your personal coaches dedicated to supporting your wellness journey across all dimensions.
               </p>
             </div>
             
-            <div className="space-y-16">
+            <div className="space-y-8">
               {/* Reneu Coach Section */}
               <CoachCategoryDisplay
                 title="Your Reneu Coach"

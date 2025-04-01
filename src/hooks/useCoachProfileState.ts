@@ -83,8 +83,10 @@ export const useCoachProfileState = (coach: Coach) => {
       
       if (coachTypeKey) {
         // Use the updateUserCoach function to update the user's coach data
-        await updateUserCoach(coachTypeKey);
-        setShowConfirmDialog(false);
+        const success = await updateUserCoach(coachTypeKey);
+        if (success) {
+          setShowConfirmDialog(false);
+        }
       } else {
         throw new Error("Invalid coach category");
       }

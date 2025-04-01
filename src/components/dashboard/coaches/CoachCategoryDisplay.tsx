@@ -43,7 +43,7 @@ const CoachCategoryDisplay = ({
   };
 
   return (
-    <div>
+    <div className="mb-16">
       <div className="flex items-center gap-2 mb-6">
         <h2 className="text-2xl font-bold">{title}</h2>
         <div className={`text-xs font-medium rounded-full px-2.5 py-0.5 border ${badgeClassName}`}>
@@ -60,7 +60,7 @@ const CoachCategoryDisplay = ({
       </p>
       
       {hasCoach ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-8">
           {coaches.map((coach) => (
             <CoachCategorySection
               key={coach.id}
@@ -75,7 +75,7 @@ const CoachCategoryDisplay = ({
           
           {/* Add More Coaches Button for multiple coach categories */}
           {allowMultiple && !isHRManagedCategory && !singleCoachOnly && (
-            <div className="border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10 h-full">
+            <div className="border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10">
               <div className="text-center space-y-4">
                 <Button variant="outline" onClick={handleFindCoach}>
                   Add More Coaches
