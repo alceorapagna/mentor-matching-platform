@@ -1,8 +1,8 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Compass, ArrowRight } from "lucide-react";
+import { Compass, ArrowRight, ArrowLeft } from "lucide-react";
 import { GoalCoachRecommendationsProps } from "./types";
 import CategorySection from "./CategorySection";
 import EmptyGoalsMessage from "./EmptyGoalsMessage";
@@ -12,6 +12,8 @@ const GoalCoachRecommendations = ({
   recommendedCoaches,
   className 
 }: GoalCoachRecommendationsProps) => {
+  const navigate = useNavigate();
+
   // Group coaches by category
   const workCoaches = recommendedCoaches.filter(coach => coach.category === 'work' || coach.category === 'business');
   const mindCoaches = recommendedCoaches.filter(coach => coach.category === 'mind');
@@ -26,11 +28,17 @@ const GoalCoachRecommendations = ({
   return (
     <Card className={`border-primary/20 ${className}`}>
       <CardHeader>
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 bg-primary/10 rounded-full">
-            <Compass className="h-5 w-5 text-primary" />
+        <div className="flex justify-between items-center">
+          <Button variant="ghost" className="p-0 h-auto" onClick={() => navigate(-1)}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back
+          </Button>
+          <div className="flex items-center gap-2">
+            <div className="p-1.5 bg-primary/10 rounded-full">
+              <Compass className="h-5 w-5 text-primary" />
+            </div>
+            <CardTitle>Your Recommended Coaches</CardTitle>
           </div>
-          <CardTitle>Your Recommended Coaches</CardTitle>
         </div>
         <CardDescription>
           Choose specialized coaches for each of your renewal pillars

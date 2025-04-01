@@ -46,7 +46,7 @@ const CoachCard = ({ coach }: CoachCardProps) => {
           </Badge>
           
           <Button size="sm" asChild>
-            <Link to={`/coaches/${coach.id}`}>View</Link>
+            <Link to={`/coaches/${coach.id}`}>View Profile</Link>
           </Button>
         </div>
       </CardContent>

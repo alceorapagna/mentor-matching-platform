@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -8,15 +8,24 @@ import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
-import { Star, Calendar as CalendarIcon, Clock, Video, MapPin, GraduationCap, Award, Briefcase, BookOpen, Languages, Check, MessageCircle, User, Users, FileCheck, Clock3 } from 'lucide-react';
+import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
+import { Star, Calendar as CalendarIcon, Clock, Video, MapPin, GraduationCap, Award, Briefcase, BookOpen, Languages, Check, MessageCircle, User, Users, FileCheck, Clock3, ArrowLeft, PhoneCall, CalendarClock } from 'lucide-react';
 
 const CoachProfile = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   
-  // Mock coach data
+  const [showContactDialog, setShowContactDialog] = useState(false);
+  const [showScheduleDialog, setShowScheduleDialog] = useState(false);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  
   const coach = {
     id: id,
     name: 'Dr. Sarah Johnson',
@@ -113,18 +122,60 @@ const CoachProfile = () => {
     ]
   };
 
-  // Mock available time slots
   const availableTimeSlots = [
     '9:00 AM', '10:00 AM', '11:00 AM', 
     '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
   ];
   
+  const handleSubmitContact = () => {
+    toast({
+      title: "Message Sent",
+      description: `Your message has been sent to ${coach.name}. They will contact you shortly.`,
+    });
+    setShowContactDialog(false);
+  };
+  
+  const handleScheduleIntro = () => {
+    toast({
+      title: "Session Scheduled",
+      description: `Your intro session with ${coach.name} has been scheduled. Check your email for details.`,
+    });
+    setShowScheduleDialog(false);
+  };
+  
+  const handleConfirmSelection = () => {
+    if (selectedPackage === '' && coach.packages.length > 0) {
+      toast({
+        title: "Please select a package",
+        description: "You need to select a coaching package to continue.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    toast({
+      title: "Coach Added to Your Team",
+      description: `${coach.name} is now part of your coaching team. You can view them in your dashboard.`,
+    });
+    
+    setShowConfirmDialog(false);
+    
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 1500);
+  };
+  
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8">
-        {/* Coach Profile Header */}
+        <div className="mb-6">
+          <Button variant="ghost" className="pl-0" onClick={() => navigate(-1)}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Coaches
+          </Button>
+        </div>
+        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
-          {/* Profile Image */}
           <div className="md:col-span-1">
             <div className="relative aspect-square overflow-hidden rounded-xl">
               <img 
@@ -140,7 +191,6 @@ const CoachProfile = () => {
             </div>
           </div>
           
-          {/* Profile Info */}
           <div className="md:col-span-2 space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -184,14 +234,22 @@ const CoachProfile = () => {
             </div>
             
             <div className="flex flex-wrap gap-4">
-              <Button className="hover-scale">Request Corporate Package</Button>
-              <Button variant="outline"><MessageCircle className="mr-2 h-4 w-4" />Contact</Button>
-              <Button variant="outline"><User className="mr-2 h-4 w-4" />View Full Profile</Button>
+              <Button onClick={() => setShowConfirmDialog(true)} className="gap-2">
+                <Check className="h-4 w-4" />
+                Confirm As My Coach
+              </Button>
+              <Button variant="outline" onClick={() => setShowContactDialog(true)} className="gap-2">
+                <MessageCircle className="h-4 w-4" />
+                Contact Coach
+              </Button>
+              <Button variant="outline" onClick={() => setShowScheduleDialog(true)} className="gap-2">
+                <Calendar className="h-4 w-4" />
+                Schedule Intro
+              </Button>
             </div>
           </div>
         </div>
         
-        {/* Main Content Tabs */}
         <Tabs defaultValue="packages" className="mb-10">
           <TabsList className="w-full justify-start border-b rounded-none px-0 h-auto">
             <TabsTrigger 
@@ -220,7 +278,6 @@ const CoachProfile = () => {
             </TabsTrigger>
           </TabsList>
           
-          {/* Packages & Pricing Tab Content */}
           <TabsContent value="packages">
             <div className="space-y-10">
               <div>
@@ -294,7 +351,6 @@ const CoachProfile = () => {
             </div>
           </TabsContent>
           
-          {/* Booking Tab Content */}
           <TabsContent value="booking">
             <div className="bg-card border rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-6">Schedule a Session</h2>
@@ -352,7 +408,6 @@ const CoachProfile = () => {
             </div>
           </TabsContent>
           
-          {/* About Tab Content */}
           <TabsContent value="about">
             <div className="space-y-8">
               <section>
@@ -428,7 +483,6 @@ const CoachProfile = () => {
             </div>
           </TabsContent>
           
-          {/* Reviews Tab Content */}
           <TabsContent value="reviews">
             <div className="space-y-6">
               <div className="flex items-center justify-between">
@@ -475,6 +529,177 @@ const CoachProfile = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Contact {coach.name}</DialogTitle>
+            <DialogDescription>
+              Send a message to {coach.name} to discuss your coaching needs.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-full overflow-hidden">
+                <img 
+                  src={coach.profileImage} 
+                  alt={coach.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-medium">{coach.name}</h3>
+                <p className="text-sm text-muted-foreground">{coach.title}</p>
+              </div>
+            </div>
+            
+            <textarea 
+              className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              placeholder="Enter your message here..."
+            />
+          </div>
+          
+          <DialogFooter className="sm:justify-between">
+            <Button variant="outline" onClick={() => setShowContactDialog(false)}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleSubmitContact} className="gap-2">
+              <MessageCircle className="h-4 w-4" />
+              Send Message
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Schedule Intro Session with {coach.name}</DialogTitle>
+            <DialogDescription>
+              Book a free 30-minute intro session to get to know {coach.name} and discuss your goals.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-full overflow-hidden">
+                <img 
+                  src={coach.profileImage} 
+                  alt={coach.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-medium">{coach.name}</h3>
+                <p className="text-sm text-muted-foreground">{coach.title}</p>
+              </div>
+            </div>
+            
+            <div className="grid gap-2">
+              <Label>Preferred Date & Time</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center gap-2 p-4 border rounded-lg">
+                  <Calendar className="h-5 w-5 text-primary" />
+                  <div className="text-sm font-medium">Select Date</div>
+                </div>
+                <div className="flex items-center gap-2 p-4 border rounded-lg">
+                  <CalendarClock className="h-5 w-5 text-primary" />
+                  <div className="text-sm font-medium">Select Time</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter className="sm:justify-between">
+            <Button variant="outline" onClick={() => setShowScheduleDialog(false)}>
+              Cancel
+            </Button>
+            <Button type="button" onClick={handleScheduleIntro} className="gap-2">
+              <Calendar className="h-4 w-4" />
+              Schedule Session
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Confirm Coach Selection</DialogTitle>
+            <DialogDescription>
+              {coach.name} will be added to your coaching team.
+              {coach.packages.length > 0 ? 
+                " Please select a coaching package below." : 
+                " This coach offers custom pricing based on your needs."}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 rounded-full overflow-hidden">
+                <img 
+                  src={coach.profileImage} 
+                  alt={coach.name}
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div>
+                <h3 className="font-medium">{coach.name}</h3>
+                <p className="text-sm text-muted-foreground">{coach.title}</p>
+              </div>
+            </div>
+            
+            {coach.packages.length > 0 && (
+              <div className="space-y-4">
+                <Label>Select a Coaching Package</Label>
+                <RadioGroup value={selectedPackage || ''} onValueChange={setSelectedPackage}>
+                  {coach.packages.map((pkg) => (
+                    <div key={pkg.id} className={`flex items-center space-x-2 rounded-md border p-3 ${pkg.id === 2 ? "bg-secondary/40" : ""}`}>
+                      <RadioGroupItem value={pkg.name} id={pkg.id.toString()} />
+                      <Label htmlFor={pkg.id.toString()} className="flex-1 cursor-pointer">
+                        <div className="font-medium">
+                          {pkg.name}
+                          {pkg.id === 2 && <span className="text-xs text-primary ml-1">(Recommended)</span>}
+                        </div>
+                        <div className="text-sm text-muted-foreground">{pkg.description}</div>
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+            )}
+            
+            {coach.packages.length === 0 && (
+              <div className="p-4 bg-secondary/30 rounded-md border">
+                <p className="text-sm">
+                  This coach offers custom pricing based on your specific needs and goals. 
+                  After confirmation, they will contact you to discuss package options.
+                </p>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter className="sm:justify-between">
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setShowConfirmDialog(false)}>
+                Cancel
+              </Button>
+              <Button variant="outline" onClick={() => {
+                setShowConfirmDialog(false);
+                setShowContactDialog(true);
+              }} className="gap-2">
+                <PhoneCall className="h-4 w-4" />
+                Contact First
+              </Button>
+            </div>
+            <Button type="button" onClick={handleConfirmSelection} className="gap-2">
+              <Check className="h-4 w-4" />
+              Confirm Coach
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </MainLayout>
   );
 };
