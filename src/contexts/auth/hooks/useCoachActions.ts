@@ -47,6 +47,8 @@ export const useCoachActions = (
         }
       }
       
+      console.log(`Updating ${dbFieldName} in profiles for user ${user.id}`);
+      
       // Update the user document - only use the lowercase field names as they exist in the database
       const { error } = await supabase
         .from('profiles')
@@ -55,7 +57,12 @@ export const useCoachActions = (
         })
         .eq('id', user.id);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error updating coach:', error);
+        throw error;
+      }
+      
+      console.log('Coach update successful, updating local user state');
       
       // Update the local user state
       setUser(updatedUser);

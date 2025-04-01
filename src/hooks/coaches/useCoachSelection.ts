@@ -61,6 +61,7 @@ export const useCoachSelection = () => {
         
         // Use a timeout to ensure the toast is visible before navigation
         setTimeout(() => {
+          console.log('Navigating to dashboard coaches tab...');
           navigate('/dashboard?tab=coaches');
         }, 1500);
         

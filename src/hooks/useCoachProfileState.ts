@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -70,6 +71,8 @@ export const useCoachProfileState = (coach: Coach) => {
         return;
       }
       
+      console.log('Confirming coach selection in profile page:', coach.category);
+      
       // Add coach
       const success = await updateUserCoach(coach.category);
       
@@ -80,8 +83,9 @@ export const useCoachProfileState = (coach: Coach) => {
         });
         setShowConfirmDialog(false);
         
-        // Redirect to dashboard after a short delay
+        // Redirect to dashboard after a short delay to show toast
         setTimeout(() => {
+          console.log('Navigating to dashboard from profile page...');
           navigate('/dashboard?tab=coaches');
         }, 1500);
       }
