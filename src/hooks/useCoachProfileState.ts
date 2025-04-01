@@ -83,11 +83,21 @@ export const useCoachProfileState = (coach: Coach) => {
         });
         setShowConfirmDialog(false);
         
+        // Force update the navigation flag to ensure the router responds
+        console.log('Preparing to navigate to dashboard...');
+        
         // Redirect to dashboard after a short delay to show toast
         setTimeout(() => {
           console.log('Navigating to dashboard from profile page...');
-          navigate('/dashboard?tab=coaches');
-        }, 1500);
+          // Use navigate with replace option to force a navigation
+          navigate('/dashboard?tab=coaches', { replace: true });
+        }, 800);
+      } else {
+        toast({
+          title: "Error",
+          description: "There was a problem adding this coach to your team. Please try again.",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       console.error("Error confirming coach:", error);

@@ -47,6 +47,16 @@ export const useCoachActions = (
         }
       }
       
+      console.log(`Attempting to update coach status for user ${user.id}`);
+      
+      // Skip database update for demo/test users with non-UUID IDs
+      if (user.id.includes('test_') || !user.id.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
+        console.log('Demo/test user detected, skipping database update');
+        // Just update the local state for demo/test users
+        setUser(updatedUser);
+        return true;
+      }
+      
       console.log(`Updating ${dbFieldName} in profiles for user ${user.id}`);
       
       // Update the user document - only use the lowercase field names as they exist in the database

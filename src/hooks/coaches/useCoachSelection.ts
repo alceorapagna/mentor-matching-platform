@@ -59,11 +59,14 @@ export const useCoachSelection = () => {
           description: `${selectedCoach?.name} is now part of your coaching team.`,
         });
         
+        console.log('Successfully added coach, preparing to navigate...');
+        
         // Use a timeout to ensure the toast is visible before navigation
         setTimeout(() => {
           console.log('Navigating to dashboard coaches tab...');
-          navigate('/dashboard?tab=coaches');
-        }, 1500);
+          // Use navigate with replace option to force a navigation
+          navigate('/dashboard?tab=coaches', { replace: true });
+        }, 800);
         
         return true;
       }
