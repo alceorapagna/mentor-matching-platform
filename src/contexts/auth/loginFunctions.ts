@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { NavigateFunction } from 'react-router-dom';
@@ -119,24 +120,4 @@ export const testAccess = async (
   // Redirect to appropriate dashboard
   redirectBasedOnRole(role, navigate, true);
   return Promise.resolve();
-};
-
-// Function to update a document in a Supabase table
-export const updateDoc = async (
-  table: string,
-  id: string,
-  updates: Record<string, any>
-): Promise<boolean> => {
-  try {
-    const { error } = await supabase
-      .from(table)
-      .update(updates)
-      .eq('id', id);
-    
-    if (error) throw error;
-    return true;
-  } catch (error) {
-    console.error(`Error updating ${table} document:`, error);
-    return false;
-  }
 };

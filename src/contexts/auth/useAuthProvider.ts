@@ -3,7 +3,7 @@ import { useAuthentication } from './hooks/useAuthentication';
 import { useAuthActions } from './hooks/useAuthActions';
 import { useCompassActions } from './hooks/useCompassActions';
 import { useCoachActions } from './hooks/useCoachActions';
-import { AuthContextType, User } from './types';
+import { AuthContextType } from './types';
 
 export const useAuthProvider = (): AuthContextType => {
   // Load authentication state and basic utilities
@@ -37,7 +37,7 @@ export const useAuthProvider = (): AuthContextType => {
     resetCompassData 
   } = useCompassActions(
     user, 
-    setUser 
+    setUser
   );
 
   // Load coach-related actions
@@ -45,7 +45,7 @@ export const useAuthProvider = (): AuthContextType => {
     updateUserCoach 
   } = useCoachActions(
     user, 
-    setUser 
+    setUser
   );
 
   return {
