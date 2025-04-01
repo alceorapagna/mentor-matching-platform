@@ -1,10 +1,9 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { NavigateFunction } from 'react-router-dom';
 import { User, UserRole } from './types';
 import { fetchUserProfile, redirectBasedOnRole } from './utils';
-import { createDemoUser, isDemoAccount } from './demoAccounts';
+import { createDemoUser, isDemoAccount, createTestUser } from './demoAccounts';
 
 // Login function
 export const login = async (
@@ -109,15 +108,11 @@ export const testAccess = (
   // Create a test user based on the requested role
   const testUser = createTestUser(role);
   
-  // Set the user in state and localStorage
+  // Set the user in state
   setUser(testUser);
-  localStorage.setItem('reneu_user', JSON.stringify(testUser));
   
   toast.success(`Quick access as ${role} activated`);
   
   // Redirect to appropriate dashboard
-  redirectBasedOnRole(role, navigate, undefined);
+  redirectBasedOnRole(role, navigate, true);
 };
-
-// Re-export the createTestUser function for use in testAccess
-import { createTestUser } from './demoAccounts';

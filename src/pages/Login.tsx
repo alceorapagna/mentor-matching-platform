@@ -21,15 +21,14 @@ const Login = () => {
     await login(demoEmail, demoPassword);
   };
 
-  // Handle quick access
+  // Handle quick access - THIS IS THE PROBLEM
   const handleQuickAccess = (option: any) => {
+    // Call testAccess with the role
+    testAccess(option.role);
+    
+    // If direct navigation is needed, navigate immediately after
     if (option.directNav) {
-      // For session page, first grant access then navigate
-      testAccess(option.role as any);
       setTimeout(() => navigate(option.path), 100);
-    } else {
-      // For other pages, just use testAccess which does its own navigation
-      testAccess(option.role as any);
     }
   };
 

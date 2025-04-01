@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User, UserRole, AuthContextType, CompassData } from './types';
 import { useToast } from '@/hooks/use-toast';
-import { isDemoAccount, createDemoUser } from './demoAccounts';
+import { isDemoAccount, createDemoUser, createTestUser } from './demoAccounts';
 
 export const useAuthProvider = (): AuthContextType => {
   const [user, setUser] = useState<User | null>(null);
@@ -223,27 +224,49 @@ export const useAuthProvider = (): AuthContextType => {
   };
 
   // Testing access function
-  const testAccess = (requiredRole: string) => {
+  const testAccess = (requiredRole: UserRole) => {
     if (!user) {
-      navigate('/login');
+      // If no user is logged in, create a test user with the required role
+      const testUser = createTestUser(requiredRole);
+      setUser(testUser);
+      
+      toast({
+        title: "Test Access Activated",
+        description: `You now have ${requiredRole} privileges for testing`,
+      });
+      
+      // Redirect based on the role
+      if (requiredRole === 'client') {
+        navigate('/dashboard');
+      } else if (requiredRole === 'coach') {
+        navigate('/coach-dashboard');
+      } else if (requiredRole === 'admin') {
+        navigate('/admin-dashboard');
+      } else if (requiredRole === 'hr') {
+        navigate('/hr-dashboard');
+      }
       return;
     }
     
+    // If a user is already logged in but with the wrong role
     if (user.role !== requiredRole) {
+      // Create a new test user with the required role
+      const testUser = createTestUser(requiredRole);
+      setUser(testUser);
+      
       toast({
-        title: "Access Denied",
-        description: `You need ${requiredRole} privileges to access this page`,
-        variant: "destructive",
+        title: "Role Switched",
+        description: `You now have ${requiredRole} privileges for testing`,
       });
       
-      // Redirect based on user role
-      if (user.role === 'client') {
+      // Redirect based on the new role
+      if (requiredRole === 'client') {
         navigate('/dashboard');
-      } else if (user.role === 'coach') {
+      } else if (requiredRole === 'coach') {
         navigate('/coach-dashboard');
-      } else if (user.role === 'admin') {
+      } else if (requiredRole === 'admin') {
         navigate('/admin-dashboard');
-      } else if (user.role === 'hr') {
+      } else if (requiredRole === 'hr') {
         navigate('/hr-dashboard');
       }
     }
