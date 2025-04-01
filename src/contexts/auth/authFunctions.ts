@@ -16,6 +16,35 @@ export const login = async (
   try {
     setIsLoading(true);
     
+    // Check if this is a demo account
+    const isDemoAccount = email.includes('@example.com');
+    
+    if (isDemoAccount) {
+      // For demo accounts, bypass the actual authentication
+      // and create a simulated user based on the email address
+      const role = email.split('@')[0] as UserRole; // client@example.com -> client
+      
+      // Create a demo user object
+      const demoUser: User = {
+        id: `demo-${role}-${Date.now()}`,
+        email: email,
+        firstName: 'Demo',
+        lastName: role.charAt(0).toUpperCase() + role.slice(1), // Capitalize first letter
+        role: role,
+        avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=Demo${role}`,
+        compassCompleted: true, // Demo accounts have completed the compass
+      };
+      
+      // Set the demo user in the auth context
+      setUser(demoUser);
+      toast.success(`Demo login as ${role} successful`);
+      
+      // Redirect based on role
+      redirectBasedOnRole(role, navigate, true);
+      return;
+    }
+    
+    // If not a demo account, proceed with normal authentication
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
