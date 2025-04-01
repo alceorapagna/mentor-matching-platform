@@ -4,10 +4,21 @@ import { Users } from "lucide-react";
 import { coachesData } from "@/data/coachesData";
 import { useAuth } from "@/contexts/AuthContext";
 import CoachCategoryDisplay from "./coaches/CoachCategoryDisplay";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const CoachesTab = () => {
   const { user } = useAuth();
+  const [renderCounter, setRenderCounter] = useState(0);
+  
+  // Force re-render when the component mounts to ensure we have the latest data
+  useEffect(() => {
+    // Set a small timeout to ensure any state updates have completed
+    const timer = setTimeout(() => {
+      setRenderCounter(prev => prev + 1);
+    }, 100);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Get the coach status from the user object - check both camelCase and lowercase versions
   // Force conversion to boolean to avoid issues with null/undefined/falsiness
@@ -27,6 +38,7 @@ const CoachesTab = () => {
       hasBodyCoach,
       // Add detailed logging for each flag
       raw_user: user,
+      renderCount: renderCounter,
       hasReneuCoachRaw: user?.hasreneucoach,
       hasReneuCoachCamel: user?.hasReneuCoach,
       hasBusinessCoachRaw: user?.hasbusinesscoach,
@@ -36,7 +48,7 @@ const CoachesTab = () => {
       hasBodyCoachRaw: user?.hasbodycoach,
       hasBodyCoachCamel: user?.hasBodyCoach
     });
-  }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
+  }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach, renderCounter]);
   
   // For testing purposes, display the coach flags directly
   useEffect(() => {
