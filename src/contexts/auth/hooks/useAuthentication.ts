@@ -39,7 +39,7 @@ export const useAuthentication = () => {
             
             // Convert table column names to our User type property names
             // Explicitly cast all boolean flags to ensure they're proper booleans
-            setUser({
+            const userWithCoachFlags = {
               id: userData.id,
               email: userData.email,
               firstName: userData.first_name,
@@ -60,7 +60,10 @@ export const useAuthentication = () => {
               hasbusinesscoach: Boolean(userData.hasbusinesscoach),
               hasmindcoach: Boolean(userData.hasmindcoach),
               hasbodycoach: Boolean(userData.hasbodycoach)
-            });
+            };
+            
+            console.log("Processed user object with coach flags:", userWithCoachFlags);
+            setUser(userWithCoachFlags);
           }
         }
       } catch (error) {
@@ -90,7 +93,7 @@ export const useAuthentication = () => {
           console.log("Auth state change - user profile:", userData);
           
           // Explicitly cast all boolean flags to ensure they're proper booleans
-          setUser({
+          const userWithCoachFlags = {
             id: userData.id,
             email: userData.email,
             firstName: userData.first_name,
@@ -111,7 +114,10 @@ export const useAuthentication = () => {
             hasbusinesscoach: Boolean(userData.hasbusinesscoach),
             hasmindcoach: Boolean(userData.hasmindcoach),
             hasbodycoach: Boolean(userData.hasbodycoach)
-          });
+          };
+          
+          console.log("Processed auth state change user object:", userWithCoachFlags);
+          setUser(userWithCoachFlags);
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);

@@ -24,7 +24,7 @@ export const useCoachActions = (
       const dbFieldName = `has${coachCategory.toLowerCase()}coach`;
       
       console.log(`[useCoachActions] Updating coach status for category: ${coachCategory}, field: ${dbFieldName}`);
-      console.log('[useCoachActions] Current user before update:', updatedUser);
+      console.log('[useCoachActions] Current user before update:', JSON.stringify(updatedUser));
       
       // Set the coach flag in the user object (handle both formats)
       const camelCaseField = `has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`;
@@ -33,7 +33,7 @@ export const useCoachActions = (
       updatedUser[dbFieldName] = true;
       updatedUser[camelCaseField] = true;
       
-      console.log('[useCoachActions] Updated user object after modification:', updatedUser);
+      console.log('[useCoachActions] Updated user object after modification:', JSON.stringify(updatedUser));
       console.log(`[useCoachActions] Set fields: ${dbFieldName}=${updatedUser[dbFieldName]}, ${camelCaseField}=${updatedUser[camelCaseField]}`);
       
       // Skip database update for demo/test users with non-UUID IDs
@@ -61,7 +61,7 @@ export const useCoachActions = (
       }
       
       console.log('[useCoachActions] Coach update successful, data returned:', data);
-      console.log('[useCoachActions] Updating local user state with:', updatedUser);
+      console.log('[useCoachActions] Updating local user state with:', JSON.stringify(updatedUser));
       
       // Update the local user state
       setUser(updatedUser);

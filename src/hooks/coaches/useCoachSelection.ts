@@ -87,10 +87,13 @@ export const useCoachSelection = () => {
           description: `${selectedCoach?.name} is now part of your coaching team.`,
         });
         
-        console.log('[useCoachSelection] Successfully added coach, redirecting to dashboard');
+        console.log('[useCoachSelection] Successfully added coach, redirecting to dashboard with full page reload');
         
         // Force a FULL browser refresh to ensure all state is properly reset and reloaded
-        window.location.href = '/dashboard?tab=coaches';
+        // Use a small timeout to ensure the database update has propagated
+        setTimeout(() => {
+          window.location.href = '/dashboard?tab=coaches';
+        }, 500);
         
         return true;
       }
