@@ -90,10 +90,10 @@ export const useCoachSelection = () => {
         console.log('[useCoachSelection] Successfully added coach, redirecting to dashboard with full page reload');
         
         // Force a FULL browser refresh to ensure all state is properly reset and reloaded
-        // Use a small timeout to ensure the database update has propagated
+        // Use a longer timeout to ensure the database update has propagated
         setTimeout(() => {
           window.location.href = '/dashboard?tab=coaches';
-        }, 500);
+        }, 1000);
         
         return true;
       }
