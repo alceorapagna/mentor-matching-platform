@@ -289,7 +289,7 @@ export const useAuthProvider = (): AuthContextType => {
         const { error } = await supabase
           .from('profiles')
           .update({ 
-            compass_data: compassData as unknown as JSON 
+            compass_data: compassData as any
           })
           .eq('id', user.id);
           
