@@ -9,6 +9,10 @@ interface CoachesContentProps {
   getMindCoaches: () => Coach[];
   getBodyCoaches: () => Coach[];
   selectedCategory: string;
+  onContactCoach?: (coach: Coach) => void;
+  onScheduleSession?: (coach: Coach) => void;
+  onConfirmCoach?: (coach: Coach) => void;
+  hasCompletedCompass?: boolean;
 }
 
 export const CoachesContent = ({
@@ -16,7 +20,11 @@ export const CoachesContent = ({
   getBusinessCoaches,
   getMindCoaches,
   getBodyCoaches,
-  selectedCategory
+  selectedCategory,
+  onContactCoach,
+  onScheduleSession,
+  onConfirmCoach,
+  hasCompletedCompass = false
 }: CoachesContentProps) => {
   return (
     <div className="space-y-16">
@@ -28,6 +36,10 @@ export const CoachesContent = ({
           badgeClassName="bg-primary/10 border-primary/40"
           coaches={getReneuCoaches()}
           isSingleCoach={true}
+          onContactCoach={onContactCoach}
+          onScheduleSession={onScheduleSession}
+          onConfirmCoach={onConfirmCoach}
+          hasCompletedCompass={hasCompletedCompass}
         />
       )}
 
@@ -39,6 +51,10 @@ export const CoachesContent = ({
           badgeClassName="bg-amber-50 text-amber-700 border-amber-200"
           coaches={getBusinessCoaches()}
           allowAddMore={true}
+          onContactCoach={onContactCoach}
+          onScheduleSession={onScheduleSession}
+          onConfirmCoach={onConfirmCoach}
+          hasCompletedCompass={hasCompletedCompass}
         />
       )}
 
@@ -50,6 +66,10 @@ export const CoachesContent = ({
           badgeClassName="bg-purple-50 text-purple-700 border-purple-200"
           coaches={getMindCoaches()}
           allowAddMore={true}
+          onContactCoach={onContactCoach}
+          onScheduleSession={onScheduleSession}
+          onConfirmCoach={onConfirmCoach}
+          hasCompletedCompass={hasCompletedCompass}
         />
       )}
 
@@ -61,6 +81,10 @@ export const CoachesContent = ({
           badgeClassName="bg-green-50 text-green-700 border-green-200"
           coaches={getBodyCoaches()}
           allowAddMore={true}
+          onContactCoach={onContactCoach}
+          onScheduleSession={onScheduleSession}
+          onConfirmCoach={onConfirmCoach}
+          hasCompletedCompass={hasCompletedCompass}
         />
       )}
     </div>

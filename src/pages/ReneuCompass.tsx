@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,12 +11,15 @@ import PurposeValuesForm from "@/components/compass/PurposeValuesForm";
 import DimensionAssessment, { DimensionData } from "@/components/compass/DimensionAssessment";
 import FutureStateForm from "@/components/compass/FutureStateForm";
 import { CompassData } from "@/contexts/AuthContext";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const ReneuCompass = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, updateCompassStatus, updateCompassData } = useAuth();
   const [step, setStep] = useState(1);
+  const [showCompletionDialog, setShowCompletionDialog] = useState(false);
   
   const [assessmentData, setAssessmentData] = useState<CompassData>({
     purpose: "",
@@ -44,18 +48,9 @@ const ReneuCompass = () => {
   const handleCompleteAssessment = async () => {
     try {
       await updateCompassData(assessmentData);
-      
       await updateCompassStatus(true);
       
-      toast({
-        title: "Reneu Compass Completed",
-        description: "Your renewal journey has been mapped. You'll be redirected to your dashboard.",
-        duration: 5000,
-      });
-      
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 2000);
+      setShowCompletionDialog(true);
     } catch (error) {
       console.error("Error completing Reneu Compass:", error);
       toast({
@@ -65,6 +60,16 @@ const ReneuCompass = () => {
         duration: 5000,
       });
     }
+  };
+  
+  const handleNavigateToCoaches = () => {
+    setShowCompletionDialog(false);
+    navigate("/coaches");
+  };
+  
+  const handleNavigateToDashboard = () => {
+    setShowCompletionDialog(false);
+    navigate("/dashboard");
   };
 
   const handlePurposeChange = (value: string) => {
@@ -145,6 +150,35 @@ const ReneuCompass = () => {
             onBack={handlePreviousStep}
           />
         )}
+        
+        {/* Completion Dialog */}
+        <Dialog open={showCompletionDialog} onOpenChange={setShowCompletionDialog}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Reneu Compass Completed!</DialogTitle>
+              <DialogDescription>
+                Congratulations! Your personalized renewal journey has been mapped. The next step is to select coaches who will guide you through your journey.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <div className="py-4">
+              <div className="p-4 bg-primary/10 rounded-md border border-primary/20">
+                <p className="text-sm">
+                  Based on your assessment, we'll recommend coaches specialized in the areas where you want to focus. You can choose a Reneu coach for your overall journey, as well as specialists for specific dimensions.
+                </p>
+              </div>
+            </div>
+            
+            <DialogFooter className="sm:justify-between">
+              <Button variant="outline" onClick={handleNavigateToDashboard}>
+                Go to Dashboard
+              </Button>
+              <Button onClick={handleNavigateToCoaches}>
+                Select Your Coaches
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </MainLayout>
   );

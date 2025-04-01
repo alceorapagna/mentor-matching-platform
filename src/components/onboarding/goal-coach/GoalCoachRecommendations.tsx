@@ -13,9 +13,10 @@ const GoalCoachRecommendations = ({
   className 
 }: GoalCoachRecommendationsProps) => {
   // Group coaches by category
-  const workCoaches = recommendedCoaches.filter(coach => coach.category === 'work');
+  const workCoaches = recommendedCoaches.filter(coach => coach.category === 'work' || coach.category === 'business');
   const mindCoaches = recommendedCoaches.filter(coach => coach.category === 'mind');
   const bodyCoaches = recommendedCoaches.filter(coach => coach.category === 'body');
+  const reneuCoaches = recommendedCoaches.filter(coach => coach.category === 'reneu');
 
   // Get goals by category
   const workGoals = goals.filter(goal => goal.category === 'work');
@@ -36,6 +37,19 @@ const GoalCoachRecommendations = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-12">
+        {/* Reneu Coach Recommendations */}
+        {reneuCoaches.length > 0 && (
+          <div className="mb-6 p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <h3 className="font-semibold mb-2">Reneu Coach</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              A Reneu coach provides holistic guidance across all dimensions of your renewal journey.
+            </p>
+            <Button asChild size="sm">
+              <Link to="/coaches?category=reneu">Select Reneu Coach</Link>
+            </Button>
+          </div>
+        )}
+        
         {/* Work Renewal Section */}
         <CategorySection 
           goals={workGoals} 

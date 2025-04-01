@@ -3,7 +3,7 @@ import { Coach } from '@/types/coach';
 import { Badge } from '@/components/ui/badge';
 import { CoachCard } from '@/components/ui/coach-card';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
+import { Calendar, Check, MessageCircle, PhoneCall, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface CoachCategorySectionProps {
@@ -15,6 +15,10 @@ interface CoachCategorySectionProps {
   isSingleCoach?: boolean;
   allowAddMore?: boolean;
   showSessionInfo?: boolean;
+  onContactCoach?: (coach: Coach) => void;
+  onScheduleSession?: (coach: Coach) => void;
+  onConfirmCoach?: (coach: Coach) => void;
+  hasCompletedCompass?: boolean;
 }
 
 const CoachCategorySection = ({
@@ -25,7 +29,11 @@ const CoachCategorySection = ({
   coaches,
   isSingleCoach = false,
   allowAddMore = false,
-  showSessionInfo = false
+  showSessionInfo = false,
+  onContactCoach,
+  onScheduleSession,
+  onConfirmCoach,
+  hasCompletedCompass = false
 }: CoachCategorySectionProps) => {
   if (coaches.length === 0) return null;
 
@@ -55,21 +63,42 @@ const CoachCategorySection = ({
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayCoaches.map((coach) => (
-          <CoachCard 
-            key={coach.id} 
-            id={coach.id.toString()} 
-            name={coach.name}
-            title={coach.title}
-            specialty={coach.specializations}
-            rating={coach.rating}
-            reviewCount={coach.reviewCount}
-            imageSrc={coach.imageSrc}
-            category={coach.category}
-            availability={coach.availability}
-            pricingModel={coach.pricingModel}
-            packages={coach.packages}
-            nextSession={showSessionInfo ? nextSession : undefined}
-          />
+          <div key={coach.id} className="flex flex-col">
+            <CoachCard 
+              id={coach.id.toString()} 
+              name={coach.name}
+              title={coach.title}
+              specialty={coach.specializations}
+              rating={coach.rating}
+              reviewCount={coach.reviewCount}
+              imageSrc={coach.imageSrc}
+              category={coach.category}
+              availability={coach.availability}
+              pricingModel={coach.pricingModel}
+              packages={coach.packages}
+              nextSession={showSessionInfo ? nextSession : undefined}
+            />
+            
+            {/* Action buttons */}
+            {hasCompletedCompass && onContactCoach && onScheduleSession && onConfirmCoach && (
+              <div className="mt-4 flex flex-col gap-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <Button variant="outline" size="sm" onClick={() => onContactCoach(coach)} className="gap-2">
+                    <PhoneCall className="h-4 w-4" />
+                    Contact
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => onScheduleSession(coach)} className="gap-2">
+                    <Calendar className="h-4 w-4" />
+                    Schedule Intro
+                  </Button>
+                </div>
+                <Button onClick={() => onConfirmCoach(coach)} className="gap-2">
+                  <Check className="h-4 w-4" />
+                  Confirm Coach
+                </Button>
+              </div>
+            )}
+          </div>
         ))}
         
         {allowAddMore && (
