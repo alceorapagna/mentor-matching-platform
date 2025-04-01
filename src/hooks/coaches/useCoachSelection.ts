@@ -3,7 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from '@/contexts/AuthContext';
 import { Coach } from '@/types/coach';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const useCoachSelection = () => {
   const { toast } = useToast();
@@ -12,6 +12,21 @@ export const useCoachSelection = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   
   const hasCompletedCompass = user?.compassCompleted || false;
+
+  // Add debugging effect to log user coach status whenever it changes
+  useEffect(() => {
+    console.log('[useCoachSelection] Current user coach state:', { 
+      user,
+      hasreneucoach: Boolean(user?.hasreneucoach),
+      hasReneuCoach: Boolean(user?.hasReneuCoach),
+      hasbusinesscoach: Boolean(user?.hasbusinesscoach), 
+      hasBusinessCoach: Boolean(user?.hasBusinessCoach),
+      hasmindcoach: Boolean(user?.hasmindcoach),
+      hasMindCoach: Boolean(user?.hasMindCoach),
+      hasbodycoach: Boolean(user?.hasbodycoach),
+      hasBodyCoach: Boolean(user?.hasBodyCoach)
+    });
+  }, [user]);
   
   const handleConfirmSelection = async (selectedCoach: Coach | null, selectedPackage: string) => {
     if (!selectedCoach) return false;

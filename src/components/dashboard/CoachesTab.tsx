@@ -24,12 +24,27 @@ const CoachesTab = () => {
       hasBusinessCoach, 
       hasMindCoach, 
       hasBodyCoach,
-      rawBodyFlag: user?.hasbodycoach,
-      rawBodyFlagCamel: user?.hasBodyCoach,
-      rawBodyFlagTypeCheck: typeof user?.hasbodycoach,
-      rawBodyFlagCamelTypeCheck: typeof user?.hasBodyCoach
+      // Add detailed logging for each flag
+      hasReneuCoachRaw: user?.hasreneucoach,
+      hasReneuCoachCamel: user?.hasReneuCoach,
+      hasBusinessCoachRaw: user?.hasbusinesscoach,
+      hasBusinessCoachCamel: user?.hasBusinessCoach,
+      hasMindCoachRaw: user?.hasmindcoach,
+      hasMindCoachCamel: user?.hasMindCoach,
+      hasBodyCoachRaw: user?.hasbodycoach,
+      hasBodyCoachCamel: user?.hasBodyCoach
     });
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
+  
+  // For testing purposes, display the coach flags directly
+  useEffect(() => {
+    console.log("COACH FLAGS STATE:", {
+      reneu: hasReneuCoach,
+      business: hasBusinessCoach,
+      mind: hasMindCoach,
+      body: hasBodyCoach
+    });
+  }, [hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
   // For demo purposes only - get the first coach of each category
   // In a real app, we'd fetch the exact coaches by ID from the database

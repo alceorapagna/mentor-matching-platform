@@ -18,7 +18,7 @@ export const useCoachActions = (
       setIsUpdatingCoach(true);
       
       // Create a deep copy of the user object
-      const updatedUser = { ...user };
+      const updatedUser = JSON.parse(JSON.stringify(user));
       
       // Field name for the database update (lowercase only)
       const dbFieldName = `has${coachCategory}coach`;
