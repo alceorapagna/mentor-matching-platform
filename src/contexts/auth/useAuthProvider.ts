@@ -35,18 +35,18 @@ export const useAuthProvider = (): AuthContextType => {
     updateCompassStatus, 
     updateCompassData, 
     resetCompassData 
-  } = useCompassActions({ 
+  } = useCompassActions(
     user, 
     setUser 
-  });
+  );
 
   // Load coach-related actions
   const { 
     updateUserCoach 
-  } = useCoachActions({ 
+  } = useCoachActions(
     user, 
     setUser 
-  });
+  );
 
   return {
     user,

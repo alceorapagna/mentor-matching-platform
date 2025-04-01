@@ -36,7 +36,7 @@ export const useCoachActions = (
       }
       
       // Update the user document
-      await updateDoc('users', user.id, {
+      await updateDoc('profiles', user.id, {
         [`has${coachCategory}coach`]: true,
         [`has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`]: true
       });
