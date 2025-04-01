@@ -3,7 +3,7 @@ import { useAuthentication } from './hooks/useAuthentication';
 import { useAuthActions } from './hooks/useAuthActions';
 import { useCompassActions } from './hooks/useCompassActions';
 import { useCoachActions } from './hooks/useCoachActions';
-import { AuthContextType } from './types';
+import { AuthContextType, User } from './types';
 
 export const useAuthProvider = (): AuthContextType => {
   // Load authentication state and basic utilities

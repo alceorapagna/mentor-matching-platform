@@ -1,7 +1,11 @@
 
-import { CompassDimension } from '@/components/compass/types';
-
 export type UserRole = 'client' | 'coach' | 'admin' | 'hr';
+
+export interface CompassDimension {
+  currentState: number;
+  desiredState: number;
+  goals: string[];
+}
 
 export interface CompassData {
   purpose: string;
@@ -42,6 +46,7 @@ export interface RegisterData {
   firstName: string;
   lastName: string;
   role: UserRole;
+  specialization?: string; // Add this field to fix the error
 }
 
 export interface AuthContextType {
@@ -51,7 +56,7 @@ export interface AuthContextType {
   login: (email: string, password: string) => Promise<User | null>;
   register: (data: RegisterData) => Promise<User | null>;
   logout: () => Promise<void>;
-  testAccess: () => Promise<boolean>;
+  testAccess: (role?: UserRole) => Promise<boolean>;  // Make role parameter optional
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
   resetCompassData: () => Promise<void>;

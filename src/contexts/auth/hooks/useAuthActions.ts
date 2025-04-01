@@ -1,6 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { User, UserRole, CompassData } from '../types';
+import { User, UserRole, CompassData, RegisterData } from '../types';
 import { isDemoAccount, createDemoUser, createTestUser } from '../demoAccounts';
 import { NavigateFunction } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
@@ -22,7 +22,7 @@ export const useAuthActions = ({
 }: AuthActionsProps) => {
   
   // Login function
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string): Promise<User | null> => {
     setIsLoading(true);
     
     try {
@@ -49,7 +49,7 @@ export const useAuthActions = ({
         }
         
         setIsLoading(false);
-        return;
+        return demoUser;
       }
       
       // Normal login flow
@@ -69,7 +69,7 @@ export const useAuthActions = ({
       
       if (userError) throw userError;
       
-      setUser({
+      const userObj = {
         id: userData.id,
         email: userData.email,
         firstName: userData.first_name,
@@ -78,7 +78,17 @@ export const useAuthActions = ({
         avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
         compassCompleted: userData.compass_completed || false,
         compassData: userData.compass_data as any,
-      } as User);
+        hasReneuCoach: userData.hasreneucoach || false,
+        hasBusinessCoach: userData.hasbusinesscoach || false,
+        hasMindCoach: userData.hasmindcoach || false,
+        hasBodyCoach: userData.hasbodycoach || false,
+        hasreneucoach: userData.hasreneucoach || false,
+        hasbusinesscoach: userData.hasbusinesscoach || false,
+        hasmindcoach: userData.hasmindcoach || false,
+        hasbodycoach: userData.hasbodycoach || false
+      } as User;
+      
+      setUser(userObj);
       
       toast({
         title: "Login Successful",
@@ -95,6 +105,8 @@ export const useAuthActions = ({
       } else if (userData.role === 'hr') {
         navigate('/hr-dashboard');
       }
+      
+      return userObj;
     } catch (error: any) {
       console.error('Login error:', error);
       toast({
@@ -102,13 +114,14 @@ export const useAuthActions = ({
         description: error.message || "Something went wrong during login",
         variant: "destructive",
       });
+      return null;
     } finally {
       setIsLoading(false);
     }
   };
 
   // Register function
-  const register = async (userData: any) => {
+  const register = async (userData: RegisterData): Promise<User | null> => {
     setIsLoading(true);
     
     try {
@@ -119,6 +132,7 @@ export const useAuthActions = ({
       });
       
       navigate('/login');
+      return null;
     } catch (error: any) {
       console.error('Registration error:', error);
       toast({
@@ -126,13 +140,14 @@ export const useAuthActions = ({
         description: error.message || "Something went wrong during registration",
         variant: "destructive",
       });
+      return null;
     } finally {
       setIsLoading(false);
     }
   };
 
   // Logout function
-  const logout = async () => {
+  const logout = async (): Promise<void> => {
     try {
       // For demo accounts, just reset the user state
       if (user && isDemoAccount(user.email)) {
@@ -153,53 +168,59 @@ export const useAuthActions = ({
   };
 
   // Testing access function
-  const testAccess = async (requiredRole: UserRole) => {
+  const testAccess = async (requiredRole?: UserRole): Promise<boolean> => {
+    if (!requiredRole && !user) {
+      return false;
+    }
+    
+    const roleToUse = requiredRole || 'client';
+    
     if (!user) {
       // If no user is logged in, create a test user with the required role
-      const testUser = createTestUser(requiredRole);
+      const testUser = createTestUser(roleToUse);
       setUser(testUser);
       
       toast({
         title: "Test Access Activated",
-        description: `You now have ${requiredRole} privileges for testing`,
+        description: `You now have ${roleToUse} privileges for testing`,
       });
       
       // Redirect based on the role
-      if (requiredRole === 'client') {
+      if (roleToUse === 'client') {
         navigate('/dashboard');
-      } else if (requiredRole === 'coach') {
+      } else if (roleToUse === 'coach') {
         navigate('/coach-dashboard');
-      } else if (requiredRole === 'admin') {
+      } else if (roleToUse === 'admin') {
         navigate('/admin-dashboard');
-      } else if (requiredRole === 'hr') {
+      } else if (roleToUse === 'hr') {
         navigate('/hr-dashboard');
       }
-      return Promise.resolve();
+      return true;
     }
     
     // If a user is already logged in but with the wrong role
-    if (user.role !== requiredRole) {
+    if (user.role !== roleToUse) {
       // Create a new test user with the required role
-      const testUser = createTestUser(requiredRole);
+      const testUser = createTestUser(roleToUse);
       setUser(testUser);
       
       toast({
         title: "Role Switched",
-        description: `You now have ${requiredRole} privileges for testing`,
+        description: `You now have ${roleToUse} privileges for testing`,
       });
       
       // Redirect based on the new role
-      if (requiredRole === 'client') {
+      if (roleToUse === 'client') {
         navigate('/dashboard');
-      } else if (requiredRole === 'coach') {
+      } else if (roleToUse === 'coach') {
         navigate('/coach-dashboard');
-      } else if (requiredRole === 'admin') {
+      } else if (roleToUse === 'admin') {
         navigate('/admin-dashboard');
-      } else if (requiredRole === 'hr') {
+      } else if (roleToUse === 'hr') {
         navigate('/hr-dashboard');
       }
     }
-    return Promise.resolve();
+    return true;
   };
 
   return {
