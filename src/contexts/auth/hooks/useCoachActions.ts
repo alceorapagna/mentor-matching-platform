@@ -29,24 +29,16 @@ export const useCoachActions = (
       if (coachCategory === 'reneu') {
         updatedUser.hasreneucoach = true;
         // Also update camelCase version if it exists in the user object
-        if ('hasReneuCoach' in updatedUser) {
-          updatedUser.hasReneuCoach = true;
-        }
+        updatedUser.hasReneuCoach = true;
       } else if (coachCategory === 'business') {
         updatedUser.hasbusinesscoach = true;
-        if ('hasBusinessCoach' in updatedUser) {
-          updatedUser.hasBusinessCoach = true;
-        }
+        updatedUser.hasBusinessCoach = true;
       } else if (coachCategory === 'mind') {
         updatedUser.hasmindcoach = true;
-        if ('hasMindCoach' in updatedUser) {
-          updatedUser.hasMindCoach = true;
-        }
+        updatedUser.hasMindCoach = true;
       } else if (coachCategory === 'body') {
         updatedUser.hasbodycoach = true;
-        if ('hasBodyCoach' in updatedUser) {
-          updatedUser.hasBodyCoach = true;
-        }
+        updatedUser.hasBodyCoach = true;
       }
       
       console.log(`Attempting to update coach status for user ${user.id}`);
