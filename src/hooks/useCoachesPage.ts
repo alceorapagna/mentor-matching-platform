@@ -125,14 +125,21 @@ export const useCoachesPage = () => {
       console.log('Before updating coach:', { 
         category,
         coachName: selectedCoach.name,
-        userId: user.id
+        userId: user.id,
+        currentCoachStatus: {
+          reneu: user.hasReneuCoach || user.hasreneucoach,
+          business: user.hasBusinessCoach || user.hasbusinesscoach,
+          mind: user.hasMindCoach || user.hasmindcoach,
+          body: user.hasBodyCoach || user.hasbodycoach
+        }
       });
       
+      // Call the updateUserCoach function from AuthContext
       await updateUserCoach(category);
       
       toast({
         title: "Coach Added to Your Team",
-        description: `${selectedCoach?.name} is now part of your coaching team. You can view them in your dashboard.`,
+        description: `${selectedCoach?.name} is now part of your coaching team.`,
       });
       
       setShowConfirmDialog(false);

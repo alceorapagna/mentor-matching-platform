@@ -35,6 +35,8 @@ export const useAuthentication = () => {
             console.error('Error fetching user profile:', userError);
             setUser(null);
           } else if (userData) {
+            console.log("Fetched user profile from Supabase:", userData);
+            
             // Convert table column names to our User type property names
             setUser({
               id: userData.id,
@@ -45,10 +47,17 @@ export const useAuthentication = () => {
               avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
               compassCompleted: userData.compass_completed || false,
               compassData: userData.compass_data as any,
+              
+              // Set both camelCase and database format versions for coach flags
               hasReneuCoach: userData.hasreneucoach || false,
               hasBusinessCoach: userData.hasbusinesscoach || false,
               hasMindCoach: userData.hasmindcoach || false,
-              hasBodyCoach: userData.hasbodycoach || false
+              hasBodyCoach: userData.hasbodycoach || false,
+              
+              hasreneucoach: userData.hasreneucoach || false,
+              hasbusinesscoach: userData.hasbusinesscoach || false,
+              hasmindcoach: userData.hasmindcoach || false,
+              hasbodycoach: userData.hasbodycoach || false
             });
           }
         }
@@ -76,6 +85,8 @@ export const useAuthentication = () => {
           console.error('Error fetching user profile:', userError);
           setUser(null);
         } else if (userData) {
+          console.log("Auth state change - user profile:", userData);
+          
           setUser({
             id: userData.id,
             email: userData.email,
@@ -85,10 +96,17 @@ export const useAuthentication = () => {
             avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
             compassCompleted: userData.compass_completed || false,
             compassData: userData.compass_data as any,
+            
+            // Set both camelCase and database format versions for coach flags
             hasReneuCoach: userData.hasreneucoach || false,
             hasBusinessCoach: userData.hasbusinesscoach || false,
             hasMindCoach: userData.hasmindcoach || false,
-            hasBodyCoach: userData.hasbodycoach || false
+            hasBodyCoach: userData.hasbodycoach || false,
+            
+            hasreneucoach: userData.hasreneucoach || false,
+            hasbusinesscoach: userData.hasbusinesscoach || false,
+            hasmindcoach: userData.hasmindcoach || false,
+            hasbodycoach: userData.hasbodycoach || false
           });
         }
       } else if (event === 'SIGNED_OUT') {

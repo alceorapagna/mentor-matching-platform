@@ -35,8 +35,16 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       // For demo, just update the local state
       const updatedUser = {
         ...user,
-        [updateField]: true
+        [updateField]: true,
+        // Also set the camelCase version for component display
+        [updateField.replace(/^has/, 'has').replace(/coach$/, 'Coach')]: true
       };
+      
+      console.log("Updating user with coach:", {
+        originalUser: user,
+        updateField,
+        updatedUser
+      });
       
       setUser(updatedUser);
       
@@ -57,7 +65,7 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
       
       console.log(`Coach updated for ${updateField}:`, updatedUser);
       
-      // Redirect to the dashboard coaches tab
+      // Show success toast
       toast({
         title: "Coach Added",
         description: "Your coach has been added to your team.",

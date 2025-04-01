@@ -1,31 +1,18 @@
 
-// User roles
+import { CompassDimension } from '@/components/compass/types';
+
 export type UserRole = 'client' | 'coach' | 'admin' | 'hr';
 
-// Compass data structure
 export interface CompassData {
   purpose: string;
   coreValues: string[];
   dimensions: {
-    work: {
-      current: number;
-      desired: number;
-      notes: string;
-    };
-    mind: {
-      current: number;
-      desired: number;
-      notes: string;
-    };
-    body: {
-      current: number;
-      desired: number;
-      notes: string;
-    };
+    work: CompassDimension;
+    mind: CompassDimension;
+    body: CompassDimension;
   };
 }
 
-// User data structure
 export interface User {
   id: string;
   email: string;
@@ -33,35 +20,40 @@ export interface User {
   lastName: string;
   role: UserRole;
   avatar?: string;
-  compassCompleted: boolean;
+  compassCompleted?: boolean;
   compassData?: CompassData;
+  
+  // Coach flags - both camelCase and database format for compatibility
   hasReneuCoach?: boolean;
   hasBusinessCoach?: boolean;
   hasMindCoach?: boolean;
   hasBodyCoach?: boolean;
+  
+  // Database format
+  hasreneucoach?: boolean;
+  hasbusinesscoach?: boolean;
+  hasmindcoach?: boolean;
+  hasbodycoach?: boolean;
 }
 
-// Data for registration
 export interface RegisterData {
-  firstName: string;
-  lastName: string;
   email: string;
   password: string;
-  role?: UserRole;
-  specialization?: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
 }
 
-// Auth context type
 export interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (data: any) => Promise<void>;
+  login: (email: string, password: string) => Promise<User | null>;
+  register: (data: RegisterData) => Promise<User | null>;
   logout: () => Promise<void>;
-  testAccess: (requiredRole: UserRole) => Promise<void>;
+  testAccess: () => Promise<boolean>;
   updateCompassStatus: (completed: boolean) => Promise<void>;
   updateCompassData: (data: CompassData) => Promise<void>;
   resetCompassData: () => Promise<void>;
-  updateUserCoach: (coachType: string) => Promise<boolean | void>;
+  updateUserCoach: (coachType: string) => Promise<boolean>;
 }

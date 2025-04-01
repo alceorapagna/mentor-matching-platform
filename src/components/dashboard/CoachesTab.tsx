@@ -9,10 +9,18 @@ const CoachesTab = () => {
   const { user } = useAuth();
   
   // Get the coach status from the user object
-  const hasReneuCoach = user?.hasReneuCoach || false;
-  const hasBusinessCoach = user?.hasBusinessCoach || false;
-  const hasMindCoach = user?.hasMindCoach || false;
-  const hasBodyCoach = user?.hasBodyCoach || false;
+  const hasReneuCoach = user?.hasreneucoach || user?.hasReneuCoach || false;
+  const hasBusinessCoach = user?.hasbusinesscoach || user?.hasBusinessCoach || false;
+  const hasMindCoach = user?.hasmindcoach || user?.hasMindCoach || false;
+  const hasBodyCoach = user?.hasbodycoach || user?.hasBodyCoach || false;
+  
+  console.log("Coach flags in CoachesTab:", { 
+    user, 
+    hasReneuCoach, 
+    hasBusinessCoach, 
+    hasMindCoach, 
+    hasBodyCoach 
+  });
   
   // Filter coaches by category
   const reneuCoaches = coachesData.filter(coach => coach.category === 'reneu');
