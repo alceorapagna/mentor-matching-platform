@@ -49,15 +49,16 @@ export const useAuthentication = () => {
               compassData: userData.compass_data as any,
               
               // Set both camelCase and database format versions for coach flags
-              hasReneuCoach: userData.hasreneucoach || false,
-              hasBusinessCoach: userData.hasbusinesscoach || false,
-              hasMindCoach: userData.hasmindcoach || false,
-              hasBodyCoach: userData.hasbodycoach || false,
+              // Ensure these are set as boolean values
+              hasReneuCoach: Boolean(userData.hasreneucoach),
+              hasBusinessCoach: Boolean(userData.hasbusinesscoach),
+              hasMindCoach: Boolean(userData.hasmindcoach),
+              hasBodyCoach: Boolean(userData.hasbodycoach),
               
-              hasreneucoach: userData.hasreneucoach || false,
-              hasbusinesscoach: userData.hasbusinesscoach || false,
-              hasmindcoach: userData.hasmindcoach || false,
-              hasbodycoach: userData.hasbodycoach || false
+              hasreneucoach: Boolean(userData.hasreneucoach),
+              hasbusinesscoach: Boolean(userData.hasbusinesscoach),
+              hasmindcoach: Boolean(userData.hasmindcoach),
+              hasbodycoach: Boolean(userData.hasbodycoach)
             });
           }
         }
@@ -98,15 +99,16 @@ export const useAuthentication = () => {
             compassData: userData.compass_data as any,
             
             // Set both camelCase and database format versions for coach flags
-            hasReneuCoach: userData.hasreneucoach || false,
-            hasBusinessCoach: userData.hasbusinesscoach || false,
-            hasMindCoach: userData.hasmindcoach || false,
-            hasBodyCoach: userData.hasbodycoach || false,
+            // Ensure these are set as boolean values
+            hasReneuCoach: Boolean(userData.hasreneucoach),
+            hasBusinessCoach: Boolean(userData.hasbusinesscoach),
+            hasMindCoach: Boolean(userData.hasmindcoach),
+            hasBodyCoach: Boolean(userData.hasbodycoach),
             
-            hasreneucoach: userData.hasreneucoach || false,
-            hasbusinesscoach: userData.hasbusinesscoach || false,
-            hasmindcoach: userData.hasmindcoach || false,
-            hasbodycoach: userData.hasbodycoach || false
+            hasreneucoach: Boolean(userData.hasreneucoach),
+            hasbusinesscoach: Boolean(userData.hasbusinesscoach),
+            hasmindcoach: Boolean(userData.hasmindcoach),
+            hasbodycoach: Boolean(userData.hasbodycoach)
           });
         }
       } else if (event === 'SIGNED_OUT') {
