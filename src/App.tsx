@@ -24,6 +24,7 @@ import HRPortal from "./pages/HRPortal";
 import HRDashboard from "./pages/HRDashboard";
 import CoachDashboard from "./pages/CoachDashboard";
 import ReneuCompass from "./pages/ReneuCompass";
+import OnboardingJourney from "./pages/OnboardingJourney";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,14 @@ const App = () => (
               element={
                 <ProtectedRoute allowedRoles={["client"]}>
                   <ReneuCompass />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/onboarding-journey" 
+              element={
+                <ProtectedRoute allowedRoles={["client"]}>
+                  <OnboardingJourney />
                 </ProtectedRoute>
               } 
             />
