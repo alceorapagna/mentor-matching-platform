@@ -38,6 +38,7 @@ export const useAuthentication = () => {
             console.log("Fetched user profile from Supabase:", userData);
             
             // Convert table column names to our User type property names
+            // Explicitly cast all boolean flags to ensure they're proper booleans
             setUser({
               id: userData.id,
               email: userData.email,
@@ -45,7 +46,7 @@ export const useAuthentication = () => {
               lastName: userData.last_name,
               role: userData.role as UserRole,
               avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
-              compassCompleted: userData.compass_completed || false,
+              compassCompleted: Boolean(userData.compass_completed),
               compassData: userData.compass_data as any,
               
               // Set both camelCase and database format versions for coach flags
@@ -88,6 +89,7 @@ export const useAuthentication = () => {
         } else if (userData) {
           console.log("Auth state change - user profile:", userData);
           
+          // Explicitly cast all boolean flags to ensure they're proper booleans
           setUser({
             id: userData.id,
             email: userData.email,
@@ -95,7 +97,7 @@ export const useAuthentication = () => {
             lastName: userData.last_name,
             role: userData.role as UserRole,
             avatar: userData.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userData.first_name}`,
-            compassCompleted: userData.compass_completed || false,
+            compassCompleted: Boolean(userData.compass_completed),
             compassData: userData.compass_data as any,
             
             // Set both camelCase and database format versions for coach flags
