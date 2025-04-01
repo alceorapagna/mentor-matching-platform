@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { User } from '@/contexts/auth/types';
-import { updateDoc } from '@/contexts/auth/loginFunctions';
+import { supabase } from '@/integrations/supabase/client';
 
 // This hook centralizes the coach-related functions
 export const useCoachActions = (
@@ -36,10 +36,15 @@ export const useCoachActions = (
       }
       
       // Update the user document
-      await updateDoc('profiles', user.id, {
-        [`has${coachCategory}coach`]: true,
-        [`has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`]: true
-      });
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          [`has${coachCategory}coach`]: true,
+          [`has${coachCategory.charAt(0).toUpperCase() + coachCategory.slice(1)}Coach`]: true
+        })
+        .eq('id', user.id);
+      
+      if (error) throw error;
       
       // Update the local user state
       setUser(updatedUser);

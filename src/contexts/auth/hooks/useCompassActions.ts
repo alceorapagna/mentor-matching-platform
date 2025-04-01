@@ -3,12 +3,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { User, CompassData } from '../types';
 import { isDemoAccount } from '../demoAccounts';
 
-type CompassActionsProps = {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-};
-
-export const useCompassActions = ({ user, setUser }: CompassActionsProps) => {
+export const useCompassActions = (
+  user: User | null,
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
+) => {
   // Compass-related functions
   const updateCompassStatus = async (completed: boolean) => {
     if (!user) return;
