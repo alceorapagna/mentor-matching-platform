@@ -22,12 +22,11 @@ const CoachesTab = () => {
     hasBodyCoach 
   });
   
-  // Filter coaches by category - for Reneu coach, only get one
+  // Filter coaches by category - for all categories, only get the first coach
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
-  // For other categories, get all matching coaches
-  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 3) : [];
-  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 3) : [];
-  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 3) : [];
+  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
+  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
+  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 1) : [];
 
   return (
     <div className="space-y-10">
@@ -65,44 +64,44 @@ const CoachesTab = () => {
               
               {/* Business Coaches Section */}
               <CoachCategoryDisplay
-                title="Your Professional Coaches"
+                title="Your Professional Coach"
                 badgeText="Professional Goals"
                 badgeClassName="bg-amber-50 text-amber-700 border-amber-200"
-                description="These specialists provide focused support for your professional goals, career advancement, leadership development, and work-related challenges."
+                description="Your professional coach provides focused support for your professional goals, career advancement, leadership development, and work-related challenges."
                 coaches={businessCoaches}
                 hasCoach={hasBusinessCoach}
                 category="business"
-                allowMultiple={true}
-                findCoachTitle="Find Professional Coaches"
-                findCoachDescription="Connect with specialists who can support your professional growth"
+                allowMultiple={false}
+                findCoachTitle="Find Professional Coach"
+                findCoachDescription="Connect with a specialist who can support your professional growth"
               />
               
               {/* Mind Coaches Section */}
               <CoachCategoryDisplay
-                title="Your Mental Coaches"
+                title="Your Mental Coach"
                 badgeText="Mental Wellbeing"
                 badgeClassName="bg-purple-50 text-purple-700 border-purple-200"
-                description="These specialists focus on supporting your mental wellbeing, emotional resilience, stress management, and personal growth."
+                description="Your mental coach focuses on supporting your mental wellbeing, emotional resilience, stress management, and personal growth."
                 coaches={mindCoaches}
                 hasCoach={hasMindCoach}
                 category="mind"
-                allowMultiple={true}
-                findCoachTitle="Find Mental Coaches"
-                findCoachDescription="Connect with specialists focused on your mental wellbeing"
+                allowMultiple={false}
+                findCoachTitle="Find Mental Coach"
+                findCoachDescription="Connect with a specialist focused on your mental wellbeing"
               />
               
               {/* Body Coaches Section */}
               <CoachCategoryDisplay
-                title="Your Physical Coaches"
+                title="Your Physical Coach"
                 badgeText="Physical Wellness"
                 badgeClassName="bg-green-50 text-green-700 border-green-200"
-                description="These specialists focus on physical wellness, nutrition, fitness, energy management, and establishing healthy habits."
+                description="Your physical coach focuses on physical wellness, nutrition, fitness, energy management, and establishing healthy habits."
                 coaches={bodyCoaches}
                 hasCoach={hasBodyCoach}
                 category="body"
-                allowMultiple={true}
-                findCoachTitle="Find Physical Coaches"
-                findCoachDescription="Connect with specialists focused on your physical wellness"
+                allowMultiple={false}
+                findCoachTitle="Find Physical Coach"
+                findCoachDescription="Connect with a specialist focused on your physical wellness"
               />
             </div>
           </div>
