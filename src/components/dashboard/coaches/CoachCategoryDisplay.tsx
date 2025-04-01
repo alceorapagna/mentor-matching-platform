@@ -75,7 +75,7 @@ const CoachCategoryDisplay = ({
           ))}
           
           {/* Add More Coaches Button for multiple coach categories */}
-          {allowMultiple && !isHRManagedCategory && !singleCoachOnly && (
+          {(allowMultiple && !isHRManagedCategory && !singleCoachOnly) && (
             <div className="mt-8 border border-dashed border-border rounded-xl flex flex-col items-center justify-center p-10">
               <div className="text-center space-y-4">
                 <Button variant="outline" onClick={handleFindCoach}>

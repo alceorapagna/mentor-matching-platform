@@ -29,25 +29,15 @@ const CoachesTab = () => {
       rawBodyFlagTypeCheck: typeof user?.hasbodycoach,
       rawBodyFlagCamelTypeCheck: typeof user?.hasBodyCoach
     });
-    
-    // Deep debug for body coach flag specifically
-    if (user) {
-      console.log("Body coach deep debug:", {
-        "user?.hasBodyCoach": user.hasBodyCoach,
-        "Boolean(user?.hasBodyCoach)": Boolean(user.hasBodyCoach),
-        "user?.hasbodycoach": user.hasbodycoach,
-        "Boolean(user?.hasbodycoach)": Boolean(user.hasbodycoach),
-        "user?.hasBodyCoach === true": user.hasBodyCoach === true,
-        "user?.hasbodycoach === true": user.hasbodycoach === true
-      });
-    }
   }, [user, hasReneuCoach, hasBusinessCoach, hasMindCoach, hasBodyCoach]);
   
-  // Filter coaches by category - for all categories, only get the first coach
+  // Filter coaches by category - for Reneu, only get one. For others, allow multiple
   const reneuCoaches = hasReneuCoach ? coachesData.filter(coach => coach.category === 'reneu').slice(0, 1) : [];
-  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business').slice(0, 1) : [];
-  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind').slice(0, 1) : [];
-  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body').slice(0, 1) : [];
+  
+  // For other coaches, we're going to allow multiple selections (not limiting to slice(0, 1))
+  const businessCoaches = hasBusinessCoach ? coachesData.filter(coach => coach.category === 'business') : [];
+  const mindCoaches = hasMindCoach ? coachesData.filter(coach => coach.category === 'mind') : [];
+  const bodyCoaches = hasBodyCoach ? coachesData.filter(coach => coach.category === 'body') : [];
   
   // Log filtered coaches
   useEffect(() => {
@@ -103,7 +93,7 @@ const CoachesTab = () => {
                 coaches={businessCoaches}
                 hasCoach={hasBusinessCoach}
                 category="business"
-                allowMultiple={false}
+                allowMultiple={true}
                 findCoachTitle="Find Professional Coach"
                 findCoachDescription="Connect with a specialist who can support your professional growth"
               />
@@ -117,7 +107,7 @@ const CoachesTab = () => {
                 coaches={mindCoaches}
                 hasCoach={hasMindCoach}
                 category="mind"
-                allowMultiple={false}
+                allowMultiple={true}
                 findCoachTitle="Find Mental Coach"
                 findCoachDescription="Connect with a specialist focused on your mental wellbeing"
               />
@@ -131,7 +121,7 @@ const CoachesTab = () => {
                 coaches={bodyCoaches}
                 hasCoach={hasBodyCoach}
                 category="body"
-                allowMultiple={false}
+                allowMultiple={true}
                 findCoachTitle="Find Physical Coach"
                 findCoachDescription="Connect with a specialist focused on your physical wellness"
               />
