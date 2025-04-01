@@ -8,7 +8,7 @@ import { Coach } from '@/components/coach-profile/types';
 export const useCoachProfileState = (coach: Coach) => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { updateUserCoach } = useAuth();
+  const { user, updateUserCoach } = useAuth();
   
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
@@ -50,19 +50,29 @@ export const useCoachProfileState = (coach: Coach) => {
     }
     
     try {
+      if (!user) {
+        toast({
+          title: "Authentication Required",
+          description: "You need to be logged in to add a coach.",
+          variant: "destructive"
+        });
+        navigate('/login');
+        return;
+      }
+      
       // Determine which coach flag to update based on the coach category
       const coachTypeMapping: { [key: string]: string } = {
-        'reneu': 'hasReneuCoach',
-        'business': 'hasBusinessCoach',
-        'mind': 'hasMindCoach',
-        'body': 'hasBodyCoach'
+        'reneu': 'reneu',
+        'business': 'business',
+        'mind': 'mind',
+        'body': 'body'
       };
       
       const coachTypeKey = coachTypeMapping[coach.category];
       
       if (coachTypeKey) {
         // Use the updateUserCoach function to update the user's coach data
-        await updateUserCoach(coach.category);
+        await updateUserCoach(coachTypeKey);
         
         toast({
           title: "Coach Added to Your Team",
@@ -73,7 +83,7 @@ export const useCoachProfileState = (coach: Coach) => {
         
         // Navigate to the dashboard with a slight delay to allow toast to be seen
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate('/dashboard?tab=coaches');
         }, 1500);
       } else {
         throw new Error("Invalid coach category");

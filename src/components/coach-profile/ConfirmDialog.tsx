@@ -50,6 +50,29 @@ const ConfirmDialog = ({
             <div>
               <h3 className="font-medium">{coach.name}</h3>
               <p className="text-sm text-muted-foreground">{coach.title}</p>
+              
+              <div className="mt-1">
+                {coach.category === 'reneu' && (
+                  <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                    Reneu Coach
+                  </span>
+                )}
+                {coach.category === 'business' && (
+                  <span className="inline-flex items-center rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                    Business Coach
+                  </span>
+                )}
+                {coach.category === 'mind' && (
+                  <span className="inline-flex items-center rounded-full border border-purple-200 bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700">
+                    Mind Coach
+                  </span>
+                )}
+                {coach.category === 'body' && (
+                  <span className="inline-flex items-center rounded-full border border-green-200 bg-green-50 px-2.5 py-0.5 text-xs font-semibold text-green-700">
+                    Body Coach
+                  </span>
+                )}
+              </div>
             </div>
           </div>
           

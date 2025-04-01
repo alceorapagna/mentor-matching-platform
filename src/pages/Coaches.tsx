@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layout/MainLayout';
@@ -20,7 +19,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const Coaches = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, updateUserCoach } = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState([0, 200]);
   const [showFilters, setShowFilters] = useState(false);
@@ -99,7 +98,9 @@ const Coaches = () => {
     setShowScheduleDialog(false);
   };
   
-  const handleConfirmSelection = () => {
+  const handleConfirmSelection = async () => {
+    if (!selectedCoach) return;
+    
     if (!selectedPackage && selectedCoach?.pricingModel === 'packages') {
       toast({
         title: "Please select a package",
@@ -109,18 +110,45 @@ const Coaches = () => {
       return;
     }
     
-    toast({
-      title: "Coach Added to Your Team",
-      description: `${selectedCoach?.name} is now part of your coaching team. You can view them in your dashboard.`,
-    });
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "You need to be logged in to add a coach.",
+        variant: "destructive"
+      });
+      navigate('/login');
+      return;
+    }
     
-    // In a real app, this would update the user's profile with the selected coach
-    
-    setShowConfirmDialog(false);
-    
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 1500);
+    try {
+      const categoryMapping: { [key: string]: string } = {
+        'reneu': 'reneu',
+        'business': 'business',
+        'mind': 'mind',
+        'body': 'body'
+      };
+      
+      const category = categoryMapping[selectedCoach.category];
+      await updateUserCoach(category);
+      
+      toast({
+        title: "Coach Added to Your Team",
+        description: `${selectedCoach?.name} is now part of your coaching team. You can view them in your dashboard.`,
+      });
+      
+      setShowConfirmDialog(false);
+      
+      setTimeout(() => {
+        navigate('/dashboard?tab=coaches');
+      }, 1500);
+    } catch (error) {
+      console.error("Error confirming coach:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem adding this coach to your team.",
+        variant: "destructive"
+      });
+    }
   };
   
   return (
@@ -170,7 +198,6 @@ const Coaches = () => {
         )}
       </div>
       
-      {/* Contact Coach Dialog */}
       <Dialog open={showContactDialog} onOpenChange={setShowContactDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -213,7 +240,6 @@ const Coaches = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Schedule Intro Session Dialog */}
       <Dialog open={showScheduleDialog} onOpenChange={setShowScheduleDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -265,7 +291,6 @@ const Coaches = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Confirm Coach Selection Dialog */}
       <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>

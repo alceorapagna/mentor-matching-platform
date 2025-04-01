@@ -42,6 +42,9 @@ export const useCoachActions = ({ user, setUser }: CoachActionsProps) => {
           
         if (error) throw error;
       }
+      
+      console.log(`Coach updated for ${updateField}:`, user);
+      return true;
     } catch (error) {
       console.error('Error updating user coach:', error);
       throw error;

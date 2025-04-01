@@ -7,6 +7,7 @@ import CompassRequiredForm from "@/components/onboarding/CompassRequiredForm";
 import WelcomeSection from "@/components/onboarding/WelcomeSection";
 import { Goal, SessionSummary } from "@/types/session";
 import { generateGoalsFromCompass, getSampleJourneyData } from "@/utils/goalUtils";
+import { useLocation } from "react-router-dom";
 
 // Tab components
 import OverviewTab from "@/components/dashboard/OverviewTab";
@@ -17,7 +18,11 @@ import CoachesTab from "@/components/dashboard/CoachesTab";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("compass-goals");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tabParam = queryParams.get('tab');
+  
+  const [activeTab, setActiveTab] = useState(tabParam || "compass-goals");
   const [generatedGoals, setGeneratedGoals] = useState<Goal[]>([]);
   const [journeyData, setJourneyData] = useState<{
     pastSessions: SessionSummary[];
